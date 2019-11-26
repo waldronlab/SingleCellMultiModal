@@ -1,6 +1,6 @@
 #	CITE-seq: Large scale simultaneous measuremnt of epitopes and transcriptomes in single cells
 library(GEOquery)
-# gsm <- getGeo('GSE100866') 
+## gsm <- getGeo('GSE100866') 
 gsm <- getGEO('GSE100866')
 #Whole genome expression set
 ##
