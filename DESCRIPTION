@@ -1,0 +1,26 @@
+Package: SingleCellMultiModal
+Type: Package
+Title: Integrates Multi-modal Single Cell Experiment datasets
+Version: 0.99.0
+Authors@R: c(
+    person("Marcel", "Ramos", email = "marcel.ramos@roswellpark.org",
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3242-0582")),
+    person("Kelly", "Eckenrode", email = "kelly.eckenrode@sph.cuny.edu",
+        role = "aut"),
+    person("Levi", "Waldron", email = "lwaldron.research@gmail.com",
+        role = "aut"))
+Description: SingleCellMultiModal is an ExperimentHub package that serves
+    multiple dataset obtained from GEO and other sources and represents them as
+    MultiAssayExperiment objects.
+Depends:
+    R (>= 4.0.0),
+    MultiAssayExperiment
+Imports:
+    ExperimentHub
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: ReproducibleResearch, CancerData, ExperimentHub
+BugReports: https://github.com/waldronlab/SingleCellMultiModal/issues
+
