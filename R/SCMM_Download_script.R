@@ -1,22 +1,29 @@
-#	CITE-seq: Large scale simultaneous measuremnt of epitopes and transcriptomes in single cells
+# scNMT
 library(GEOquery)
-# gsm <- getGeo('GSE100866') 
-gsm <- getGEO('GSE100866')
-#Whole genome expression set
-##
-library(Biobase)
-example(ExpressionSet)
+gse <- getGEO('GSE121708')
 
-eset <- expresssionSet
+# head(
+#     pData(phenoData(gse[[1]]))
+# )
 
-write.table(exprs(eset), file = "test.txt")
-## 
-## read data
+# download raw data
+# dfdata <- getGEOSuppFiles("GSE121708")
 
-myeset <- read.table("test.txt")
+# identical(
+#     pData(gse[[1]])$geo_accession,
+#     rownames(pData(gse[[1]]))
+# )
+# TRUE
 
-library(SummarizedExperiment)
-SummarizedExperiment(assays = list(counts = data.matrix(myeset)))
+gg <- head(pData(gse[[1]])$geo_accession)
+metlist <- lapply(gg, getGEO)
+metas <- lapply(metlist, Meta)
+names(metas) <- gg
+lapply(metas, function(x) as(x, "CharacterList"))
 
 
+## GPL
+# plat <- getGEO(annotation(gse[[1]]))
 
+
+getGSEDataTables('GSE121708')

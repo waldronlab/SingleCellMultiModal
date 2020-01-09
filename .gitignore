@@ -1,4 +1,15 @@
+# RStudio Files
 .Rproj.user
-.Rhistory
+
+# Data Files
 .RData
+/vignettes/cache/
+*.[Rr][Dd][SsAa]
+*.txt
 .Ruserdata
+.Rhistory
+*GSE*
+
+# Merge residuals
+*.orig
+
