@@ -13,3 +13,7 @@
 # Merge residuals
 *.orig
 
+# compressed files
+*.gz
+# databases
+*.sqlite
