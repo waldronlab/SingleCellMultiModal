@@ -8,11 +8,60 @@ gse <- getGEO('GSE121708', GSEMatrix = TRUE)
 # )
 
 # download raw data
-dfdata <- getGEOSuppFiles("GSE121708")
+# dfdata <- getGEOSuppFiles("GSE121708")
 files <- untar("GSE121708/GSE121708_RAW.tar", list = TRUE)
-test <- head(files)
+files
+
+
+splitfiles <- strsplit(files, "_")
+datf <- lapply(splitfiles, function(fname) {
+    fname[length(fname)] <-
+        gsub("\\.tsv\\.gz", "", fname[length(fname)])
+    samp <- fname[[1L]]
+    inst <- fname %in% c("new", "repeat")
+    instance <- ifelse(any(inst), fname[inst], NA_character_)
+    fname <- fname[!inst]
+    plates <- c(1L:(length(fname)-3L), length(fname))
+    expro <- c(1L, (length(fname)-2):length(fname))
+    assayname <- fname[length(fname)]
+
+    plate <- paste0(fname[-plates], collapse = "_")
+    extract <- paste0(fname[-expro], collapse = "_")
+    c(samp, extract, instance, plate, assayname)
+})
+sampmap <- do.call(rbind.data.frame, c(datf, stringsAsFactors = FALSE))
+names(sampmap) <- c("sample", "extraction", "instance", "plate", "assay")
+
+sampmap <- cbind.data.frame(sampmap, filename = files, stringsAsFactors = FALSE)
+
+fileext <- ".tsv.gz"
+refile <- paste0(paste0(Filter(nchar, sampmap[1, ]), collapse = "_"), fileext)
+
+listfiles <- split(files, sampmap$assay)
+
+test <- head(sampmap)
+tiny <- split(test, test$assay)
+
+nlist <- lapply(tiny, function(fdat) {
+    lapply(fdat$filename, readr::read_tsv)
+})
+
+gg <- unlist(nlist, recursive = FALSE)
+gplist <- lapply(gg, function(df) {
+    dat <- head(df)
+    dat <- dat[complete.cases(dat[, 1:2]), ]
+    res <- GenomicRanges::makeGRangesFromDataFrame(dat,
+        keep.extra.columns = TRUE, start.field = "pos", end.field = "pos")
+    as(res, "GPos")
+})
+# create two assays: one for each dataset
+ragged <- as(as(gplist, "GRangesList"), "RaggedExperiment")
+
 untar("GSE121708/GSE121708_RAW.tar", files = test)
-gsm0 <- read.table("GSM3443369_E4.5-5.5_new_Plate1_A02_met.tsv.gz", header = TRUE)
+gsm0 <- read.table(test[1], header = TRUE)
+gsm1 <- read.table(test[2], header = TRUE)
+gsm2 <- read.table(test[3], header = TRUE)
+
 gsm1 <- readr::read_tsv("GSM3443369_E4.5-5.5_new_Plate1_A02_met.tsv.gz")
 gsm1.5 <- readr::read_tsv("GSM3443369_E4.5-5.5_new_Plate1_A02_acc.tsv.gz")
 
@@ -42,6 +91,7 @@ slups <- lapply(sups, getGEO, GSEMatrix = FALSE)
 lapply(slups, function(x) lapply(GSMList(x), function(y) Meta(y)$title))
 
 library(SRAdb)
+library(DBI)
 # sra_con <- dbConnect(SQLite(), getSRAdbFile())
 sra_con <- dbConnect(SQLite(), "SRAmetadb.sqlite")
 listSRAfile("SRX4917371", sra_con, fileType = "sra")
@@ -70,10 +120,20 @@ getGSEDataTables('GSE121708')
 
 library(dbplyr)
 library(dplyr)
+library(DBI)
+library(RSQLite)
 
+sra_con <- dbConnect(SQLite(), "SRAmetadb.sqlite")
 src_dbi(sra_con)
 
-tbl(sra_con, "run")
+runs <- tbl(sra_con, "run")
+samps <- tbl(sra_con, "sample")
+group_by(runs, run_file) %>% summarize(uns = n())
+
+sratab <- tbl(sra_con, "sra")
+select(sratab, run_url_link, run_entrez_link, experiment_url_link, experiment_entrez_link, sample_url_link, sample_entrez_link, study_url_link, study_entrez_link) %>%
+    collect()
+
 
 res <- httr::POST("https://www.ncbi.nlm.nih.gov/Traces/sdl/2/retrieve?acc=SRR8091082,SRR8091083")
 reslist <- httr::content(res)
