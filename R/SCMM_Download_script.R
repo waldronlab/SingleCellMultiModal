@@ -59,17 +59,18 @@ onelist <- lapply(nlist, function(assay) {
 })
 
 untar("GSE121708/GSE121708_RAW.tar", files = test)
-gsm0 <- read.table(test[1], header = TRUE)
-gsm1 <- read.table(test[2], header = TRUE)
-gsm2 <- read.table(test[3], header = TRUE)
 
-gsm1 <- readr::read_tsv("GSM3443369_E4.5-5.5_new_Plate1_A02_met.tsv.gz")
-gsm1.5 <- readr::read_tsv("GSM3443369_E4.5-5.5_new_Plate1_A02_acc.tsv.gz")
+## attempt to obtain metadata
+cells <- colnames(gse[[1]])
 
+metalist <- lapply(cells, function(x)
+    Meta(getGEO(x, GSEMatrix = FALSE))
+)
+
+# saveRDS(metalist, file = "metalist.rds")
+# metalist <- readRDS("metalist.rds")
 # obtain just file location
 testdata <- getGEOSuppFiles("GSE121708", fetch_files = FALSE)
-
-sampids <- vapply(strsplit(files, "_"), `[[`, character(1L), 1L)
 
 # identical(
 #     pData(gse[[1]])$geo_accession,
@@ -78,7 +79,7 @@ sampids <- vapply(strsplit(files, "_"), `[[`, character(1L), 1L)
 # TRUE
 
 geos <- pData(gse[[1]])$geo_accession
-sum(geos %in% sampids)/length(geos) * 100
+sum(geos %in% sampmap$sample) * 100 / length(geos)
 
 ago <- lapply(head(geos), function(acc) {
     Meta(getGEO(acc))$relation
