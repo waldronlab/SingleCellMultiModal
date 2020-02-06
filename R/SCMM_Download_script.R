@@ -43,19 +43,20 @@ test <- head(sampmap)
 tiny <- split(test, test$assay)
 
 nlist <- lapply(tiny, function(fdat) {
-    lapply(fdat$filename, readr::read_tsv)
+    sampf <- setNames(fdat$filename, fdat$sample)
+    lapply(sampf, readr::read_tsv)
 })
 
-gg <- unlist(nlist, recursive = FALSE)
-gplist <- lapply(gg, function(df) {
-    dat <- head(df)
-    dat <- dat[complete.cases(dat[, 1:2]), ]
-    res <- GenomicRanges::makeGRangesFromDataFrame(dat,
-        keep.extra.columns = TRUE, start.field = "pos", end.field = "pos")
-    as(res, "GPos")
+onelist <- lapply(nlist, function(assay) {
+    rlist <- lapply(assay, function(df) {
+        dat <- head(df)
+        dat <- dat[complete.cases(dat[, 1:2]), ]
+        res <- GenomicRanges::makeGRangesFromDataFrame(dat,
+            keep.extra.columns = TRUE, start.field = "pos", end.field = "pos")
+        as(res, "GPos")
+    })
+    as(as(rlist, "GRangesList"), "RaggedExperiment")
 })
-# create two assays: one for each dataset
-ragged <- as(as(gplist, "GRangesList"), "RaggedExperiment")
 
 untar("GSE121708/GSE121708_RAW.tar", files = test)
 gsm0 <- read.table(test[1], header = TRUE)
