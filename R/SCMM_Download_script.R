@@ -23,14 +23,17 @@ datf <- lapply(splitfiles, function(fname) {
     fname <- fname[!inst]
     plates <- c(1L:(length(fname)-3L), length(fname))
     expro <- c(1L, (length(fname)-2):length(fname))
+    explay <- c(1L, length(fname))
     assayname <- fname[length(fname)]
 
     plate <- paste0(fname[-plates], collapse = "_")
     extract <- paste0(fname[-expro], collapse = "_")
-    c(samp, extract, instance, plate, assayname)
+    center <- paste0(fname[-explay], collapse = "_")
+    c(samp, extract, instance, plate, center, assayname)
 })
 sampmap <- do.call(rbind.data.frame, c(datf, stringsAsFactors = FALSE))
-names(sampmap) <- c("sample", "extraction", "instance", "plate", "assay")
+names(sampmap) <- c("sample", "extraction", "instance", "plate", "ex.plate",
+    "assay")
 
 sampmap <- cbind.data.frame(sampmap, filename = files, stringsAsFactors = FALSE)
 
@@ -69,14 +72,42 @@ metalist <- lapply(cells, function(x)
 
 # saveRDS(metalist, file = "metalist.rds")
 # metalist <- readRDS("metalist.rds")
-# obtain just file location
-testdata <- getGEOSuppFiles("GSE121708", fetch_files = FALSE)
 
-# identical(
-#     pData(gse[[1]])$geo_accession,
-#     rownames(pData(gse[[1]]))
-# )
-# TRUE
+allseries <- unique(unlist(lapply(metalist, `[[`, "series_id")))
+
+.checkSize <- function(access, directory = ".", verbose = TRUE) {
+    finfo <- getGEOSuppFiles(access, fetch_files = FALSE)
+    fur <- as.character(finfo[['url']])
+
+    header <- httr::HEAD(fur)$headers
+    header_bytes <- as.numeric(header$`content-length`)
+
+    fpath <- file.path(directory, access, finfo[['fname']])
+    local_bytes <- file.size(fpath)
+
+    if (verbose)
+        message("url: ", header_bytes, " vs. local: ", local_bytes)
+    identical(header_bytes, local_bytes)
+}
+
+getSeries <- function(series, directory = ".") {
+    directory <- normalizePath(directory)
+    vapply(series, function(x) {
+        finfo <- getGEOSuppFiles(x, fetch_files = FALSE)
+        fname <- finfo[['fname']]
+        fpath <- file.path(directory, x, fname)
+        if (file.exists(fpath) && .checkSize(x, directory, verbose = FALSE))
+            message("File exists: ", basename(fpath))
+        else
+            getGEOSuppFiles(x, baseDir = directory)
+        fpath
+    }, character(1L))
+}
+
+rnafile <- getSeries(allseries[1])
+rnac <- readr::read_tsv(rnafile)
+
+allsups <- getSeries(allseries)
 
 geos <- pData(gse[[1]])$geo_accession
 sum(geos %in% sampmap$sample) * 100 / length(geos)
