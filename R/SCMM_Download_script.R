@@ -1,48 +1,36 @@
 # scNMT
 library(GEOquery)
 gse <- getGEO('GSE121708', GSEMatrix = TRUE)
-# gse <- getGEO('GSE121708', GSEMatrix = FALSE)
 
-# head(
-#     pData(phenoData(gse[[1]]))
-# )
-
-# download raw data
-# dfdata <- getGEOSuppFiles("GSE121708")
-files <- untar("GSE121708/GSE121708_RAW.tar", list = TRUE)
-files
+ head(
+     pData(phenoData(gse[[1]]))
+ )
 
 
-splitfiles <- strsplit(files, "_")
-datf <- lapply(splitfiles, function(fname) {
-    fname[length(fname)] <-
-        gsub("\\.tsv\\.gz", "", fname[length(fname)])
-    samp <- fname[[1L]]
-    inst <- fname %in% c("new", "repeat")
-    instance <- ifelse(any(inst), fname[inst], NA_character_)
-    fname <- fname[!inst]
-    plates <- c(1L:(length(fname)-3L), length(fname))
-    expro <- c(1L, (length(fname)-2):length(fname))
-    explay <- c(1L, length(fname))
-    assayname <- fname[length(fname)]
+allseries <- .getAllSeries(gse[[1]])
 
-    plate <- paste0(fname[-plates], collapse = "_")
-    extract <- paste0(fname[-expro], collapse = "_")
-    center <- paste0(fname[-explay], collapse = "_")
-    c(samp, extract, instance, plate, center, assayname)
-})
-sampmap <- do.call(rbind.data.frame, c(datf, stringsAsFactors = FALSE))
-names(sampmap) <- c("sample", "extraction", "instance", "plate", "ex.plate",
-    "assay")
+allsups <- .downloadSeries(allseries, directory = "~/data")
 
-sampmap <- cbind.data.frame(sampmap, filename = files, stringsAsFactors = FALSE)
+## checking data vs url size
+vapply(allseries, .checkSize, logical(1L), directory = "~/data")
 
-fileext <- ".tsv.gz"
-refile <- paste0(paste0(Filter(nchar, sampmap[1, ]), collapse = "_"), fileext)
+## file sizes
+fs <- round(vapply(allsups, file.size, double(1L)) / 1024^3, 2)
 
-listfiles <- split(files, sampmap$assay)
+tsvs <- grepl("tsv\\.gz$", allsups)
+tars <- grepl("\\.tar$", allsups)
 
-test <- head(sampmap)
+tt <- readr::read_tsv(allsups[6])
+tp <- readr::read_tsv(allsups[7])
+tr <- readr::read_tsv(allsups[1])
+
+flist <- lapply(allsups[tars], function(x) untar(x, list = TRUE))
+
+smaps <- Map(function(x, y) .nametodframe(fnames = x, gseacc = y),
+    x = flist, y = names(flist))
+sampmap <- dplyr::bind_rows(smaps)
+
+test <- head(sampmap[sampmap$GSEseries %in% names(allsups[tars]), ])
 tiny <- split(test, test$assay)
 
 nlist <- lapply(tiny, function(fdat) {
@@ -62,52 +50,6 @@ onelist <- lapply(nlist, function(assay) {
 })
 
 untar("GSE121708/GSE121708_RAW.tar", files = test)
-
-## attempt to obtain metadata
-cells <- colnames(gse[[1]])
-
-metalist <- lapply(cells, function(x)
-    Meta(getGEO(x, GSEMatrix = FALSE))
-)
-
-# saveRDS(metalist, file = "metalist.rds")
-# metalist <- readRDS("metalist.rds")
-
-allseries <- unique(unlist(lapply(metalist, `[[`, "series_id")))
-
-.checkSize <- function(access, directory = ".", verbose = TRUE) {
-    finfo <- getGEOSuppFiles(access, fetch_files = FALSE)
-    fur <- as.character(finfo[['url']])
-
-    header <- httr::HEAD(fur)$headers
-    header_bytes <- as.numeric(header$`content-length`)
-
-    fpath <- file.path(directory, access, finfo[['fname']])
-    local_bytes <- file.size(fpath)
-
-    if (verbose)
-        message("url: ", header_bytes, " vs. local: ", local_bytes)
-    identical(header_bytes, local_bytes)
-}
-
-getSeries <- function(series, directory = ".") {
-    directory <- normalizePath(directory)
-    vapply(series, function(x) {
-        finfo <- getGEOSuppFiles(x, fetch_files = FALSE)
-        fname <- finfo[['fname']]
-        fpath <- file.path(directory, x, fname)
-        if (file.exists(fpath) && .checkSize(x, directory, verbose = FALSE))
-            message("File exists: ", basename(fpath))
-        else
-            getGEOSuppFiles(x, baseDir = directory)
-        fpath
-    }, character(1L))
-}
-
-rnafile <- getSeries(allseries[1])
-rnac <- readr::read_tsv(rnafile)
-
-allsups <- getSeries(allseries)
 
 geos <- pData(gse[[1]])$geo_accession
 sum(geos %in% sampmap$sample) * 100 / length(geos)
