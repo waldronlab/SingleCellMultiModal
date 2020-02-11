@@ -53,21 +53,12 @@ onelist <- lapply(nlist, function(assay) {
 })
 
 ## sample map for RNA seq data
-slups <- lapply(allseries, getGEO, GSEMatrix = FALSE)
-minisamp <- stack(unlist(lapply(slups, function(x)
-    lapply(GSMList(x), function(y) Meta(y)$title))))
-minisamp$ex.plate <- gsub("Sample [0-9]*_", "", minisamp$values)
-tech <- grepl("\\((sc[A-Z]+-Seq)\\)$", minisamp$ex.plate)
-minisamp$mode <-
-    ifelse(tech, gsub("(.* )\\((sc[A-Z]+-Seq)\\)$", "\\2", minisamp$ex.plate), NA_character_)
-minisamp$ex.plate <- gsub(" \\(.*\\)", "", minisamp$ex.plate)
-names(minisamp) <- c("title", "GSMaccess", "ex.plate", "mode")
-
 allpheno <- lapply(allseries, function(x) {
     gse <- getGEO(x, GSEMatrix = TRUE)
     pdat <- pData(phenoData(gse[[1]]))
-    pdat$ex.plate <- gsub("\\s+\\(sc[A-Z]+-Seq\\)", "", pdat$title)
-    pdat$GSEseries <- x
+    pdat$ex.plate <- gsub("Sample [0-9]*_", "",
+        gsub("\\s+\\(sc[A-Z]+-Seq\\)", "", pdat$title))
+    pdat$geo_series <- x
     pdat
 })
 
