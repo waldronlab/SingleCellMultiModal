@@ -26,6 +26,7 @@ tr <- readr::read_tsv(allsups[1])
 
 flist <- lapply(allsups[tars], function(x) untar(x, list = TRUE))
 
+## sample map for raw bsseq data
 smaps <- Map(function(x, y) .nametodframe(fnames = x, gseacc = y),
     x = flist, y = names(flist))
 sampmap <- dplyr::bind_rows(smaps)
@@ -51,57 +52,26 @@ onelist <- lapply(nlist, function(assay) {
     as(as(rlist, "GRangesList"), "RaggedExperiment")
 })
 
+## sample map for RNA seq data
 slups <- lapply(allseries, getGEO, GSEMatrix = FALSE)
 minisamp <- stack(unlist(lapply(slups, function(x)
     lapply(GSMList(x), function(y) Meta(y)$title))))
-minisamp$ex.plate <- gsub(" \\(.*\\)", "", gsub("Sample ", "", minisamp$values))
-names(minisamp) <- c("title", "GSMaccess", "ex.plate")
+minisamp$ex.plate <- gsub("Sample [0-9]*_", "", minisamp$values)
+tech <- grepl("\\((sc[A-Z]+-Seq)\\)$", minisamp$ex.plate)
+minisamp$mode <-
+    ifelse(tech, gsub("(.* )\\((sc[A-Z]+-Seq)\\)$", "\\2", minisamp$ex.plate), NA_character_)
+minisamp$ex.plate <- gsub(" \\(.*\\)", "", minisamp$ex.plate)
+names(minisamp) <- c("title", "GSMaccess", "ex.plate", "mode")
 
-library(SRAdb)
-library(DBI)
-# sra_con <- dbConnect(SQLite(), getSRAdbFile())
-sra_con <- dbConnect(SQLite(), "SRAmetadb.sqlite")
-listSRAfile("SRX4917371", sra_con, fileType = "sra")
-getSRAinfo("SRX4917371", sra_con, sraType = "sra" )
-getSRAfile("SRX4917371", sra_con, fileType = "sra" )
-listSRAfile ("SRX4917371", sra_con, fileType = 'sra', srcType='fasp')
+allpheno <- lapply(allseries, function(x) {
+    gse <- getGEO(x, GSEMatrix = TRUE)
+    pdat <- pData(phenoData(gse[[1]]))
+    pdat$ex.plate <- gsub("\\s+\\(sc[A-Z]+-Seq\\)", "", pdat$title)
+    pdat$GSEseries <- x
+    pdat
+})
 
-getSRAinfo("SRS3964271", sra_con, sraType = "sra")
-getSRAinfo("SRR8091082", sra_con)
-sraConvert("SRR8091082", out_type = c("study", "sample", "experiment", "run"), sra_con)
+cnames <- Reduce(intersect, lapply(allpheno, names))
+intpheno <- lapply(allpheno, `[`, cnames)
 
-getGEO("GSM3440983", GSEMatrix = FALSE)
-# https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR8091082
-
-metlist <- lapply(gg, getGEO)
-metas <- lapply(metlist, Meta)
-names(metas) <- gg
-lapply(metas, function(x) as(x, "CharacterList"))
-
-
-## GPL
-# plat <- getGEO(annotation(gse[[1]]))
-
-
-getGSEDataTables('GSE121708')
-
-library(dbplyr)
-library(dplyr)
-library(DBI)
-library(RSQLite)
-
-sra_con <- dbConnect(SQLite(), "SRAmetadb.sqlite")
-src_dbi(sra_con)
-
-runs <- tbl(sra_con, "run")
-samps <- tbl(sra_con, "sample")
-group_by(runs, run_file) %>% summarize(uns = n())
-
-sratab <- tbl(sra_con, "sra")
-select(sratab, run_url_link, run_entrez_link, experiment_url_link, experiment_entrez_link, sample_url_link, sample_entrez_link, study_url_link, study_entrez_link) %>%
-    collect()
-
-
-res <- httr::POST("https://www.ncbi.nlm.nih.gov/Traces/sdl/2/retrieve?acc=SRR8091082,SRR8091083")
-reslist <- httr::content(res)
-
+intpheno <- dplyr::bind_rows(intpheno)
