@@ -30,6 +30,8 @@ smaps <- Map(function(x, y) .nametodframe(fnames = x, gseacc = y),
     x = flist, y = names(flist))
 sampmap <- dplyr::bind_rows(smaps)
 
+all(unlist(flist, use.names = FALSE) %in% sampmap$filename)
+
 test <- head(sampmap[sampmap$GSEseries %in% names(allsups[tars]), ])
 tiny <- split(test, test$assay)
 
@@ -49,21 +51,11 @@ onelist <- lapply(nlist, function(assay) {
     as(as(rlist, "GRangesList"), "RaggedExperiment")
 })
 
-untar("GSE121708/GSE121708_RAW.tar", files = test)
-
-geos <- pData(gse[[1]])$geo_accession
-sum(geos %in% sampmap$sample) * 100 / length(geos)
-
-ago <- lapply(head(geos), function(acc) {
-    Meta(getGEO(acc))$relation
-})
-
-notes <- notes(experimentData(gse[[1]]))$relation
-sups <- gsub(".*(GSE*)", "\\1",
-grep("SuperSeries", unlist(strsplit(notes, "\n")), ignore.case = TRUE, value = TRUE)
-)
-slups <- lapply(sups, getGEO, GSEMatrix = FALSE)
-lapply(slups, function(x) lapply(GSMList(x), function(y) Meta(y)$title))
+slups <- lapply(allseries, getGEO, GSEMatrix = FALSE)
+minisamp <- stack(unlist(lapply(slups, function(x)
+    lapply(GSMList(x), function(y) Meta(y)$title))))
+minisamp$ex.plate <- gsub(" \\(.*\\)", "", gsub("Sample ", "", minisamp$values))
+names(minisamp) <- c("title", "GSMaccess", "ex.plate")
 
 library(SRAdb)
 library(DBI)
