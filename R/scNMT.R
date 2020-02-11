@@ -56,7 +56,7 @@ onelist <- lapply(nlist, function(assay) {
 allpheno <- lapply(allseries, function(x) {
     gse <- getGEO(x, GSEMatrix = TRUE)
     pdat <- pData(phenoData(gse[[1]]))
-    pdat$ex.plate <- gsub("Sample [0-9]*_", "",
+    pdat$ext_plate <- gsub("Sample [0-9]*_", "",
         gsub("\\s+\\(sc[A-Z]+-Seq\\)", "", pdat$title))
     pdat$geo_series <- x
     pdat
@@ -66,3 +66,11 @@ cnames <- Reduce(intersect, lapply(allpheno, names))
 intpheno <- lapply(allpheno, `[`, cnames)
 
 intpheno <- dplyr::bind_rows(intpheno)
+
+# FALSE
+all(names(tt[-1]) %in% intpheno$ext_plate)
+# TRUE
+all(names(tp[-1]) %in% intpheno$ext_plate)
+# TRUE
+all(names(tr[-1]) %in% intpheno$ext_plate)
+
