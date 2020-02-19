@@ -60,8 +60,8 @@
         c(samp, extract, instance, plate, center, assayname)
     })
     sampmap <- do.call(rbind.data.frame, c(datf, stringsAsFactors = FALSE))
-    names(sampmap) <- c("sample", "extraction", "instance", "plate", "ex.plate",
-        "assay")
+    names(sampmap) <- c("geo_accession", "extraction", "instance", "plate",
+        "ext_plate", "assay")
     gseaccs <- if (!missing(gseacc)) rep(gseacc, length(filen))
         else rep(NA_character_, length(filen))
     sampmap <- cbind.data.frame(sampmap, filename = filen, GSEseries = gseaccs,
@@ -69,3 +69,6 @@
     sampmap
 }
 
+.splitselect <- function(char, indx = 1L, sep = "_") {
+    vapply(strsplit(char, "_"), `[[`, character(1L), indx)
+}
