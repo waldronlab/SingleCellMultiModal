@@ -39,7 +39,7 @@
     }, character(1L))
 }
 
-.nametodframe <- function(fnames, gseacc, splitter = "_") {
+.nametodframe <- function(fnames, splitter = "_") {
     filen <- fnames
     fnames <- strsplit(fnames, splitter)
     datf <- lapply(fnames, function(fname) {
@@ -52,20 +52,15 @@
         plates <- c(1L:(length(fname)-3L), length(fname))
         expro <- c(1L, (length(fname)-2):length(fname))
         explay <- c(1L, length(fname))
-        assayname <- fname[length(fname)]
 
         plate <- paste0(fname[-plates], collapse = "_")
         extract <- paste0(fname[-expro], collapse = "_")
         center <- paste0(fname[-explay], collapse = "_")
-        c(samp, extract, instance, plate, center, assayname)
+        c(samp, extract, instance, plate, center)
     })
     sampmap <- do.call(rbind.data.frame, c(datf, stringsAsFactors = FALSE))
     names(sampmap) <- c("geo_accession", "extraction", "instance", "plate",
-        "ext_plate", "assay")
-    gseaccs <- if (!missing(gseacc)) rep(gseacc, length(filen))
-        else rep(NA_character_, length(filen))
-    sampmap <- cbind.data.frame(sampmap, filename = filen, GSEseries = gseaccs,
-        stringsAsFactors = FALSE)
+        "ext_plate")
     sampmap
 }
 

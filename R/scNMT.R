@@ -32,25 +32,26 @@ rnalist <- lapply(allsups[tsvs], readr::read_tsv)
 
 flist <- lapply(allsups[tars], function(x) untar(x, list = TRUE))
 lapply(flist, head)
-uflist <- unlist(flist, use.names = FALSE)
-anyDuplicated(uflist)
+flist <- stack(flist)
+names(flist) <- c("filename", "GSEseries")
+flist[] <- lapply(flist, as.character)
+head(flist)
 
-mets <- grepl("met", uflist)
-geoaccs <- .splitselect(uflist[mets])
-gsub("met|acc", "*", uflist)
-filedata <- do.call(cbind.data.frame, list(geo_accession = geoaccs, split(uflist, mets),
-    stringsAsFactors = FALSE))
-names(filedata)[2:3] <- c("accessibilty", "methylation")
-# merge(intpheno, filedata, by = "geo_accession")
-## sample map for raw bsseq data
-smaps <- Map(function(x, y) .nametodframe(fnames = x, gseacc = y),
-    x = filedata$accessibilty, y = names(flist))
-sampmap <- dplyr::bind_rows(smaps)
-head(filedata)
-head(sampmap)
-sampmap <- sampmap[, -which(names(sampmap) %in% c("assay", "filename"))]
-fmap <- merge(filedata, sampmap, by = "geo_accession")
-fmap$archive <- allsups[match(fmap$GSEseries, names(allsups))]
+## check duplicates
+anyDuplicated(flist$filename)
+
+mets <- grepl("met", flist$filename)
+flist <- do.call(cbind.data.frame, split(flist, mets))
+flist <- flist[, -which(names(flist) == "FALSE.GSEseries")]
+names(flist) <- c("accessibility", "methylation", "GSEseries")
+flist$geo_accession <- .splitselect(flist$accessibility)
+head(flist)
+
+dfromfile <- .nametodframe(flist$accessibility)
+fmap <- merge(flist, dfromfile, by = "geo_accession")
+
+## samplemap
+head(fmap)
 
 ## extract all files in tarballs
 lapply(allsups[tars], function(tr) {
@@ -58,15 +59,18 @@ lapply(allsups[tars], function(tr) {
 })
 
 access <- apply(fmap, 1L, function(x) {
-    datapath <- file.path(dirname(x['archive']), x['accessibility'])
+    datapath <- file.path("~/data", x['GSEseries'], x['accessibility'])
+    stopifnot(file.exists(datapath))
     dat <- readr::read_tsv(datapath)
     dat <- dat[complete.cases(dat), ]
     res <- GenomicRanges::makeGRangesFromDataFrame(dat,
         keep.extra.columns = TRUE, start.field = "pos", end.field = "pos")
     as(res, "GPos")
 })
+names(access) <- fmap[["ext_plate"]]
+grltest <- as(access, "GRangesList")
+accmet <- as(grltest, "RaggedExperiment")
 
-as(as(rlist, "GRangesList"), "RaggedExperiment")
 
 allGEOs <- lapply(allsubseries, getGEO, GSEMatrix = TRUE)
 allGEOs <- unlist(allGEOs, recursive = TRUE)
