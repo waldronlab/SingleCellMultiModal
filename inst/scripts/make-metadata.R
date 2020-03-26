@@ -1,8 +1,8 @@
 allextpat <- "\\.[Rr][Dd][Aa]$"
 
 .getDataFiles <-
-function(directory = "~/data/scmm/",
-    dataDir = "scnmt_gastrulation", pattern = allextpat) {
+function(directory = "~/data/scmm",
+    dataDir = "mouse_gastrulation", pattern = allextpat) {
     location <- file.path(directory, dataDir)
     list.files(location, pattern = pattern, full.names = TRUE, recursive = TRUE)
 }
@@ -20,7 +20,27 @@ function(directory = "~/data/scmm/",
     }, character(1L))
 }
 
-## TODO: Update after here
+.makeMetaDF <- function(filepaths, includeSlots = FALSE) {
+    namespat <- "^[a-z]*_(.*)"
+
+    basefiles <- gsub(allextpat, "", basename(filepaths))
+    obj_slots <-
+        if (!includeSlots)
+            c("metadata", "colData", "sampleMap")
+        else
+            NULL
+
+    dfr <- DataFrame(files = as(filepaths, "List"),
+        objectNames = basefiles,
+        dataNames = gsub(namespat, "\\1", basefiles),
+        dataTypes = vapply(
+            strsplit(basefiles, "[_-]"), `[[`, character(1L), 2L)
+   )
+    dfr[["experimentFiles"]] <- !dfr[["dataTypes"]] %in% obj_slots
+
+    dfr
+}
+
 .get_DispatchClass <- function(resource_files) {
     ext_map <- data.frame(
         ext_pattern = allextpat,
@@ -36,17 +56,17 @@ function(directory = "~/data/scmm/",
 .getMetadata <- function(
     directory, dataDir, ext_pattern, resource_maintainer, resource_biocVersion)
 {
-    dataTypeFolders <- dir(file.path(directory, dataDir))
     stopifnot(S4Vectors::isSingleString(directory),
         S4Vectors::isSingleString(dataDir))
-
+    ## loop over datasets in each dataDir
+    dataTypeFolders <- file.path(directory, dataDir)
     metasets <- lapply(dataTypeFolders, function(dataType) {
-        message("Working on: ", dataType)
-        datafilepaths <- .getDataFiles(directory = directory,
-            dataDir = dataDir, dataTypeFolder = dataType, pattern = ext_pattern)
+        datafilepaths <- .getDataFiles(
+            directory = directory, dataDir = dataType, pattern = ext_pattern
+        )
+        message("Working on: ", basename(dataType))
         dfmeta <- .makeMetaDF(datafilepaths, TRUE)
         dataList <- .loadRDAList(dfmeta)
-        dataList <- .addMethylation(dfmeta, dataList)
         replen <- length(datafilepaths)
 
         ResourceName <- basename(datafilepaths)
@@ -54,16 +74,18 @@ function(directory = "~/data/scmm/",
         Description <- .get_Description(Title, dataType)
         BiocVersion <- rep(as.character(resource_biocVersion), replen)
         Genome <- rep("", replen)
-        SourceType <- rep("TXT", replen)
-        SourceUrl <- rep("http://gdac.broadinstitute.org/", replen)
-        SourceVersion <- rep("1.1.38", replen)
-        Species <- rep("Homo sapiens", replen)
-        TaxonomyId <- rep("9606", replen)
+        SourceType <- rep("RDA", replen)
+        SourceUrl <-
+            rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
+                replen)
+        SourceVersion <- rep("1.0.0", replen)
+        Species <- rep("Mus musculus", replen)
+        TaxonomyId <- rep("10090", replen)
         Coordinate_1_based <- rep(as.logical(NA), replen)
         DataProvider <-
-            rep("Eli and Edythe L. Broad Institute of Harvard and MIT", replen)
+            rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", replen)
         Maintainer <- rep(resource_maintainer, replen)
-        RDataPath <- file.path("curatedTCGAData", ResourceName)
+        RDataPath <- file.path("SingleCellMultiModall", dataType, ResourceName)
         RDataClass <- .getRDataClass(dataList)
         DispatchClass <- .get_DispatchClass(ResourceName)
         data.frame(Title, Description, BiocVersion, Genome, SourceType, SourceUrl,
@@ -74,7 +96,6 @@ function(directory = "~/data/scmm/",
     do.call(rbind, metasets)
 }
 
-
 make_metadata <- function(
     directory = "~/data/scmm/",
     dataDir = "scnmt_gastrulation",
@@ -82,6 +103,9 @@ make_metadata <- function(
     resource_maintainer = utils::maintainer("SingleCellMultiModal"),
     resource_biocVersion = BiocManager::version())
 {
+    if (!identical(basename(getwd()), "SingleCellMultiModal"))
+        stop("Run 'make_metadata()' from directory: 'SingleCellMultiModal'")
+
     exdata <- "inst/extdata"
     metafile <- file.path(exdata, "metadata.csv")
 
