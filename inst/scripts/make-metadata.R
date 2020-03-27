@@ -98,7 +98,7 @@ function(directory = "~/data/scmm",
 
 make_metadata <- function(
     directory = "~/data/scmm/",
-    dataDir = "scnmt_gastrulation",
+    dataDir = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]$",
     resource_maintainer = utils::maintainer("SingleCellMultiModal"),
     resource_biocVersion = BiocManager::version())
