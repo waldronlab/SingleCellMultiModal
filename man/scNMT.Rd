@@ -7,7 +7,13 @@
 \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 }
 \usage{
-scNMT(dataType = "*", modes = "*", dry.run = TRUE, verbose = TRUE, ...)
+scNMT(
+  dataType = "mouse_gastrulation",
+  modes = "*",
+  dry.run = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{dataType}{character(1) Indicates study that produces this type of
@@ -33,8 +39,7 @@ scNMT assembles data on-the-fly from `ExperimentHub` to
     \insertCite{Argelaguet2019-et;textual}{SingleCellMultiModal}
 }
 \examples{
-scNMT(dataType = "mouse_gastrulation", modes = c("acc", "met", "rna"),
-    dry.run = TRUE)
+scNMT(dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
 
 }
 \references{
