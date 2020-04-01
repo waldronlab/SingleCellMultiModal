@@ -26,9 +26,14 @@ Depends:
     R (>= 4.0.0),
     MultiAssayExperiment
 Imports:
-    ExperimentHub
+    AnnotationHub,
+    ExperimentHub,
+    Rdpack,
+    utils
+RdMacros: Rdpack
 VignetteBuilder:
     knitr
 biocViews: ReproducibleResearch, CancerData, ExperimentHub
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.0

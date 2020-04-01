@@ -30,7 +30,7 @@ function(directory = "~/data/scmm",
         else
             NULL
 
-    dfr <- DataFrame(files = as(filepaths, "List"),
+    dfr <- S4Vectors::DataFrame(files = as(filepaths, "List"),
         objectNames = basefiles,
         dataNames = gsub(namespat, "\\1", basefiles),
         dataTypes = vapply(
@@ -59,8 +59,7 @@ function(directory = "~/data/scmm",
     stopifnot(S4Vectors::isSingleString(directory),
         S4Vectors::isSingleString(dataDir))
     ## loop over datasets in each dataDir
-    dataTypeFolders <- file.path(directory, dataDir)
-    metasets <- lapply(dataTypeFolders, function(dataType) {
+    metasets <- lapply(dataDir, function(dataType) {
         datafilepaths <- .getDataFiles(
             directory = directory, dataDir = dataType, pattern = ext_pattern
         )
@@ -74,7 +73,7 @@ function(directory = "~/data/scmm",
         Description <- .get_Description(Title, dataType)
         BiocVersion <- rep(as.character(resource_biocVersion), replen)
         Genome <- rep("", replen)
-        SourceType <- rep("RDA", replen)
+        SourceType <- rep("RDS", replen)
         SourceUrl <-
             rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
                 replen)
@@ -85,13 +84,14 @@ function(directory = "~/data/scmm",
         DataProvider <-
             rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", replen)
         Maintainer <- rep(resource_maintainer, replen)
-        RDataPath <- file.path("SingleCellMultiModall", dataType, ResourceName)
+        RDataPath <- file.path("singlecellmultimodal", dataType, ResourceName)
         RDataClass <- .getRDataClass(dataList)
         DispatchClass <- .get_DispatchClass(ResourceName)
+        DataType <- rep(dataType, replen)
         data.frame(Title, Description, BiocVersion, Genome, SourceType, SourceUrl,
                    SourceVersion, Species, TaxonomyId, Coordinate_1_based,
                    DataProvider, Maintainer, RDataClass, DispatchClass,
-                   ResourceName, RDataPath, stringsAsFactors = FALSE)
+                   ResourceName, RDataPath, DataType, stringsAsFactors = FALSE)
     })
     do.call(rbind, metasets)
 }

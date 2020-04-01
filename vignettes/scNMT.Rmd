@@ -1,0 +1,49 @@
+---
+title: "scNMT Mouse Gastrulation"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+  %\VignetteIndexEntry{scNMT Mouse Gastrulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UFT-8}
+output:
+    BiocStyle::html_document:
+      toc_float: true
+Package: SingleCellMultiModal
+bibliography: REFERENCES.bib
+---
+
+# Installation
+
+For now, install via GitHub:
+
+```{r, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("waldronlab/SingleCellMultiModal")
+```
+
+Load packages:
+
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(SingleCellMultiModal)
+library(MultiAssayExperiment)
+```
+
+# scNMT
+
+The dataset was provided by Argelaguet and colleagues [@Argelaguet2019-et].
+
+# Downloading datasets
+
+```{r}
+scNMT("mouse_gastrulation", mode = "*", dry.run = TRUE)
+```
+
+# sessionInfo
+
+```{r}
+sessionInfo()
+```
+
+# References

@@ -67,3 +67,33 @@
 .splitselect <- function(char, indx = 1L, sep = "_") {
     vapply(strsplit(char, "_"), `[[`, character(1L), indx)
 }
+
+.selectInRow <- function(dataframe, term, outcol, colname = NULL) {
+    if (!is.null(colname))
+        unlist(dataframe[unlist(dataframe[[colname]] == term), outcol])
+    else
+        unlist(dataframe[term, outcol])
+}
+
+.loadEnvObj <- function(filepath, name) {
+    OBJENV <- new.env(parent = emptyenv())
+    load(filepath, envir = OBJENV)
+    object <- OBJENV[[name]]
+    object
+}
+
+.loadRDAList <- function(metadata_frame) {
+    objnames <- .selectInRow(metadata_frame,
+        metadata_frame[["experimentFiles"]], "objectNames")
+
+    rdafiles <- .selectInRow(metadata_frame,
+        metadata_frame[["experimentFiles"]], "files")
+
+    dataList <- lapply(rdafiles, function(dpath) {
+        oname <- .selectInRow(metadata_frame, dpath, "objectNames", "files")
+        .loadEnvObj(dpath, oname)
+    })
+    names(dataList) <- objnames
+    dataList
+}
+
