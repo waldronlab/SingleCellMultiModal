@@ -84,7 +84,7 @@ function(directory = "~/data/scmm",
         DataProvider <-
             rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", replen)
         Maintainer <- rep(resource_maintainer, replen)
-        RDataPath <- file.path("singlecellmultimodal", dataType, ResourceName)
+        RDataPath <- file.path("SingleCellMultiModal", dataType, ResourceName)
         RDataClass <- .getRDataClass(dataList)
         DispatchClass <- .get_DispatchClass(ResourceName)
         DataType <- rep(dataType, replen)
