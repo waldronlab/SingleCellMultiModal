@@ -4,13 +4,18 @@
 if (FALSE) {
     library(MultiAssayExperiment)
 
-    mae <- readRDS("scnmtseq_gastrulation_mae_826-cells_orderedFeatures.rds")
     ddir <- "~/data/scmm/mouse_gastrulation"
 
     if (!dir.exists(ddir))
         dir.create(ddir, recursive = TRUE)
 
-    exportClass(mae, ddir, fmt = "csv")
+    scnmt <- readRDS(
+        file.path(ddir, "..",
+            "scnmtseq_gastrulation_mae_826-cells_orderedFeatures.rds"
+        )
+    )
+
+    exportClass(scnmt, ddir, fmt = "csv")
 }
 
 # convert .csv files to .rda matrices
