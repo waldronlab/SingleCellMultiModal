@@ -9,6 +9,45 @@
     sort(modes[!modes %in% slots])
 }
 
+.searchFromInputs <- function(glob, searchFields) {
+    regGlob <- glob2rx(unique(glob))
+    res <- unlist(lapply(regGlob, function(x) {
+        grep(x, searchFields, ignore.case = TRUE, value = TRUE)
+        }))
+    if (!length(res))
+        stop("No matches found, modify search criteria")
+    res
+}
+
+.conditionToIndex <- function(startVec, testVec, FUN) {
+    logmat <- vapply(startVec, FUN, logical(length(testVec)))
+    apply(logmat, 1L, any)
+}
+
+.getResources <- function(ExperimentHub, resTable, verbose) {
+    fileNames <- stats::setNames(resTable[["RDataPath"]], resTable[["Title"]])
+    resources <- lapply(fileNames, function(res) {
+        if (verbose)
+            message("Working on: ", gsub("\\.rda", "", basename(res)))
+        query(ExperimentHub, res)[[1L]]
+    })
+
+    resources
+}
+
+.test_eh <- function(...) {
+    tryCatch({
+        ExperimentHub(...)
+    }, error = function(e) {
+        emsg <- conditionMessage(e)
+        if (grepl("Timeout", emsg))
+            warning("[experimenthub.bioconductor.org] timeout, localHub=TRUE",
+                call.=FALSE)
+        ExperimentHub(..., localHub = TRUE)
+    })
+}
+
+
 #' Mouse Gastrulation Multi-modal Data
 #'
 #' @description scNMT assembles data on-the-fly from `ExperimentHub` to
@@ -55,7 +94,7 @@ scNMT <-
     stopifnot(is.character(dataType), length(dataType) == 1L, !is.na(dataType))
 
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    modes_metadat <- modes_metadat[modes_metadat[["dataType"]] == dataType, ]
+    modes_metadat <- modes_metadat[modes_metadat[["DataType"]] == dataType, ]
     eh_assays <- modes_metadat[["ResourceName"]]
     modesAvail <- .modesAvailable(eh_assays)
     if (identical(modes, "*") && dry.run) {
@@ -67,4 +106,32 @@ scNMT <-
         "\n")
         return(invisible())
     }
+
+    resultModes <- .searchFromInputs(modes, modesAvail)
+    fileIdx <- .conditionToIndex(resultModes, eh_assays, function(x) grepl(x, eh_assays))
+    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
+
+    if (dry.run) { return(fileMatches) }
+    eh <- .test_eh(...)
+    modes_list <- .getResources(
+        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
+    )
+    names(modes_list) <- gsub("scnmt_", "", names(modes_list))
+
+    eh_experiments <- ExperimentList(modes_list)
+
+    ess_names <- c("colData", "metadata", "sampleMap")
+
+    ess_idx <- .conditionToIndex(ess_names, eh_assays,
+        function(x) grepl(x, eh_assays))
+
+    ess_list <- .getResources(eh,
+        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
+    names(ess_list) <- gsub("scnmt_", "", names(ess_list))
+
+    MultiAssayExperiment(
+        experiments = eh_experiments,
+        colData = ess_list[["colData"]],
+        sampleMap = ess_list[["sampleMap"]],
+    )
 }
