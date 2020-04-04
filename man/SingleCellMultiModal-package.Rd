@@ -11,7 +11,7 @@ representation of multi-modal data from project such as `scNMT` for mouse
 gastrulation.
 }
 \examples{
-help(package = "curatedTCGAData")
+help(package = "SingleCellMultiModal")
 
 }
 \seealso{

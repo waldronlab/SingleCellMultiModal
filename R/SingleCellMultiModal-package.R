@@ -13,6 +13,6 @@ NULL
 #' gastrulation.
 #'
 #' @examples
-#' help(package = "curatedTCGAData")
+#' help(package = "SingleCellMultiModal")
 #'
 "_PACKAGE"
