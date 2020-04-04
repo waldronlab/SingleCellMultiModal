@@ -27,9 +27,13 @@ Depends:
     MultiAssayExperiment
 Imports:
     AnnotationHub,
+    BiocFileCache,
     ExperimentHub,
+    rappdirs,
     Rdpack,
     utils
+Suggests:
+    knitr
 RdMacros: Rdpack
 VignetteBuilder:
     knitr

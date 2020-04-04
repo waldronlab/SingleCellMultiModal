@@ -9,7 +9,7 @@ output:
     BiocStyle::html_document:
       toc_float: true
 Package: SingleCellMultiModal
-bibliography: REFERENCES.bib
+bibliography: ../inst/REFERENCES.bib
 ---
 
 # Installation

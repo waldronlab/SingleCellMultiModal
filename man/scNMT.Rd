@@ -28,6 +28,9 @@ download (default TRUE)}
 
 \item{verbose}{logical(1) Whether to show the dataset currently being
 (down)loaded (default TRUE)}
+
+\item{...}{Additional arguments passed on to the
+\link[ExperimentHub]{ExperimentHub} constructor}
 }
 \value{
 A single cell multi-modal \linkS4class{MultiAssayExperiment}

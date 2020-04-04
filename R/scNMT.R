@@ -68,6 +68,9 @@
 #' @param verbose logical(1) Whether to show the dataset currently being
 #'     (down)loaded (default TRUE)
 #'
+#' @param ... Additional arguments passed on to the
+#'     \link[ExperimentHub]{ExperimentHub} constructor
+#'
 #' @seealso SingleCellMultiModal-package
 #'
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment}

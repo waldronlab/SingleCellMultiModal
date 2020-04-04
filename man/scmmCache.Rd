@@ -27,8 +27,8 @@ future downloads will go to this folder.}
 \item{ask}{logical (default TRUE when interactive session) Confirm the file
 location of the cache directory}
 
-\item{cancer_study_id}{A single string from \code{studiesTable} associated
-with a study tarball}
+\item{accession}{character(1) A single string indicating the accession number
+of the study}
 }
 \description{
 Managing data downloads is important to save disk space and

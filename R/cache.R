@@ -3,7 +3,7 @@
     BiocFileCache::BiocFileCache(cache)
 }
 
-#' @name scmmCache 
+#' @name scmmCache
 #'
 #' @title Manage cache / download directories for study data
 #'
@@ -28,15 +28,15 @@
 #'
 #' @param directory The file location where the cache is located. Once set
 #' future downloads will go to this folder.
-#' 
+#'
 #' @param verbose Whether to print descriptive messages
-#' 
+#'
 #' @param ask logical (default TRUE when interactive session) Confirm the file
 #' location of the cache directory
-#' 
-#' @param cancer_study_id A single string from `studiesTable` associated
-#' with a study tarball
-#' 
+#'
+#' @param accession character(1) A single string indicating the accession number
+#' of the study
+#'
 #' @param ... For `scmmCache`, arguments passed to `setCache`
 #'
 #' @md
@@ -47,6 +47,7 @@ scmmCache <- function(...) {
 }
 
 #' @rdname scmmCache
+#' @importFrom rappdirs user_cache_dir
 #' @export
 setCache <-
     function(directory = rappdirs::user_cache_dir("SingleCellMultiModal"),
@@ -54,7 +55,7 @@ setCache <-
         ask = interactive())
 {
     stopifnot(is.character(directory),
-        isSingleString(directory), !is.na(directory))
+        S4Vectors::isSingleString(directory), !is.na(directory))
 
     if (!dir.exists(directory)) {
         if (ask) {
@@ -80,9 +81,9 @@ setCache <-
 #' @export
 removeCache <- function(accession) {
     bfc <- .getCache()
-    rid <- bfcquery(bfc, cancer_study_id, "rname", exact = TRUE)$rid
+    rid <- BiocFileCache::bfcquery(bfc, accession, "rname", exact = TRUE)$rid
     if (length(rid)) {
-        bfcremove(bfc, rid)
+        BiocFileCache::bfcremove(bfc, rid)
         message("Cache record: ", accession, ".tar.gz removed")
     } else
         message("No record found: ", accession, ".tar.gz")
