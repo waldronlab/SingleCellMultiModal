@@ -4,7 +4,7 @@ date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{scNMT Mouse Gastrulation}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UFT-8}
+  %\VignetteEncoding{UTF-8}
 output:
     BiocStyle::html_document:
       toc_float: true
