@@ -56,3 +56,8 @@ the user to delete the tarball associated with a study number in the
 cache.
 }
 
+\examples{
+getOption("scmmCache")
+scmmCache()
+
+}

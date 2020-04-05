@@ -41,6 +41,12 @@
 #'
 #' @md
 #'
+#' @examples
+#' getOption("scmmCache")
+#' scmmCache()
+#'
+#' @return The directory / option of the cache location
+#'
 #' @export
 scmmCache <- function(...) {
     getOption("scmmCache", setCache(..., verbose = FALSE))
