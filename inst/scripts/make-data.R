@@ -31,13 +31,20 @@ if (FALSE) {
         lapply(csvs, function(csvfile) {
             objname <- gsub(pattern, "", basename(csvfile))
             readin <- as.data.frame(readr::read_csv(csvfile))
-            if (!objname %in% c("scnmt_colData", "scnmt_sampleMap")) {
-                readin <- data.matrix(readin)
-            }
-            rownames(readin) <- readin[, 1L]
-            readin <- readin[, -1L]
-            rdafile <- gsub("csv", "rda", csvfile)
+            rnames <- readin[[1L]]
+
+            if (!objname %in% c("scnmt_colData", "scnmt_sampleMap"))
+                readin <- data.matrix(readin[, -1])
+            else if (identical(objname, "scnmt_colData"))
+                names(readin)[1] <- "cellID"
+            else
+                readin <- readin[, -1]
+
+            if (!objname %in% "scnmt_sampleMap")
+                rownames(readin) <- rnames
+
             assign(objname, readin)
+            rdafile <- gsub("csv", "rda", csvfile)
             save(list = objname, file = rdafile)
         })
     )

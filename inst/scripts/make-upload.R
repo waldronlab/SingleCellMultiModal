@@ -4,6 +4,7 @@ allextpat <- "\\.[Rr][Dd][Aa]$"
 # IMPORTANT! First do:
 # aws sts get-session-token
 # then add key value pairs to ~/.Renviron
+source("make-metadata.R")
 
 upload_aws <- function(
     dataList, dataType = "mouse_gastrulation", directory = "~/data/scmm",
@@ -13,7 +14,7 @@ upload_aws <- function(
         directory = directory, dataDir = dataType, pattern = fileExt
     )
     bucketLocation <-
-        file.path("experimenthub", "singlecellmultimodal", dataType)
+        file.path("experimenthub", "SingleCellMultiModal", dataType)
     if (upload)
         AnnotationHubData:::upload_to_S3(file = datafilepaths,
             remotename = basename(datafilepaths),
