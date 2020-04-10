@@ -30,6 +30,9 @@ location of the cache directory}
 \item{accession}{character(1) A single string indicating the accession number
 of the study}
 }
+\value{
+The directory / option of the cache location
+}
 \description{
 Managing data downloads is important to save disk space and
 re-downloading data files. This can be done effortlessly via the integrated

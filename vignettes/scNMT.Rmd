@@ -20,7 +20,7 @@ For now, install via GitHub:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("waldronlab/SingleCellMultiModal")
+BiocManager::install("SingleCellMultiModal")
 ```
 
 Load packages:
@@ -36,8 +36,16 @@ The dataset was provided by Argelaguet and colleagues [@Argelaguet2019-et].
 
 # Downloading datasets
 
+The user can see the available dataset by using the default options
+
 ```{r}
 scNMT("mouse_gastrulation", mode = "*", dry.run = TRUE)
+```
+
+Or by simply running:
+
+```{r}
+scNMT("mouse_gastrulation")
 ```
 
 # sessionInfo

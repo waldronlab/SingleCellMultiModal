@@ -38,15 +38,14 @@ A single cell multi-modal \linkS4class{MultiAssayExperiment}
 \description{
 scNMT assembles data on-the-fly from `ExperimentHub` to
     provide a \linkS4class{MultiAssayExperiment} container. The
-    `mouse_gastrulation` dataset is obtained from
-    \insertCite{Argelaguet2019-et;textual}{SingleCellMultiModal}
+    `mouse_gastrulation` dataset is obtained from Argelaguet et al. (2019)
 }
 \examples{
 scNMT(dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
 
 }
 \references{
-\insertCite{Argelaguet2019-et}{SingleCellMultiModal}
+Argelaguet et al. (2019)
 }
 \seealso{
 SingleCellMultiModal-package

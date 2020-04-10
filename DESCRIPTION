@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrates Multi-modal Single Cell Experiment datasets
-Version: 0.99.7
+Version: 0.99.8
 Authors@R:
     c(person(given = "Marcel",
              family = "Ramos",
@@ -30,11 +30,9 @@ Imports:
     BiocFileCache,
     ExperimentHub,
     rappdirs,
-    Rdpack,
     utils
 Suggests:
     knitr
-RdMacros: Rdpack
 VignetteBuilder:
     knitr
 biocViews: ReproducibleResearch, CancerData, ExperimentHub
