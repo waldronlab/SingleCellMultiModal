@@ -1,6 +1,5 @@
 #' @importFrom ExperimentHub loadResources ExperimentHub
 #' @importFrom AnnotationHub query
-#' @importFrom Rdpack reprompt
 #' @importFrom utils glob2rx read.csv
 #' @import MultiAssayExperiment
 NULL
