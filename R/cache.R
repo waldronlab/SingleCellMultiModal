@@ -60,8 +60,9 @@ setCache <-
         verbose = TRUE,
         ask = interactive())
 {
-    stopifnot(is.character(directory),
-        S4Vectors::isSingleString(directory), !is.na(directory))
+    stopifnot(
+        is.character(directory), length(directory) == 1L, !is.na(directory)
+    )
 
     if (!dir.exists(directory)) {
         if (ask) {
