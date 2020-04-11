@@ -30,7 +30,7 @@ download (default TRUE)}
 (down)loaded (default TRUE)}
 
 \item{...}{Additional arguments passed on to the
-\link[ExperimentHub]{ExperimentHub} constructor}
+\link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
 A single cell multi-modal \linkS4class{MultiAssayExperiment}

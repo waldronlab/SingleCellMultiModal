@@ -68,7 +68,7 @@
 #'     (down)loaded (default TRUE)
 #'
 #' @param ... Additional arguments passed on to the
-#'     \link[ExperimentHub]{ExperimentHub} constructor
+#'     \link[ExperimentHub]{ExperimentHub-class} constructor
 #'
 #' @seealso SingleCellMultiModal-package
 #'
