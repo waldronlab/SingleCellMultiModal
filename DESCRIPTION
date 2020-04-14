@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrates Multi-modal Single Cell Experiment datasets
-Version: 0.99.12
+Version: 0.99.13
 Authors@R:
     c(person(given = "Marcel",
              family = "Ramos",
