@@ -40,6 +40,29 @@ scNMT assembles data on-the-fly from `ExperimentHub` to
     provide a \linkS4class{MultiAssayExperiment} container. The
     `mouse_gastrulation` dataset is obtained from Argelaguet et al. (2019)
 }
+\details{
+scNMT is a combination of RNA-seq (transcriptome) and an adaptation
+    of Nucleosome Occupancy and Methylation sequencing (NOMe-seq, the
+    methylome and chromatin accessibility) technologies. For more
+    information, see Reik et al. (2018) DOI: 10.1038/s41467-018-03149-4
+
+    \itemize{
+        \item{mouse_gastrulation:}
+        \itemize{
+            \item{rna} - RNA-seq
+            \item{acc_*} - chromatin accessibility
+            \item{met_*} - DNA methylation
+            \itemize{
+                \item{cgi} - CpG islands
+                \item{CTCF} - footprints of CTCF binding
+                \item{DHS} - DNase Hypersensitive Sites
+                \item{genebody} - gene bodies
+                \item{p300} - p300 binding sites
+                \item{promoter} - gene promoters
+            }
+        }
+    }
+}
 \examples{
 scNMT(dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
 
