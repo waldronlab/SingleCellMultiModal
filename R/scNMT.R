@@ -47,6 +47,11 @@
     })
 }
 
+.getRowsFromMetadata <- function(metafile, dTypes) {
+    modes_metadat <- read.csv(metafile, stringsAsFactors = FALSE)
+    modes_metadat <- modes_metadat[modes_metadat[["DataType"]] == dtypes, ]
+    modes_metadat[["ResourceName"]]
+}
 
 #' Mouse Gastrulation Multi-modal Data
 #'
@@ -117,13 +122,11 @@ scNMT <-
     dataType <- tolower(dataType)
     stopifnot(is.character(dataType), length(dataType) == 1L, !is.na(dataType))
 
-    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    modes_metadat <- modes_metadat[modes_metadat[["DataType"]] == dataType, ]
-    eh_assays <- modes_metadat[["ResourceName"]]
+    eh_assays <- .getRowsFromMetadata(modes_file, dataType)
     modesAvail <- .modesAvailable(eh_assays)
     if (identical(modes, "*") && dry.run) {
         message("See the list below for available datasets for")
-        cat(dataType, ":\n",
+        message(dataType, ":\n",
             paste(
                 strwrap(paste(modesAvail, collapse = " "), width = 46),
             collapse = "\n "),
@@ -143,9 +146,7 @@ scNMT <-
     names(modes_list) <- gsub("scnmt_", "", names(modes_list))
 
     eh_experiments <- ExperimentList(modes_list)
-
     ess_names <- c("colData", "metadata", "sampleMap")
-
     ess_idx <- .conditionToIndex(ess_names, eh_assays,
         function(x) grepl(x, eh_assays))
 
