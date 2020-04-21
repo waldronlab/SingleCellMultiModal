@@ -122,12 +122,14 @@ scNMT <-
     eh_assays <- modes_metadat[["ResourceName"]]
     modesAvail <- .modesAvailable(eh_assays)
     if (identical(modes, "*") && dry.run) {
-        message("See the list below for available datasets for")
-        cat(dataType, ":\n",
+        message("Available data modes for\n",
+            "  ", dataType, ":\n",
             paste(
-                strwrap(paste(modesAvail, collapse = " "), width = 46),
-            collapse = "\n "),
-        "\n")
+                strwrap(paste(modesAvail, collapse = ", "),
+                    width = 46, indent = 4, exdent = 4),
+                collapse = "\n"
+            )
+        )
         return(invisible())
     }
 
