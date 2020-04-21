@@ -14,16 +14,14 @@ bibliography: ../inst/REFERENCES.bib
 
 # Installation
 
-For now, install via GitHub:
-
-```{r, eval=FALSE}
+```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("SingleCellMultiModal")
 ```
 
-Load packages:
+## Load
 
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
@@ -34,7 +32,7 @@ library(MultiAssayExperiment)
 
 The dataset was provided by Argelaguet and colleagues [@Argelaguet2019-et].
 
-# Downloading datasets
+## Downloading datasets
 
 The user can see the available dataset by using the default options
 
@@ -47,6 +45,40 @@ Or by simply running:
 ```{r}
 scNMT("mouse_gastrulation")
 ```
+
+## Chromatin Accessibility
+
+```{r}
+nmt <- scNMT("mouse_gastrulation", mode = c("*_DHS", "*_cgi", "*_genebody"), dry.run = FALSE)
+```
+
+Check row annotations:
+
+```{r}
+rownames(nmt)
+```
+
+Take a peek at the `sampleMap`:
+
+```{r}
+sampleMap(nmt)
+```
+
+See the accessibilty levels (as proportions) for DNase Hypersensitive Sites:
+
+```{r}
+head(assay(nmt, "acc_DHS"))[, 1:4]
+```
+
+## DNA Methylation
+
+See the methylation percentage / proportion:
+
+```{r}
+head(assay(nmt, "met_DHS"))[, 1:4]
+```
+
+For protocol information, see the references below.
 
 # sessionInfo
 
