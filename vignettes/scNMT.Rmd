@@ -30,7 +30,13 @@ library(MultiAssayExperiment)
 
 # scNMT
 
-The dataset was provided by Argelaguet and colleagues [@Argelaguet2019-et].
+The dataset was graciously provided by @Argelaguet2019-et.
+
+Scripts used to process the raw data were written and maintained by Argelaguet
+and colleagues and reside on GitHub:
+https://github.com/rargelaguet/scnmt_gastrulation
+
+For more information on the protocol, see @Clark2018-qg.
 
 ## Downloading datasets
 
@@ -46,11 +52,15 @@ Or by simply running:
 scNMT("mouse_gastrulation")
 ```
 
-## Chromatin Accessibility
+Example with actual data:
 
-```{r}
-nmt <- scNMT("mouse_gastrulation", mode = c("*_DHS", "*_cgi", "*_genebody"), dry.run = FALSE)
+```{r,message=FALSE}
+nmt <- scNMT("mouse_gastrulation", mode = c("*_DHS", "*_cgi", "*_genebody"),
+    dry.run = FALSE)
+nmt
 ```
+
+## Exploring the data structure
 
 Check row annotations:
 
@@ -63,6 +73,8 @@ Take a peek at the `sampleMap`:
 ```{r}
 sampleMap(nmt)
 ```
+
+## Chromatin Accessibility
 
 See the accessibilty levels (as proportions) for DNase Hypersensitive Sites:
 
