@@ -2,7 +2,7 @@
 % Please edit documentation in R/scNMT.R
 \name{scNMT}
 \alias{scNMT}
-\title{Mouse Gastrulation Multi-modal Data}
+\title{Single-cell Nucleosome, Methylation and Transcription sequencing}
 \source{
 \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 }
@@ -37,8 +37,12 @@ A single cell multi-modal \linkS4class{MultiAssayExperiment}
 }
 \description{
 scNMT assembles data on-the-fly from `ExperimentHub` to
-    provide a \linkS4class{MultiAssayExperiment} container. The
-    `mouse_gastrulation` dataset is obtained from Argelaguet et al. (2019)
+    provide a \linkS4class{MultiAssayExperiment} container. The `dataType`
+    argument provides access to the `mouse_gastrulation` dataset as obtained
+    from Argelaguet et al. (2019). Pre-processing code can be seen at
+    \url{https://github.com/rarguelaguet/mouse_gastrulation}. Protocol
+    information for this dataset is available at Clark et al. (2018). See
+    the vignette for the full citation.
 }
 \details{
 scNMT is a combination of RNA-seq (transcriptome) and an adaptation
