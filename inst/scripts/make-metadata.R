@@ -68,30 +68,8 @@ function(directory = "~/data/scmm",
         dataList <- .loadRDAList(dfmeta)
         replen <- length(datafilepaths)
 
-        ResourceName <- basename(datafilepaths)
-        Title <- gsub(ext_pattern, "", ResourceName)
-        Description <- .get_Description(Title, dataType)
-        BiocVersion <- rep(as.character(resource_biocVersion), replen)
-        Genome <- rep("", replen)
-        SourceType <- rep("RDS", replen)
-        SourceUrl <-
-            rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
-                replen)
-        SourceVersion <- rep("1.0.0", replen)
-        Species <- rep("Mus musculus", replen)
-        TaxonomyId <- rep("10090", replen)
-        Coordinate_1_based <- rep(as.logical(NA), replen)
-        DataProvider <-
-            rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", replen)
-        Maintainer <- rep(resource_maintainer, replen)
-        RDataPath <- file.path("SingleCellMultiModal", dataType, ResourceName)
-        RDataClass <- .getRDataClass(dataList)
-        DispatchClass <- .get_DispatchClass(ResourceName)
-        DataType <- rep(dataType, replen)
-        data.frame(Title, Description, BiocVersion, Genome, SourceType, SourceUrl,
-                   SourceVersion, Species, TaxonomyId, Coordinate_1_based,
-                   DataProvider, Maintainer, RDataClass, DispatchClass,
-                   ResourceName, RDataPath, DataType, stringsAsFactors = FALSE)
+        ## Make call to MetaHubCreate
+        metaset <- MetaHubCreate()$generate
     })
     do.call(rbind, metasets)
 }

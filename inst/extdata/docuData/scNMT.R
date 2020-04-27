@@ -1,15 +1,18 @@
-# TODO: create file and use within constructor function
-scnmtData <- data.frame(
-    DataProvider = "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
-    TaxonomyId = "10090",
-    Species = "Mus musculus",
-    SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
-    SourceType = "RDS",
-    stringsAsFactors = FALSE
-)
-
+# # TODO: write file and use within constructor function (doc_file)
+# scnmtData <- data.frame(
+#     DataProvider = "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
+#     TaxonomyId = "10090",
+#     Species = "Mus musculus",
+#     SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
+#     SourceType = "RDS",
+#     stringsAsFactors = FALSE
+# )
+# write.table(scnmtData, file = "mouse_gastrulation.csv", row.names = FALSE)
+# read.table("mouse_gastrulation.csv", header = TRUE)
+#
 ## read static file as input to functions
 
+source("../../scripts/make-metadata.R")
 .inferSource <- function(filepaths) {
     lfiles <- strsplit(filepaths, "\\.")
     exts <- mapply(`[`, lfiles, lengths(lfiles))
@@ -24,7 +27,14 @@ scnmtData <- data.frame(
     vTypes[match(uexts, uTypes)]
 }
 
-library(R6)
+.stdLength <- function(metalist, replength) {
+    lapply(metalist, function(field) {
+        if (length(field) == 1L)
+            rep(field, replength)
+        else
+            field
+    })
+}
 
 ## alist() with formals()<-
 ## fancyFUN <- function() {}
@@ -33,17 +43,18 @@ library(R6)
 MetaHubCreate <- function(base_dir, data_dir, ext_pattern, doc_file, data_list,
     pkg_name = "SingleCellMultiModal")
 {
+    location <- file.path(base_dir, data_dir)
     stopifnot(
-        dir.exists(base_dir), dir.exists(data_dir),
+        dir.exists(base_dir), dir.exists(location),
         is.character(ext_pattern), !is.na(ext_pattern),
         identical(length(ext_pattern), 1L),
         file.exists(doc_file), is.character(doc_file), !is.na(doc_file),
         identical(length(doc_file), 1L)
     )
-    location <- file.path(base_dir, data_dir)
     filepaths <- list.files(
         location, pattern = ext_pattern, full.names = TRUE, recursive = TRUE
     )
+    # docData <- read.table(doc_file, header = TRUE)
     dataType <- data_dir
     replength <- length(filepaths)
     resnames <- basename(filepaths)
@@ -56,7 +67,7 @@ MetaHubCreate <- function(base_dir, data_dir, ext_pattern, doc_file, data_list,
             Genome = character(1L),
             SourceType = NA_character_,
             SourceUrl = character(1L),
-            SourceVersion = "1.0.0",
+            SourceVersion = NA_character_,
             Species = character(1L),
             TaxonomyId = character(1L),
             Coordinate_1_based = NA,
@@ -64,33 +75,52 @@ MetaHubCreate <- function(base_dir, data_dir, ext_pattern, doc_file, data_list,
             Maintainer = NA_character_,
             RDataClass = NA_character_,
             DispatchClass = .get_DispatchClass(resnames),
+            Location_Prefix = NA_character_,
             RDataPath = NA_character_,
             ResourceName = resnames,
             DataType = dataType,
 
-            initialize = function(Title, Description, BiocVersion, Genome,
-                SourceType, SourceUrl, SourceVersion, Species, TaxonomyId,
-                Coordinate_1_based, DataProvider, Maintainer, RDataClass,
-                DispatchClass, ResourceName, RDataPath, DataType)
+            initialize = function(doc_file)
             {
-                if (is.na(Title))
+                if (is.na(self$Title))
                     self$Title <- gsub(ext_pattern, "", basename(filepaths))
-                if (is.na(Description))
-                    self$Description <- paste(Title, "data specific to the",
-                        toupper(DataType), "project")
-                if (is.na(SourceType))
-                    self$Description <- .inferSource(filepaths)
-                if (is.na(Maintainer))
+                if (is.na(self$Description))
+                    self$Description <- paste(self$Title, "data specific to the",
+                        toupper(self$DataType), "project")
+                if (is.na(self$SourceType))
+                    self$SourceType <- .inferSource(filepaths)
+                if (is.na(self$SourceVersion))
+                    self$SourceVersion <- "1.0.0"
+                if (is.na(self$Maintainer))
                     self$Maintainer <- utils::maintainer(pkg_name)
-                if (is.na(RDataClass))
+                if (is.na(self$RDataClass))
                     self$RDataClass <- .getRDataClass(dataList)
-                if (is.na(RDataPath))
-                    self$RDataPath <- file.path(pkg_name, dataType, ResourceName)
+                if (is.na(self$Location_Prefix))
+                    self$Location_Prefix <- NULL
+                if (is.na(self$RDataPath))
+                    self$RDataPath <- file.path(pkg_name, self$DataType,
+                        self$ResourceName)
+                lapply(names(doc_file), function(i) {
+                    assign(i, doc_file[[i]], self)
+                })
             },
             generate = function() {
-                # spill guts to data.frame
-
+                lnames <- !names(self) %in%
+                    c(".__enclos_env__", "clone", "generate", "initialize")
+                initList <- mget(names(self)[lnames], envir = self)
+                initList <- Filter(function(x) !is.null(x), initList)
+                flist <- .stdLength(initList, replength)
+                do.call(data.frame, c(flist, stringsAsFactors = FALSE))
             }
         )
     )
 }
+
+MetaHubCreate(
+    base_dir = "~/data/scmm",
+    data_dir = "mouse_gastrulation",
+    ext_pattern = "\\.[Rr][Dd][Aa]",
+    doc_file = "mouse_gastrulation.csv",
+    data_list = a_list,
+    pkg_name = "SingleCellMultiModal"
+)
