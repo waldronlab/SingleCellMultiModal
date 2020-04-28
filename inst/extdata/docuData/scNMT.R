@@ -93,10 +93,12 @@ MetaHubCreate <-
                     initialize = function(doc_file)
                     {
                         if (is.na(self$Title))
-                            self$Title <- gsub(ext_pattern, "", basename(filepaths))
+                            self$Title <- gsub(ext_pattern, "",
+                                basename(filepaths))
                         if (is.na(self$Description))
-                            self$Description <- paste(self$Title, "data specific to the",
-                                toupper(self$DataType), "project")
+                            self$Description <- paste(self$Title,
+                                "data specific to the", toupper(self$DataType),
+                                "project")
                         if (is.na(self$SourceType))
                             self$SourceType <- .inferSource(filepaths)
                         if (is.na(self$SourceVersion))
@@ -116,7 +118,8 @@ MetaHubCreate <-
                     },
                     generate = function() {
                         lnames <- !names(self) %in%
-                            c(".__enclos_env__", "clone", "generate", "initialize")
+                            c(".__enclos_env__", "clone", "generate",
+                                "initialize")
                         initList <- mget(names(self)[lnames], envir = self)
                         initList <- Filter(function(x) !is.null(x), initList)
                         flist <- .stdLength(initList, replength)
@@ -130,16 +133,8 @@ MetaHubCreate <-
     filepaths = fpathlist, replength = replengths)
     do.call(
         function(...) {
-            rbind.data.frame(..., make.row.names = FALSE, stringsAsFactors = FALSE)
+            rbind.data.frame(..., make.row.names = FALSE,
+                stringsAsFactors = FALSE)
         },
     metaList)
 }
-
-MetaHubCreate(
-    base_dir = "~/data/scmm",
-    data_dirs = "mouse_gastrulation",
-    ext_pattern = "\\.[Rr][Dd][Aa]",
-    doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
-    pkg_name = "SingleCellMultiModal"
-)
-

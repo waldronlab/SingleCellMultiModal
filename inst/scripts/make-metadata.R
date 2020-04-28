@@ -76,7 +76,7 @@ make_metadata <- function(
         base_dir = "~/data/scmm",
         data_dirs = "mouse_gastrulation",
         ext_pattern = "\\.[Rr][Dd][Aa]",
-        doc_file = "inst/extdata/docData/mouse_gastrulation.csv",
+        doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
         pkg_name = "SingleCellMultiModal"
     )
 
