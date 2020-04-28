@@ -13,6 +13,8 @@
 ## read static file as input to functions
 
 source("../../scripts/make-metadata.R")
+source("../../scripts/tools.R")
+
 .inferSource <- function(filepaths) {
     lfiles <- strsplit(filepaths, "\\.")
     exts <- mapply(`[`, lfiles, lengths(lfiles))
@@ -40,87 +42,104 @@ source("../../scripts/make-metadata.R")
 ## fancyFUN <- function() {}
 ## formals(fancyFUN) <- alist()
 
-MetaHubCreate <- function(base_dir, data_dir, ext_pattern, doc_file, data_list,
-    pkg_name = "SingleCellMultiModal")
+MetaHubCreate <-
+    function(base_dir, data_dirs, ext_pattern, doc_file, pkg_name)
 {
-    location <- file.path(base_dir, data_dir)
+    locations <- file.path(base_dir, data_dirs)
     stopifnot(
-        dir.exists(base_dir), dir.exists(location),
+        dir.exists(base_dir), all(dir.exists(locations)),
         is.character(ext_pattern), !is.na(ext_pattern),
         identical(length(ext_pattern), 1L),
         file.exists(doc_file), is.character(doc_file), !is.na(doc_file),
         identical(length(doc_file), 1L)
     )
-    filepaths <- list.files(
-        location, pattern = ext_pattern, full.names = TRUE, recursive = TRUE
-    )
-    # docData <- read.table(doc_file, header = TRUE)
-    dataType <- data_dir
-    replength <- length(filepaths)
-    resnames <- basename(filepaths)
-
-    R6::R6Class("EHubMeta",
-        public = list(
-            Title = NA_character_,
-            Description = NA_character_,
-            BiocVersion = as.character(BiocManager::version()),
-            Genome = character(1L),
-            SourceType = NA_character_,
-            SourceUrl = character(1L),
-            SourceVersion = NA_character_,
-            Species = character(1L),
-            TaxonomyId = character(1L),
-            Coordinate_1_based = NA,
-            DataProvider = character(1L),
-            Maintainer = NA_character_,
-            RDataClass = NA_character_,
-            DispatchClass = .get_DispatchClass(resnames),
-            Location_Prefix = NA_character_,
-            RDataPath = NA_character_,
-            ResourceName = resnames,
-            DataType = dataType,
-
-            initialize = function(doc_file)
-            {
-                if (is.na(self$Title))
-                    self$Title <- gsub(ext_pattern, "", basename(filepaths))
-                if (is.na(self$Description))
-                    self$Description <- paste(self$Title, "data specific to the",
-                        toupper(self$DataType), "project")
-                if (is.na(self$SourceType))
-                    self$SourceType <- .inferSource(filepaths)
-                if (is.na(self$SourceVersion))
-                    self$SourceVersion <- "1.0.0"
-                if (is.na(self$Maintainer))
-                    self$Maintainer <- utils::maintainer(pkg_name)
-                if (is.na(self$RDataClass))
-                    self$RDataClass <- .getRDataClass(dataList)
-                if (is.na(self$Location_Prefix))
-                    self$Location_Prefix <- NULL
-                if (is.na(self$RDataPath))
-                    self$RDataPath <- file.path(pkg_name, self$DataType,
-                        self$ResourceName)
-                lapply(names(doc_file), function(i) {
-                    assign(i, doc_file[[i]], self)
-                })
-            },
-            generate = function() {
-                lnames <- !names(self) %in%
-                    c(".__enclos_env__", "clone", "generate", "initialize")
-                initList <- mget(names(self)[lnames], envir = self)
-                initList <- Filter(function(x) !is.null(x), initList)
-                flist <- .stdLength(initList, replength)
-                do.call(data.frame, c(flist, stringsAsFactors = FALSE))
-            }
+    fpathlist <- lapply(locations, function(locs) {
+        list.files(
+            locs, pattern = ext_pattern, full.names = TRUE, recursive = TRUE
         )
-    )
+    })
+    docFrame <- read.table(doc_file, header = TRUE)
+    docList <- split(docFrame, seq_len(nrow(docFrame)))
+    dataTypes <- data_dirs
+    replengths <- lengths(fpathlist)
+    namelist <- lapply(fpathlist, basename)
+
+    metaList <- Map(
+        function(dataType, doc_file, resnames, filepaths, replength) {
+            message("Working on: ", basename(dataType))
+            dfmeta <- .makeMetaDF(filepaths, TRUE)
+            dataList <- .loadRDAList(dfmeta)
+            hubmeta <- R6::R6Class("EHubMeta",
+                public = list(
+                    Title = NA_character_,
+                    Description = NA_character_,
+                    BiocVersion = as.character(BiocManager::version()),
+                    Genome = character(1L),
+                    SourceType = NA_character_,
+                    SourceUrl = character(1L),
+                    SourceVersion = NA_character_,
+                    Species = character(1L),
+                    TaxonomyId = character(1L),
+                    Coordinate_1_based = NA,
+                    DataProvider = character(1L),
+                    Maintainer = NA_character_,
+                    RDataClass = NA_character_,
+                    DispatchClass = .get_DispatchClass(resnames),
+                    Location_Prefix = NA_character_,
+                    RDataPath = NA_character_,
+                    ResourceName = resnames,
+                    DataType = dataType,
+
+                    initialize = function(doc_file)
+                    {
+                        if (is.na(self$Title))
+                            self$Title <- gsub(ext_pattern, "", basename(filepaths))
+                        if (is.na(self$Description))
+                            self$Description <- paste(self$Title, "data specific to the",
+                                toupper(self$DataType), "project")
+                        if (is.na(self$SourceType))
+                            self$SourceType <- .inferSource(filepaths)
+                        if (is.na(self$SourceVersion))
+                            self$SourceVersion <- "1.0.0"
+                        if (is.na(self$Maintainer))
+                            self$Maintainer <- utils::maintainer(pkg_name)
+                        if (is.na(self$RDataClass))
+                            self$RDataClass <- .getRDataClass(dataList)
+                        if (is.na(self$Location_Prefix))
+                            self$Location_Prefix <- NULL
+                        if (is.na(self$RDataPath))
+                            self$RDataPath <- file.path(pkg_name, self$DataType,
+                                self$ResourceName)
+                        lapply(names(doc_file), function(i) {
+                            assign(i, doc_file[[i]], self)
+                        })
+                    },
+                    generate = function() {
+                        lnames <- !names(self) %in%
+                            c(".__enclos_env__", "clone", "generate", "initialize")
+                        initList <- mget(names(self)[lnames], envir = self)
+                        initList <- Filter(function(x) !is.null(x), initList)
+                        flist <- .stdLength(initList, replength)
+                        do.call(data.frame, c(flist, stringsAsFactors = FALSE))
+                    }
+                )
+            )
+            nhub <- hubmeta$new(doc_file)
+            nhub$generate()
+    }, dataType = dataTypes, doc_file = docList, resnames = namelist,
+    filepaths = fpathlist, replength = replengths)
+    do.call(
+        function(...) {
+            rbind.data.frame(..., make.row.names = FALSE, stringsAsFactors = FALSE)
+        },
+    metaList)
 }
 
 MetaHubCreate(
     base_dir = "~/data/scmm",
-    data_dir = "mouse_gastrulation",
+    data_dirs = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]",
-    doc_file = "mouse_gastrulation.csv",
-    data_list = a_list,
+    doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
     pkg_name = "SingleCellMultiModal"
 )
+

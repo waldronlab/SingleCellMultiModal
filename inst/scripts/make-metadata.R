@@ -53,36 +53,15 @@ function(directory = "~/data/scmm",
     ext_map[["Dispatch"]][apply(hitMatrix, 1L, which)]
 }
 
-.getMetadata <- function(
-    directory, dataDir, ext_pattern, resource_maintainer, resource_biocVersion)
-{
-    stopifnot(S4Vectors::isSingleString(directory),
-        S4Vectors::isSingleString(dataDir))
-    ## loop over datasets in each dataDir
-    metasets <- lapply(dataDir, function(dataType) {
-        datafilepaths <- .getDataFiles(
-            directory = directory, dataDir = dataType, pattern = ext_pattern
-        )
-        message("Working on: ", basename(dataType))
-        dfmeta <- .makeMetaDF(datafilepaths, TRUE)
-        dataList <- .loadRDAList(dfmeta)
-        replen <- length(datafilepaths)
-
-        ## Make call to MetaHubCreate
-        metaset <- MetaHubCreate()$generate
-    })
-    do.call(rbind, metasets)
-}
-
 make_metadata <- function(
     directory = "~/data/scmm/",
     dataDir = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    resource_maintainer = utils::maintainer("SingleCellMultiModal"),
-    resource_biocVersion = BiocManager::version())
+    doc_file = "mouse_gastrulation.csv",
+    pkg_name = "SingleCellMultiModal")
 {
-    if (!identical(basename(getwd()), "SingleCellMultiModal"))
-        stop("Run 'make_metadata()' from directory: 'SingleCellMultiModal'")
+    if (!identical(basename(getwd()), pkg_name))
+        stop("Run 'make_metadata()' from directory: ", pkg_name)
 
     exdata <- "inst/extdata"
     metafile <- file.path(exdata, "metadata.csv")
@@ -93,9 +72,13 @@ make_metadata <- function(
     if (file.exists(metafile))
         file.remove(metafile)
 
-    metadat <- .getMetadata(directory = directory, dataDir = dataDir,
-        ext_pattern = ext_pattern, resource_maintainer = resource_maintainer,
-        resource_biocVersion = resource_biocVersion)
+    metadat <- MetaHubCreate(
+        base_dir = "~/data/scmm",
+        data_dirs = "mouse_gastrulation",
+        ext_pattern = "\\.[Rr][Dd][Aa]",
+        doc_file = "inst/extdata/docData/mouse_gastrulation.csv",
+        pkg_name = "SingleCellMultiModal"
+    )
 
     readr::write_csv(metadat, "inst/extdata/metadata.csv", col_names = TRUE)
 }
