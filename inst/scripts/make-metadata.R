@@ -55,10 +55,11 @@ function(directory = "~/data/scmm",
 
 make_metadata <- function(
     directory = "~/data/scmm/",
-    dataDir = "mouse_gastrulation",
+    dataDirs = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "mouse_gastrulation.csv",
-    pkg_name = "SingleCellMultiModal")
+    doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
+    pkg_name = "SingleCellMultiModal",
+    append = FALSE)
 {
     if (!identical(basename(getwd()), pkg_name))
         stop("Run 'make_metadata()' from directory: ", pkg_name)
@@ -73,13 +74,13 @@ make_metadata <- function(
         file.remove(metafile)
 
     metadat <- MetaHubCreate(
-        base_dir = "~/data/scmm",
-        data_dirs = "mouse_gastrulation",
-        ext_pattern = "\\.[Rr][Dd][Aa]",
-        doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
-        pkg_name = "SingleCellMultiModal"
+        base_dir = directory,
+        data_dirs = dataDirs,
+        ext_pattern = ext_pattern,
+        doc_file = doc_file,
+        pkg_name = pkg_name
     )
 
-    readr::write_csv(metadat, "inst/extdata/metadata.csv", col_names = TRUE)
+    readr::write_csv(metadat, metafile, append = append, col_names = TRUE)
 }
 
