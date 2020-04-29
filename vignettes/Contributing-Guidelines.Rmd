@@ -1,0 +1,216 @@
+---
+output: github_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  cache = TRUE,
+  out.width = "100%"
+)
+options(tibble.print_min = 5, tibble.print_max = 5)
+```
+
+# Overview
+
+Thank you for your interest!
+
+The `SingleCellMultiModal` package aims to provide datasets that have similar
+pre-processing techniques from several different technologies. In particular,
+our initial focus is on providing data from `scNMT` and `scM&T` technologies
+but all multi-modal technologies are welcome.
+
+# List of Multi-modal Datasets
+
+Please see this spreadsheet for a list of available datasets:
+[Google Drive Sheet](https://drive.google.com/drive)
+
+# Contributing
+
+In order to contribute, we require data in a specific format.
+Aside from the usual required `metadata.csv` documentation in
+the package, contributors are required to add a name to the
+`DataType` column in the metadata table that indicates the name of the
+contributed dataset.
+
+```{r}
+library(SingleCellMultiModal)
+
+meta <- system.file("extdata", "metadata.csv", package = "SingleCellMultiModal",
+    mustWork = TRUE)
+head(read.csv(meta))
+```
+
+# vignettes
+
+Contributors are required to demonstrate user-level functionality via
+examples in a vignette for each contributed dataset.
+
+# R
+
+Ideally, the interface for the contributed dataset should be similar to that
+of `scNMT` so that users have a sense of consistency in the usage of the
+package. This means having one main function that returns a
+`MultiAssayExperiment` object and having options that show the user what
+datasets are available for a particular technology. Contributors should use
+`roxygen2` for documenting datasets.
+
+See the current example for implementation details:
+
+```{r}
+scNMT(dataType = "mouse_gastrulation", mode = "*", dry.run = TRUE)
+```
+
+# inst/*
+
+## extdata/
+
+The data should be organized in a data directory (`directory` argument in
+`make_metadata`) that includes another folder with the name of the dataset
+(`dataDir` in `make_metadata`) and documented in the `metadata.csv` under the
+`DataType` name. The fields required by `ExperimentHub` are listed here:
+
+* ResourceName
+* Title
+* Description
+* BiocVersion
+* Genome
+* SourceType
+* SourceUrl
+* SourceVersion
+* Species
+* TaxonomyId
+* Coordinate_1_based
+* DataProvider
+* Maintainer
+* RDataPath
+* RDataClass
+* DispatchClass
+* DataType
+
+To make it easy for contributions, we've provided a mechanism for easy
+documentation using a file from a `data.frame`.
+
+Interested contributors should modify the file in the location here:
+
+```{r}
+(docu <- system.file("extdata", "docuData", "singlecellmultimodal.csv",
+    package = "SingleCellMultiModal", mustWork = TRUE))
+```
+
+Contributors should add an additional row that documents the contributed
+dataset. The example below shows the currently present datasets
+(`dataType = "mouse_gastrulation"`):
+
+```{r}
+(scmeta <- read.table(docu, header = TRUE))
+```
+
+Contributors can create an entry to `singlecellmultimodal.csv` as a
+`data.frame` and add the row:
+
+```{r}
+(mymeta <- data.frame(
+    DataProvider = "Institute for Population Genetics",
+    TaxonomyId = "9606",
+    Species = "Homo sapiens",
+    SourceUrl = "https://online/location/where/data/is/obtained",
+    SourceType = "RDA",
+    stringsAsFactors = FALSE
+))
+```
+If the contributor wishes to build the entire metadata, he/she should bind
+the new metadata data.frame to the one obtained from the package:
+
+```{r}
+(newtable <- rbind(scmeta, mymeta))
+```
+
+### Saving the data
+
+After creating a metadata `data.frame`, the contributor can save the dataset
+as a `.csv` file using `write.table`.
+
+```{r,eval=FALSE}
+write.table(
+    newtable,
+    file = "../inst/extdata/docuData/singlecellmultimodal.csv",
+    row.names = FALSE
+)
+```
+
+If the contributor wishes to *append* only the contributed datasets to the
+metadata, the contributor can set a unique file name to the saved
+`data.frame`:
+
+```{r,eval=FALSE}
+write.table(
+    mymeta,
+    file = "../inst/extdata/docuData/mymeta.csv",
+    row.names = FALSE
+)
+```
+
+## Documenting diverse data
+
+In the case that the contributed data is not uniform, the `data.frame`
+will account for all contributed data files.
+For example, if the contributed data has a number of different source types,
+the contributor is required to create a `data.frame` with the number of rows
+equal to the number of files to be uploaded.
+
+```{r}
+(advMeta <- data.frame(
+    DataProvider = c("Institute of Population Genetics",
+        "Genetic Science Center"),
+    TaxonomyId = c("9606", "9606"),
+    Species = c("Homo sapiens", "Homo sapiens"),
+    SourceUrl = c("https://science/org", "https://science/gov"),
+    SourceType = c("RDS", "XML"),
+    stringsAsFactors = FALSE
+))
+```
+
+## scripts/
+
+Once the data is ready, the user can use the function in `make-metadata.R`
+in the `scripts` folder.  A typical call to `make_metadata` will either add to
+the metadata or replace it entirely. The easiest for current contributors is to
+`append` rows to the metadata file.
+
+```{r,eval=FALSE}
+make_metadata(
+    directory = "~/data/",
+    dataDirs = "contributed_data", # also the name of the DataType
+    ext_pattern = "\\.[Rr][Dd][Aa]$",
+    doc_file = "../inst/extdata/docuData/mymeta.csv",
+    pkg_name = "SingleCellMultiModal",
+    append = TRUE
+)
+```
+
+_Note_. The `make_metadata` function should be run from the base package
+directory from a GitHub / git checkout (`git clone ...`).
+
+The contributor should then create a Pull Request on [GitHub][].
+
+[GitHub]: https://github.com/waldronlab/SingleCellMultiModal/pulls
+
+If you are interested in contributing, I can help you go over the contribution
+and submission. Please contact me either on the [Bioc-community Slack][]
+(mramos148) or at marcel {dot} ramos [at] sph (dot) cuny (dot) edu.
+
+[Bioc-community Slack]: https://community-bioc.slack.com
+
+## sessionInfo
+
+<details>
+  <summary> sessionInfo </summary>
+
+```{r,echo=FALSE}
+sessionInfo()
+```
+
+</details>
