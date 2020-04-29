@@ -53,58 +53,16 @@ function(directory = "~/data/scmm",
     ext_map[["Dispatch"]][apply(hitMatrix, 1L, which)]
 }
 
-.getMetadata <- function(
-    directory, dataDir, ext_pattern, resource_maintainer, resource_biocVersion)
-{
-    stopifnot(S4Vectors::isSingleString(directory),
-        S4Vectors::isSingleString(dataDir))
-    ## loop over datasets in each dataDir
-    metasets <- lapply(dataDir, function(dataType) {
-        datafilepaths <- .getDataFiles(
-            directory = directory, dataDir = dataType, pattern = ext_pattern
-        )
-        message("Working on: ", basename(dataType))
-        dfmeta <- .makeMetaDF(datafilepaths, TRUE)
-        dataList <- .loadRDAList(dfmeta)
-        replen <- length(datafilepaths)
-
-        ResourceName <- basename(datafilepaths)
-        Title <- gsub(ext_pattern, "", ResourceName)
-        Description <- .get_Description(Title, dataType)
-        BiocVersion <- rep(as.character(resource_biocVersion), replen)
-        Genome <- rep("", replen)
-        SourceType <- rep("RDS", replen)
-        SourceUrl <-
-            rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
-                replen)
-        SourceVersion <- rep("1.0.0", replen)
-        Species <- rep("Mus musculus", replen)
-        TaxonomyId <- rep("10090", replen)
-        Coordinate_1_based <- rep(as.logical(NA), replen)
-        DataProvider <-
-            rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", replen)
-        Maintainer <- rep(resource_maintainer, replen)
-        RDataPath <- file.path("SingleCellMultiModal", dataType, ResourceName)
-        RDataClass <- .getRDataClass(dataList)
-        DispatchClass <- .get_DispatchClass(ResourceName)
-        DataType <- rep(dataType, replen)
-        data.frame(Title, Description, BiocVersion, Genome, SourceType, SourceUrl,
-                   SourceVersion, Species, TaxonomyId, Coordinate_1_based,
-                   DataProvider, Maintainer, RDataClass, DispatchClass,
-                   ResourceName, RDataPath, DataType, stringsAsFactors = FALSE)
-    })
-    do.call(rbind, metasets)
-}
-
 make_metadata <- function(
     directory = "~/data/scmm/",
-    dataDir = "mouse_gastrulation",
+    dataDirs = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    resource_maintainer = utils::maintainer("SingleCellMultiModal"),
-    resource_biocVersion = BiocManager::version())
+    doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
+    pkg_name = "SingleCellMultiModal",
+    append = FALSE)
 {
-    if (!identical(basename(getwd()), "SingleCellMultiModal"))
-        stop("Run 'make_metadata()' from directory: 'SingleCellMultiModal'")
+    if (!identical(basename(getwd()), pkg_name))
+        stop("Run 'make_metadata()' from directory: ", pkg_name)
 
     exdata <- "inst/extdata"
     metafile <- file.path(exdata, "metadata.csv")
@@ -115,10 +73,14 @@ make_metadata <- function(
     if (file.exists(metafile))
         file.remove(metafile)
 
-    metadat <- .getMetadata(directory = directory, dataDir = dataDir,
-        ext_pattern = ext_pattern, resource_maintainer = resource_maintainer,
-        resource_biocVersion = resource_biocVersion)
+    metadat <- MetaHubCreate(
+        base_dir = directory,
+        data_dirs = dataDirs,
+        ext_pattern = ext_pattern,
+        doc_file = doc_file,
+        pkg_name = pkg_name
+    )
 
-    readr::write_csv(metadat, "inst/extdata/metadata.csv", col_names = TRUE)
+    readr::write_csv(metadat, metafile, append = append, col_names = TRUE)
 }
 
