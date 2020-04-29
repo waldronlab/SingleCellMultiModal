@@ -9,6 +9,7 @@
 .Ruserdata
 .Rhistory
 *GSE*
+*_cache
 
 # Merge residuals
 *.orig

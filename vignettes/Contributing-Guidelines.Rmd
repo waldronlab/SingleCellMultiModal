@@ -35,9 +35,11 @@ the package, contributors are required to add a name to the
 `DataType` column in the metadata table that indicates the name of the
 contributed dataset.
 
-```{r}
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
+```
 
+```{r}
 meta <- system.file("extdata", "metadata.csv", package = "SingleCellMultiModal",
     mustWork = TRUE)
 head(read.csv(meta))
@@ -201,6 +203,8 @@ The contributor should then create a Pull Request on [GitHub][].
 If you are interested in contributing, I can help you go over the contribution
 and submission. Please contact me either on the [Bioc-community Slack][]
 (mramos148) or at marcel {dot} ramos [at] sph (dot) cuny (dot) edu.
+If you need to sign up to the community Slack channel, follow this link:
+https://bioc-community.herokuapp.com/
 
 [Bioc-community Slack]: https://community-bioc.slack.com
 

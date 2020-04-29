@@ -22,3 +22,4 @@
 ^README\.md$
 ^docs$
 ^data-raw$
+^.*_cache$
