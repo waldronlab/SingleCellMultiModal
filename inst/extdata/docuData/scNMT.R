@@ -1,17 +1,3 @@
-# # TODO: write file and use within constructor function (doc_file)
-# scnmtData <- data.frame(
-#     DataProvider = "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
-#     TaxonomyId = "10090",
-#     Species = "Mus musculus",
-#     SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
-#     SourceType = "RDS",
-#     stringsAsFactors = FALSE
-# )
-# write.table(scnmtData, file = "mouse_gastrulation.csv", row.names = FALSE)
-# read.table("mouse_gastrulation.csv", header = TRUE)
-#
-## read static file as input to functions
-
 source("../../scripts/make-metadata.R")
 source("../../scripts/tools.R")
 

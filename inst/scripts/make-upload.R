@@ -4,6 +4,9 @@ allextpat <- "\\.[Rr][Dd][Aa]$"
 # IMPORTANT! First do:
 # aws sts get-session-token
 # then add key value pairs to ~/.Renviron
+if (all(!grepl("output.*=.*text", readLines("~/.aws/config"))))
+    warning("Set the output value to 'text' in '.aws/config'")
+
 ab <- system2("aws", c("sts", "get-session-token"), stdout = TRUE)
 creds <- strsplit(ab, "\t")[[1]][c(2,4,5)]
 credlines <- paste0(
