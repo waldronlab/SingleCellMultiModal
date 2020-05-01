@@ -1,5 +1,5 @@
-source("../../scripts/make-metadata.R")
-source("../../scripts/tools.R")
+setwd("~/github/SingleCellMultiModal")
+source("inst/scripts/make-metadata.R")
 
 .inferSource <- function(filepaths) {
     lfiles <- strsplit(filepaths, "\\.")
@@ -23,6 +23,17 @@ source("../../scripts/tools.R")
             field
     })
 }
+
+.loadRDAList <- function(filepaths, ext_pat) {
+    basefiles <- gsub(ext_pat, "", basename(filepaths))
+    filepaths <- setNames(filepaths, basefiles)
+    Map(function(filepath, name) {
+        OBJENV <- new.env(parent = emptyenv())
+        load(filepath, envir = OBJENV)
+        OBJENV[[name]]
+    }, filepaths, basefiles)
+}
+
 
 ## alist() with formals()<-
 ## fancyFUN <- function() {}
@@ -53,8 +64,7 @@ MetaHubCreate <-
     metaList <- Map(
         function(dataType, doc_file, resnames, filepaths, replength) {
             message("Working on: ", basename(dataType))
-            dfmeta <- .makeMetaDF(filepaths, TRUE)
-            dataList <- .loadRDAList(dfmeta)
+            dataList <- .loadRDAList(filepaths, ext_pattern)
             hubmeta <- R6::R6Class("EHubMeta",
                 public = list(
                     Title = NA_character_,
@@ -70,7 +80,7 @@ MetaHubCreate <-
                     DataProvider = character(1L),
                     Maintainer = NA_character_,
                     RDataClass = NA_character_,
-                    DispatchClass = .get_DispatchClass(resnames),
+                    DispatchClass = .get_DispatchClass(resnames, ext_pattern),
                     Location_Prefix = NA_character_,
                     RDataPath = NA_character_,
                     ResourceName = resnames,

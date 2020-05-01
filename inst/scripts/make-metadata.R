@@ -20,30 +20,9 @@ function(directory = "~/data/scmm",
     }, character(1L))
 }
 
-.makeMetaDF <- function(filepaths, includeSlots = FALSE) {
-    namespat <- "^[a-z]*_(.*)"
-
-    basefiles <- gsub(allextpat, "", basename(filepaths))
-    obj_slots <-
-        if (!includeSlots)
-            c("metadata", "colData", "sampleMap")
-        else
-            NULL
-
-    dfr <- S4Vectors::DataFrame(files = as(filepaths, "List"),
-        objectNames = basefiles,
-        dataNames = gsub(namespat, "\\1", basefiles),
-        dataTypes = vapply(
-            strsplit(basefiles, "[_-]"), `[[`, character(1L), 2L)
-   )
-    dfr[["experimentFiles"]] <- !dfr[["dataTypes"]] %in% obj_slots
-
-    dfr
-}
-
-.get_DispatchClass <- function(resource_files) {
+.get_DispatchClass <- function(resource_files, ext_pat) {
     ext_map <- data.frame(
-        ext_pattern = allextpat,
+        ext_pattern = ext_pat,
         Dispatch = "Rda",
         stringsAsFactors = FALSE
     )
@@ -54,24 +33,23 @@ function(directory = "~/data/scmm",
 }
 
 make_metadata <- function(
-    directory = "~/data/scmm/",
+    directory = "~/data/scmm",
     dataDirs = "mouse_gastrulation",
     ext_pattern = "\\.[Rr][Dd][Aa]$",
     doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
     pkg_name = "SingleCellMultiModal",
+    dry.run = TRUE,
     append = FALSE)
 {
     if (!identical(basename(getwd()), pkg_name))
         stop("Run 'make_metadata()' from directory: ", pkg_name)
 
     exdata <- "inst/extdata"
-    metafile <- file.path(exdata, "metadata.csv")
 
     if (!dir.exists(exdata))
         dir.create(exdata)
 
-    if (file.exists(metafile))
-        file.remove(metafile)
+    metafile <- file.path(exdata, "metadata.csv")
 
     metadat <- MetaHubCreate(
         base_dir = directory,
@@ -81,6 +59,11 @@ make_metadata <- function(
         pkg_name = pkg_name
     )
 
-    readr::write_csv(metadat, metafile, append = append, col_names = TRUE)
+    if (!dry.run) {
+        file.remove(metafile)
+        readr::write_csv(metadat, metafile, append = append, col_names = TRUE)
+    }
+
+    metadat
 }
 
