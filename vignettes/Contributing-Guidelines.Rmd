@@ -193,6 +193,20 @@ make_metadata(
 )
 ```
 
+The user may also wish to run `dry.run=TRUE` to see the output `data.frame`
+to be added to the `metadata.csv` file.
+
+```{r,eval=FALSE}
+make_metadata(
+    directory = "~/data/",
+    dataDirs = "contributed_data", # also the name of the DataType
+    ext_pattern = "\\.[Rr][Dd][Aa]$",
+    doc_file = "../inst/extdata/docuData/mymeta.csv",
+    pkg_name = "SingleCellMultiModal",
+    dry.run = TRUE
+)
+```
+
 _Note_. The `make_metadata` function should be run from the base package
 directory from a GitHub / git checkout (`git clone ...`).
 
