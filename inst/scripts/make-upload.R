@@ -21,7 +21,7 @@ write(credlines, file = "~/.Renviron", append = TRUE)
 source("make-metadata.R")
 
 upload_aws <- function(
-    dataList, dataType = "mouse_gastrulation", directory = "~/data/scmm",
+    dataType = "mouse_gastrulation", directory = "~/data/scmm",
     upload = FALSE, fileExt = allextpat
 ) {
     datafilepaths <- .getDataFiles(

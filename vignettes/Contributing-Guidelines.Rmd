@@ -98,8 +98,10 @@ documentation using a file from a `data.frame`.
 Interested contributors should modify the file in the location here:
 
 ```{r}
-(docu <- system.file("extdata", "docuData", "singlecellmultimodal.csv",
-    package = "SingleCellMultiModal", mustWork = TRUE))
+(
+    docu <- system.file("extdata", "docuData", "singlecellmultimodal.csv",
+        package = "SingleCellMultiModal", mustWork = TRUE)
+)
 ```
 
 Contributors should add an additional row that documents the contributed
@@ -107,72 +109,69 @@ dataset. The example below shows the currently present datasets
 (`dataType = "mouse_gastrulation"`):
 
 ```{r}
-(scmeta <- read.table(docu, header = TRUE))
-```
-
-Contributors can create an entry to `singlecellmultimodal.csv` as a
-`data.frame` and add the row:
-
-```{r}
-(mymeta <- data.frame(
-    DataProvider = "Institute for Population Genetics",
-    TaxonomyId = "9606",
-    Species = "Homo sapiens",
-    SourceUrl = "https://online/location/where/data/is/obtained",
-    SourceType = "RDA",
-    stringsAsFactors = FALSE
-))
-```
-If the contributor wishes to build the entire metadata, he/she should bind
-the new metadata data.frame to the one obtained from the package:
-
-```{r}
-(newtable <- rbind(scmeta, mymeta))
-```
-
-### Saving the data
-
-After creating a metadata `data.frame`, the contributor can save the dataset
-as a `.csv` file using `write.table`.
-
-```{r,eval=FALSE}
-write.table(
-    newtable,
-    file = "../inst/extdata/docuData/singlecellmultimodal.csv",
-    row.names = FALSE
+(
+    scmeta <- read.csv(docu, header = TRUE)
 )
 ```
 
-If the contributor wishes to *append* only the contributed datasets to the
-metadata, the contributor can set a unique file name to the saved
-`data.frame`:
+Contributors can create an entry to `singlecellmultimodal.csv` as a
+`data.frame` and add the row. In this example, we create the data already
+contained in the `.csv` file:
+
+```{r}
+(
+    scmeta <- data.frame(
+        DataProvider =
+            "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
+        TaxonomyId = "10090",
+        Species = "Mus musculus",
+        SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
+        SourceType = "RDS",
+        dataType = "mouse_gastrulation",
+        stringsAsFactors = FALSE)
+)
+```
+
+If the contributor can then append the metadata to the existing file.
+
+### Saving the data
+
+After creating the documentation `data.frame`, the contributor can save the
+dataset as a `.csv` file using `write.csv` and append to the existing
+documentation file.
 
 ```{r,eval=FALSE}
-write.table(
-    mymeta,
-    file = "../inst/extdata/docuData/mymeta.csv",
+write.csv(
+    scmeta,
+    file = "../inst/extdata/docuData/singlecellmultimodal.csv",
+    append = TRUE,
     row.names = FALSE
 )
 ```
 
 ## Documenting diverse data
 
-In the case that the contributed data is not uniform, the `data.frame`
-will account for all contributed data files.
+In the case that the contributed data is not uniform, meaning that there are
+multiple file types in the data type folder, the `data.frame` will have to
+account for _all_ contributed data files.
 For example, if the contributed data has a number of different source types,
 the contributor is required to create a `data.frame` with the number of rows
 equal to the number of files to be uploaded.
 
+In this example, we have two datasets from different source types and formats:
+
 ```{r}
-(advMeta <- data.frame(
-    DataProvider = c("Institute of Population Genetics",
-        "Genetic Science Center"),
-    TaxonomyId = c("9606", "9606"),
-    Species = c("Homo sapiens", "Homo sapiens"),
-    SourceUrl = c("https://science/org", "https://science/gov"),
-    SourceType = c("RDS", "XML"),
-    stringsAsFactors = FALSE
-))
+(
+    advMeta <- data.frame(
+        DataProvider = c("Institute of Population Genetics",
+            "Genetic Science Center"),
+        TaxonomyId = c("9606", "9606"),
+        Species = c("Homo sapiens", "Homo sapiens"),
+        SourceUrl = c("https://science/org", "https://science/gov"),
+        SourceType = c("RDS", "XML"),
+        dataType = "human_genetics",
+        stringsAsFactors = FALSE)
+)
 ```
 
 ## scripts/
@@ -185,9 +184,9 @@ the metadata or replace it entirely. The easiest for current contributors is to
 ```{r,eval=FALSE}
 make_metadata(
     directory = "~/data/",
-    dataDirs = "contributed_data", # also the name of the DataType
+    dataDirs = "mouse_gastrulation", # also the name of the DataType
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "../inst/extdata/docuData/mymeta.csv",
+    doc_file = "../inst/extdata/docuData/singlecellmultimodal.csv",
     pkg_name = "SingleCellMultiModal",
     append = TRUE
 )

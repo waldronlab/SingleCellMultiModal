@@ -55,8 +55,8 @@ MetaHubCreate <-
             locs, pattern = ext_pattern, full.names = TRUE, recursive = TRUE
         )
     })
-    docFrame <- read.table(doc_file, header = TRUE)
-    docList <- split(docFrame, seq_len(nrow(docFrame)))
+    docFrame <- read.csv(doc_file, header = TRUE)
+    docList <- split(docFrame, docFrame[["dataType"]])
     dataTypes <- data_dirs
     replengths <- lengths(fpathlist)
     namelist <- lapply(fpathlist, basename)
