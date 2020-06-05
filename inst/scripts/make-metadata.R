@@ -1,12 +1,5 @@
 allextpat <- "\\.[Rr][Dd][Aa]$"
 
-.getDataFiles <-
-function(directory = "~/data/scmm",
-    dataDir = "mouse_gastrulation", pattern = allextpat) {
-    location <- file.path(directory, dataDir)
-    list.files(location, pattern = pattern, full.names = TRUE, recursive = TRUE)
-}
-
 .get_Description <- function(data_name, dataType) {
     paste(data_name, "data specific to the", toupper(dataType), "project")
 }
@@ -31,6 +24,9 @@ function(directory = "~/data/scmm",
             logical(length(resource_files)))
     ext_map[["Dispatch"]][apply(hitMatrix, 1L, which)]
 }
+
+setwd("~/github/SingleCellMultiModal")
+source("inst/extdata/docuData/scNMT.R")
 
 make_metadata <- function(
     directory = "~/data/scmm",

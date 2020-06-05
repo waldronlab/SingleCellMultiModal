@@ -1,6 +1,3 @@
-setwd("~/github/SingleCellMultiModal")
-source("inst/scripts/make-metadata.R")
-
 .inferSource <- function(filepaths) {
     lfiles <- strsplit(filepaths, "\\.")
     exts <- mapply(`[`, lfiles, lengths(lfiles))

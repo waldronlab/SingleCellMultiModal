@@ -1,3 +1,9 @@
+.getDataFiles <- function(directory = "~/data/scmm",
+    dataDir = "mouse_gastrulation", pattern = allextpat) {
+    location <- file.path(directory, dataDir)
+    list.files(location, pattern = pattern, full.names = TRUE, recursive = TRUE)
+}
+
 # upload files to AWS S3
 allextpat <- "\\.[Rr][Dd][Aa]$"
 
@@ -21,9 +27,11 @@ write(credlines, file = "~/.Renviron", append = TRUE)
 source("make-metadata.R")
 
 upload_aws <- function(
-    dataType = "mouse_gastrulation", directory = "~/data/scmm",
+    dataType, directory = "~/data/scmm",
     upload = FALSE, fileExt = allextpat
 ) {
+    if (missing(dataType))
+        stop("Enter a 'dataType' folder")
     datafilepaths <- .getDataFiles(
         directory = directory, dataDir = dataType, pattern = fileExt
     )
@@ -35,4 +43,5 @@ upload_aws <- function(
             bucket = bucketLocation)
 }
 
-upload_aws(upload=TRUE)
+# upload_aws(dataType = "mouse_gastrulation", upload=TRUE)
+# upload_aws(dataType = "mouse_visual_cortex", upload=TRUE)
