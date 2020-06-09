@@ -53,14 +53,14 @@ MetaHubCreate <-
         )
     })
     docFrame <- read.csv(doc_file, header = TRUE)
-    docList <- split(docFrame, docFrame[["dataType"]])
-    dataTypes <- data_dirs
+    docList <- split(docFrame, docFrame[["DataType"]])
+    DataTypes <- data_dirs
     replengths <- lengths(fpathlist)
     namelist <- lapply(fpathlist, basename)
 
     metaList <- Map(
-        function(dataType, doc_file, resnames, filepaths, replength) {
-            message("Working on: ", basename(dataType))
+        function(DataType, doc_file, resnames, filepaths, replength) {
+            message("Working on: ", basename(DataType))
             dataList <- .loadRDAList(filepaths, ext_pattern)
             hubmeta <- R6::R6Class("EHubMeta",
                 public = list(
@@ -81,7 +81,7 @@ MetaHubCreate <-
                     Location_Prefix = NA_character_,
                     RDataPath = NA_character_,
                     ResourceName = resnames,
-                    DataType = dataType,
+                    DataType = DataType,
 
                     initialize = function(doc_file)
                     {
@@ -118,11 +118,12 @@ MetaHubCreate <-
                         flist <- .stdLength(initList, replength)
                         do.call(data.frame, c(flist, stringsAsFactors = FALSE))
                     }
-                )
+                ),
+                lock_objects = FALSE
             )
             nhub <- hubmeta$new(doc_file)
             nhub$generate()
-    }, dataType = dataTypes, doc_file = docList, resnames = namelist,
+    }, DataType = DataTypes, doc_file = docList, resnames = namelist,
     filepaths = fpathlist, replength = replengths)
     do.call(
         function(...) {

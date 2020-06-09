@@ -1,2 +1,3 @@
-"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","dataType"
-"Dept. of Bioinformatics, The Babraham Institute, United Kingdom","10090","Mus musculus","https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ","RDS","mouse_gastrulation"
+"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","DataType","Maintainer"
+"Dept. of Bioinformatics, The Babraham Institute, United Kingdom",10090,"Mus musculus","https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ","RDS","mouse_gastrulation","Marcel Ramos <marcel.ramos@roswellpark.org>"
+"Dept. of Molecular Genetics, Allen Institute for Brain Science, United States",10090,"Mus musculus","https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0","RDS","mouse_visual_cortex","Dario Righelli <dario.righelli@gmail.com>"

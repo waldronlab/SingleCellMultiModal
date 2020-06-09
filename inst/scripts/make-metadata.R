@@ -30,7 +30,7 @@ source("inst/extdata/docuData/scNMT.R")
 
 make_metadata <- function(
     directory = "~/data/scmm",
-    dataDirs = "mouse_gastrulation",
+    dataDirs = c("mouse_gastrulation", "mouse_visual_cortex"),
     ext_pattern = "\\.[Rr][Dd][Aa]$",
     doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
     pkg_name = "SingleCellMultiModal",
@@ -63,3 +63,4 @@ make_metadata <- function(
     metadat
 }
 
+make_metadata(dry.run = FALSE)
