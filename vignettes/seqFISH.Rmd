@@ -61,7 +61,7 @@ Or by simply running:
 
 ```{r}
 mse <- SingleCellMultiModal::seqFISH(dataType="mouse_visual_cortex", 
-                                        modes="*", dry.run=FALSE)
+                                      modes="*", dry.run=FALSE)
 ```
 
 Example with actual data:

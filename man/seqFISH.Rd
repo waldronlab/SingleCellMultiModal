@@ -28,6 +28,9 @@ download (default TRUE)}
 \item{...}{Additional arguments passed on to the
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
+\value{
+A MultiAssayExperiment class object with seq-FISH data loaded
+}
 \description{
 seqFISH function assembles data on-the-fly from `ExperimentHub` 
     to provide a \linkS4class{MultiAssayExperiment} container. Actually 

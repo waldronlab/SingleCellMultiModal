@@ -8,8 +8,8 @@
 #' @details seq FISH data are a combination of single cell spatial coordinates 
 #'     and transcriptomics for a few hundreds of genes.
 #'     seq-FISH data can be combined for example with scRNA-seq data to unveil 
-#'     multiple aspects of cellular behaviour based on their spatial organization 
-#'     and transcription.
+#'     multiple aspects of cellular behaviour based on their spatial 
+#'     organization and transcription.
 #'     
 #'     Available datasets are:
 #'     \itemize{
@@ -40,6 +40,8 @@
 #' @param ... Additional arguments passed on to the
 #'     \link[ExperimentHub]{ExperimentHub-class} constructor
 #'     
+#' @return A MultiAssayExperiment class object with seq-FISH data loaded
+#' 
 #' @author Dario Righelli <dario.righelli <at> gmail.com>
 #' @importFrom SpatialExperiment SpatialExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
