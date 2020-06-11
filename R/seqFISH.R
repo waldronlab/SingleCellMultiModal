@@ -89,15 +89,17 @@ seqFISH <-
     )
     
     se <- SpatialExperiment::SpatialExperiment(
-                rowData=rownames(modes_list$seqFISH_Counts),
-                colData=modes_list$seqFISH_Labels,
-                assays=SimpleList(counts=as.matrix(modes_list$seqFISH_Counts)),
-                spatialCoords=modes_list$seqFISH_Coordinates)
+            rowData=rownames(modes_list$seqFISH_Counts),
+            colData=modes_list$seqFISH_Labels,
+            assays=S4Vectors::SimpleList(
+                    counts=as.matrix(modes_list$seqFISH_Counts)),
+            spatialCoords=modes_list$seqFISH_Coordinates)
     
     sce <- SingleCellExperiment::SingleCellExperiment(
                 rowData=rownames(modes_list$scRNA_Counts),
                 colData=modes_list$scRNA_Labels,
-                assays=SimpleList(counts=as.matrix(modes_list$scRNA_Counts)))
+                assays=S4Vectors::SimpleList(
+                    counts=as.matrix(modes_list$scRNA_Counts)))
     
     mse <- MultiAssayExperiment::MultiAssayExperiment(
                                     experiments=c("seqFISH"=se, "scRNAseq"=sce))

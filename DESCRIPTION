@@ -26,6 +26,8 @@ Imports:
     AnnotationHub,
     BiocFileCache,
     ExperimentHub,
+    S4Vectors,
+    SingleCellExperiment,
     SpatialExperiment,
     rappdirs,
     utils
