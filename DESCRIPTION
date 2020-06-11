@@ -26,6 +26,7 @@ Imports:
     AnnotationHub,
     BiocFileCache,
     ExperimentHub,
+    SpatialExperiment,
     rappdirs,
     utils
 Suggests:
