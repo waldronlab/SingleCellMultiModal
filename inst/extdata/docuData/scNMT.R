@@ -12,6 +12,40 @@
     vTypes[match(uexts, uTypes)]
 }
 
+doc_helper <-
+    function(
+        DataProvider, TaxonomyId, Species, SourceUrl, SourceType, DataType, ...
+    )
+{
+    args <- list(...)
+    saf <- args[["stringsAsFactors"]]
+    saf <- if(!is.null(saf)) saf else FALSE
+
+    input_vals <- list(
+        DataProvider = DataProvider, TaxonomyId = TaxonomyId,
+        Species = Species, SourceUrl = SourceUrl,
+        SourceType = SourceType, DataType = DataType
+    )
+    clens <- lengths(input_vals)
+    zlen <- !clens
+    if (any(zlen))
+        stop(
+            "Provide values for: ",
+            paste(names(input_vals)[zlen], collapse = ", ")
+        )
+
+    nonstd <- !clens %in% c(max(clens), 1L)
+    if (any(nonstd))
+        stop("Lengths of inputs must either be 1 or the max length")
+
+    input_vals[clens == 1L] <- lapply(input_vals[clens == 1L],
+        function(x) {
+            rep(x, max(clens))
+        })
+
+    as.data.frame(input_vals, stringsAsFactors = saf)
+}
+
 .stdLength <- function(metalist, replength) {
     lapply(metalist, function(field) {
         if (length(field) == 1L)
