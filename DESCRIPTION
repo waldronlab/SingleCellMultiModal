@@ -26,7 +26,6 @@ Imports:
     AnnotationHub,
     BiocFileCache,
     ExperimentHub,
-    rappdirs,
     utils
 Suggests:
     knitr

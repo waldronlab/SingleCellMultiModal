@@ -9,7 +9,7 @@
 scmmCache(...)
 
 setCache(
-  directory = rappdirs::user_cache_dir("SingleCellMultiModal"),
+  directory = tools::R_user_dir("SingleCellMultiModal", "cache"),
   verbose = TRUE,
   ask = interactive()
 )

@@ -30,4 +30,9 @@ Authors:
   \item Levi Waldron \email{lwaldron.research@gmail.com}
 }
 
+Other contributors:
+\itemize{
+  \item Dario Righelli \email{dario.righelli@gmail.com} [contributor]
+}
+
 }

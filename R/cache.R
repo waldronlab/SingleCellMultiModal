@@ -53,10 +53,9 @@ scmmCache <- function(...) {
 }
 
 #' @rdname scmmCache
-#' @importFrom rappdirs user_cache_dir
 #' @export
 setCache <-
-    function(directory = rappdirs::user_cache_dir("SingleCellMultiModal"),
+    function(directory = tools::R_user_dir("SingleCellMultiModal", "cache"),
         verbose = TRUE,
         ask = interactive())
 {
