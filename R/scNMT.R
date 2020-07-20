@@ -53,7 +53,8 @@
 #' @description scNMT assembles data on-the-fly from `ExperimentHub` to
 #'     provide a \linkS4class{MultiAssayExperiment} container. The `dataType`
 #'     argument provides access to the `mouse_gastrulation` dataset as obtained
-#'     from Argelaguet et al. (2019). Pre-processing code can be seen at
+#'     from Argelaguet et al. (2019; DOI: 10.1038/s41586-019-1825-8).
+#'     Pre-processing code can be seen at
 #'     \url{https://github.com/rarguelaguet/mouse_gastrulation}. Protocol
 #'     information for this dataset is available at Clark et al. (2018). See
 #'     the vignette for the full citation.
@@ -79,6 +80,9 @@
 #'             }
 #'         }
 #'     }
+#'     Special thanks to Al J Abadi for preparing the published data in time
+#'     for the 2020 BIRS Workshop, see the link here:
+#'     url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 #'
 #' @param dataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
