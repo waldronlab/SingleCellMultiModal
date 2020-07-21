@@ -19,12 +19,13 @@ removeCache(accession)
 \arguments{
 \item{...}{For \code{scmmCache}, arguments passed to \code{setCache}}
 
-\item{directory}{The file location where the cache is located. Once set
-future downloads will go to this folder.}
+\item{directory}{character(1) The file location where the cache is located.
+Once set, future downloads will go to this folder. See \code{setCache} section
+for details.}
 
 \item{verbose}{Whether to print descriptive messages}
 
-\item{ask}{logical (default TRUE when interactive session) Confirm the file
+\item{ask}{logical(1) (default TRUE when \code{interactive()}) Confirm the file
 location of the cache directory}
 
 \item{accession}{character(1) A single string indicating the accession number
@@ -48,8 +49,8 @@ a cache if not already created. A specific directory can be used via
 \section{setCache}{
 
 Specify the directory location of the data cache. By default, it will
-got to the user's home/.cache and "appname" directory as specified by
-\link{user_cache_dir}. (default appname: 'SingleCellMultiModal')
+go into the user's home and package name directory as given by
+\link[tools]{R_user_dir} (default: '$HOME/.cache/R/SingleCellMultiModal').
 }
 
 \section{removeCache}{
