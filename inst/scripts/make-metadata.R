@@ -1,7 +1,7 @@
 allextpat <- "\\.[Rr][Dd][Aa]$"
 
-.get_Description <- function(data_name, dataType) {
-    paste(data_name, "data specific to the", toupper(dataType), "project")
+.get_Description <- function(data_name, DataType) {
+    paste(data_name, "data specific to the", toupper(DataType), "project")
 }
 
 .getRDataClass <- function(dataList) {
@@ -25,14 +25,15 @@ allextpat <- "\\.[Rr][Dd][Aa]$"
     ext_map[["Dispatch"]][apply(hitMatrix, 1L, which)]
 }
 
-setwd("~/github/SingleCellMultiModal")
+setwd("~/gh/SingleCellMultiModal")
 source("inst/extdata/docuData/scNMT.R")
 
 make_metadata <- function(
     directory = "~/data/scmm",
-    dataDirs = c("mouse_gastrulation", "mouse_visual_cortex"),
+    dataDirs = c(rep("mouse_gastrulation", 2), "mouse_visual_cortex"),
+    version = c("1.0.0", "2.0.0"),
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "inst/extdata/docuData/singlecellmultimodal.csv",
+    doc_file,
     pkg_name = "SingleCellMultiModal",
     dry.run = TRUE,
     append = FALSE)
@@ -45,6 +46,9 @@ make_metadata <- function(
     if (!dir.exists(exdata))
         dir.create(exdata)
 
+    if (missing(doc_file))
+        stop("'doc_file' for generating the metadata is missing")
+
     metafile <- file.path(exdata, "metadata.csv")
 
     metadat <- MetaHubCreate(
@@ -52,6 +56,7 @@ make_metadata <- function(
         data_dirs = dataDirs,
         ext_pattern = ext_pattern,
         doc_file = doc_file,
+        version = version,
         pkg_name = pkg_name
     )
 
@@ -63,4 +68,23 @@ make_metadata <- function(
     metadat
 }
 
-make_metadata(dry.run = FALSE)
+# make_metadata(
+#     dataDirs = "mouse_gastrulation",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv1.csv",
+#     dry_run = FALSE
+# )
+
+make_metadata(
+    dataDirs = "mouse_gastrulation",
+    version = c("1.0.0", "2.0.0"),
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv2.csv",
+    dry.run = FALSE
+)
+
+# make_metadata(
+#     dataDirs = c(rep("mouse_gastrulation", 2), "mouse_visual_cortex"),
+#     version = c("1.0.0", "2.0.0", "1.0.0"),
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv3.csv",
+#     dry_run = FALSE
+# )

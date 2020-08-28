@@ -40,8 +40,8 @@ library(SingleCellMultiModal)
 ```
 
 ```{r}
-meta <- system.file("extdata", "metadata.csv", package = "SingleCellMultiModal",
-    mustWork = TRUE)
+meta <- system.file("extdata", "metadata.csv",
+    package = "SingleCellMultiModal", mustWork = TRUE)
 head(read.csv(meta))
 ```
 
@@ -98,10 +98,9 @@ documentation using a file from a `data.frame`.
 Interested contributors should modify the file in the location here:
 
 ```{r}
-(
-    docu <- system.file("extdata", "docuData", "singlecellmultimodal.csv",
-        package = "SingleCellMultiModal", mustWork = TRUE)
-)
+docu <- system.file("extdata", "docuData", "singlecellmultimodalv2.csv",
+    package = "SingleCellMultiModal", mustWork = TRUE)
+docu
 ```
 
 Contributors should add an additional row that documents the contributed
@@ -109,9 +108,7 @@ dataset. The example below shows the currently present datasets
 (`dataType = "mouse_gastrulation"`):
 
 ```{r}
-(
-    scmeta <- read.csv(docu, header = TRUE)
-)
+read.csv(docu, header = TRUE)
 ```
 
 Contributors can create an entry to `singlecellmultimodal.csv` as a
@@ -119,17 +116,19 @@ Contributors can create an entry to `singlecellmultimodal.csv` as a
 contained in the `.csv` file:
 
 ```{r}
-(
-    scmeta <- data.frame(
-        DataProvider =
-            "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
-        TaxonomyId = "10090",
-        Species = "Mus musculus",
-        SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
-        SourceType = "RDS",
-        dataType = "mouse_gastrulation",
-        stringsAsFactors = FALSE)
+scmeta <- data.frame(
+    DataProvider =
+        "Dept. of Bioinformatics, The Babraham Institute, United Kingdom",
+    TaxonomyId = "10090",
+    Species = "Mus musculus",
+    SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
+    SourceType = "RDS",
+    SourceVersion = c("1.0.0", "2.0.0"),
+    DataType = "mouse_gastrulation",
+    Maintainer = "Marcel Ramos <marcel.ramos@roswellpark.org>",
+    stringsAsFactors = FALSE
 )
+scmeta
 ```
 
 If the contributor can then append the metadata to the existing file.
@@ -143,8 +142,7 @@ documentation file.
 ```{r,eval=FALSE}
 write.csv(
     scmeta,
-    file = "../inst/extdata/docuData/singlecellmultimodal.csv",
-    append = TRUE,
+    file = "inst/extdata/docuData/singlecellmultimodal.csv",
     row.names = FALSE
 )
 ```
@@ -161,16 +159,15 @@ equal to the number of files to be uploaded.
 In this example, we have two datasets from different source types and formats:
 
 ```{r}
-(
-    advMeta <- data.frame(
-        DataProvider = c("Institute of Population Genetics",
-            "Genetic Science Center"),
-        TaxonomyId = c("9606", "9606"),
-        Species = c("Homo sapiens", "Homo sapiens"),
-        SourceUrl = c("https://science/org", "https://science/gov"),
-        SourceType = c("RDS", "XML"),
-        dataType = "human_genetics",
-        stringsAsFactors = FALSE)
+data.frame(
+    DataProvider = c("Institute of Population Genetics",
+        "Genetic Science Center"),
+    TaxonomyId = "9606",
+    Species = "Homo sapiens",
+    SourceUrl = c("https://science/org", "https://science/gov"),
+    SourceType = c("RDS", "XML"),
+    dataType = "human_genetics",
+    stringsAsFactors = FALSE
 )
 ```
 
@@ -186,9 +183,10 @@ make_metadata(
     directory = "~/data/",
     dataDirs = "mouse_gastrulation", # also the name of the DataType
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "../inst/extdata/docuData/singlecellmultimodal.csv",
+    doc_file = "../inst/extdata/docuData/singlecellmultimodalv3.csv",
     pkg_name = "SingleCellMultiModal",
-    append = TRUE
+    append = TRUE,
+    dry.run = TRUE
 )
 ```
 
@@ -202,6 +200,7 @@ make_metadata(
     ext_pattern = "\\.[Rr][Dd][Aa]$",
     doc_file = "../inst/extdata/docuData/mymeta.csv",
     pkg_name = "SingleCellMultiModal",
+    append = TRUE,
     dry.run = TRUE
 )
 ```
