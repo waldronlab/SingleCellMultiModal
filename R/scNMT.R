@@ -152,7 +152,7 @@ scNMT <-
     )
     names(modes_list) <- gsub("scnmt_", "", names(modes_list))
 
-    eh_experiments <- ExperimentList(modes_list)
+    eh_experiments <- ExperimentList(modes_list)[resultModes]
 
     ess_names <- c("colData", "metadata", "sampleMap")
 
