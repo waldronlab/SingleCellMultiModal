@@ -140,7 +140,8 @@ MetaHubCreate <-
                             self$Location_Prefix <- NULL
                         if (is.na(self$RDataPath))
                             self$RDataPath <- file.path(pkg_name,
-                                self$DataType, self$ResourceName)
+                                self$DataType, paste0("v", version),
+                                self$ResourceName)
                         lapply(names(doc_file), function(i) {
                             assign(i, doc_file[[i]], self)
                         })
