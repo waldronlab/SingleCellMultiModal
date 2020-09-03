@@ -71,15 +71,15 @@ doc_helper <-
 ## formals(fancyFUN) <- alist()
 
 MetaHubCreate <-
-    function(base_dir, data_dirs, ext_pattern, doc_file, pkg_name)
+    function(base_dir, data_dirs, ext_pattern, doc_file, version, pkg_name)
 {
-    locations <- file.path(base_dir, data_dirs)
+    locations <- file.path(base_dir, data_dirs, paste0("v", version))
     stopifnot(
         dir.exists(base_dir), all(dir.exists(locations)),
         is.character(ext_pattern), !is.na(ext_pattern),
         identical(length(ext_pattern), 1L),
         file.exists(doc_file), is.character(doc_file), !is.na(doc_file),
-        identical(length(doc_file), 1L)
+        identical(length(doc_file), 1L), is.character(version)
     )
     fpathlist <- lapply(locations, function(locs) {
         list.files(
@@ -87,14 +87,16 @@ MetaHubCreate <-
         )
     })
     docFrame <- read.csv(doc_file, header = TRUE)
-    docList <- split(docFrame, docFrame[["DataType"]])
+    docList <- split(docFrame,
+        list(docFrame[["DataType"]], docFrame[["SourceVersion"]]))
+    versions <- version
     DataTypes <- data_dirs
     replengths <- lengths(fpathlist)
     namelist <- lapply(fpathlist, basename)
 
     metaList <- Map(
-        function(DataType, doc_file, resnames, filepaths, replength) {
-            message("Working on: ", basename(DataType))
+        function(DataType, doc_file, resnames, filepaths, replength, version) {
+            message("Working on: ", basename(DataType), " v", version)
             dataList <- .loadRDAList(filepaths, ext_pattern)
             hubmeta <- R6::R6Class("EHubMeta",
                 public = list(
@@ -104,7 +106,7 @@ MetaHubCreate <-
                     Genome = character(1L),
                     SourceType = NA_character_,
                     SourceUrl = character(1L),
-                    SourceVersion = NA_character_,
+                    SourceVersion = version,
                     Species = character(1L),
                     TaxonomyId = character(1L),
                     Coordinate_1_based = NA,
@@ -137,7 +139,8 @@ MetaHubCreate <-
                         if (is.na(self$Location_Prefix))
                             self$Location_Prefix <- NULL
                         if (is.na(self$RDataPath))
-                            self$RDataPath <- file.path(pkg_name, self$DataType,
+                            self$RDataPath <- file.path(pkg_name,
+                                self$DataType, paste0("v", version),
                                 self$ResourceName)
                         lapply(names(doc_file), function(i) {
                             assign(i, doc_file[[i]], self)
@@ -158,7 +161,7 @@ MetaHubCreate <-
             nhub <- hubmeta$new(doc_file)
             nhub$generate()
     }, DataType = DataTypes, doc_file = docList, resnames = namelist,
-    filepaths = fpathlist, replength = replengths)
+    filepaths = fpathlist, replength = replengths, version = versions)
     do.call(
         function(...) {
             rbind.data.frame(..., make.row.names = FALSE,

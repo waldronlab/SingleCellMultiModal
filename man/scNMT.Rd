@@ -8,20 +8,24 @@
 }
 \usage{
 scNMT(
-  dataType = "mouse_gastrulation",
+  DataType = "mouse_gastrulation",
   modes = "*",
+  version = "2.0.0",
   dry.run = TRUE,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{dataType}{character(1) Indicates study that produces this type of
+\item{DataType}{character(1) Indicates study that produces this type of
 data (default: 'mouse_gastrulation')}
 
 \item{modes}{character() The assay types or modes of data to obtain these
 include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
 RNA-seq ("rna") by default.}
+
+\item{version}{character(1) The data version available in ExperimentHub
+defaults to the newest version ('2.0.0')}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -37,11 +41,11 @@ A single cell multi-modal \linkS4class{MultiAssayExperiment}
 }
 \description{
 scNMT assembles data on-the-fly from `ExperimentHub` to
-    provide a \linkS4class{MultiAssayExperiment} container. The `dataType`
+    provide a \linkS4class{MultiAssayExperiment} container. The `DataType`
     argument provides access to the `mouse_gastrulation` dataset as obtained
     from Argelaguet et al. (2019; DOI: 10.1038/s41586-019-1825-8).
     Pre-processing code can be seen at
-    \url{https://github.com/rarguelaguet/mouse_gastrulation}. Protocol
+    \url{https://github.com/rargelaguet/scnmt_gastrulation}. Protocol
     information for this dataset is available at Clark et al. (2018). See
     the vignette for the full citation.
 }
@@ -72,7 +76,7 @@ scNMT is a combination of RNA-seq (transcriptome) and an adaptation
     url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 }
 \examples{
-scNMT(dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
+scNMT(DataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
 
 }
 \references{

@@ -1,3 +1,17 @@
+## Changes in version 1.2.0
+
+### New features
+
+* New 'mouse_gastrulation' dataset released (version "2.0.0").
+* Use `version` argument to indicate the `mouse_gastrulation` data version
+* The data includes **all** cells not only the ones that passed the QC
+of all three 'omics (thanks @rargelaguet, @ajabadi).
+
+### Bug fixes and minor improvements
+
+* Default `version` argument in `scNMT` function now set to "2.0.0" (version
+"1.0.0" still available)
+
 ## Changes in version 1.0.0
 
 ### New features

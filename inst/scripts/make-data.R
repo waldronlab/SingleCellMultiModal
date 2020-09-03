@@ -9,9 +9,11 @@ if (FALSE) {
     if (!dir.exists(ddir))
         dir.create(ddir, recursive = TRUE)
 
+#   old
+#   "scnmtseq_gastrulation_mae_826-cells_orderedFeatures.rds"
     scnmt <- readRDS(
-        file.path(ddir, "..",
-            "scnmtseq_gastrulation_mae_826-cells_orderedFeatures.rds"
+        file.path(ddir, "allcells",
+            "scnmtseq_gastrulation_mae_AllCells.rds"
         )
     )
 
@@ -26,7 +28,7 @@ if (FALSE) {
 {
     location <- file.path(directory, dataDir)
     csvs <- list.files(location, pattern = pattern, full.names = TRUE,
-        recursive = TRUE)
+        recursive = FALSE)
     invisible(
         lapply(csvs, function(csvfile) {
             objname <- gsub(pattern, "", basename(csvfile))
@@ -49,4 +51,3 @@ if (FALSE) {
         })
     )
 }
-

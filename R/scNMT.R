@@ -47,15 +47,19 @@
     })
 }
 
+.isSingleCharNA <- function(x) {
+    is.character(x) && length(x) == 1L && !is.na(x)
+}
+
 
 #' Single-cell Nucleosome, Methylation and Transcription sequencing
 #'
 #' @description scNMT assembles data on-the-fly from `ExperimentHub` to
-#'     provide a \linkS4class{MultiAssayExperiment} container. The `dataType`
+#'     provide a \linkS4class{MultiAssayExperiment} container. The `DataType`
 #'     argument provides access to the `mouse_gastrulation` dataset as obtained
 #'     from Argelaguet et al. (2019; DOI: 10.1038/s41586-019-1825-8).
 #'     Pre-processing code can be seen at
-#'     \url{https://github.com/rarguelaguet/mouse_gastrulation}. Protocol
+#'     \url{https://github.com/rargelaguet/scnmt_gastrulation}. Protocol
 #'     information for this dataset is available at Clark et al. (2018). See
 #'     the vignette for the full citation.
 #'
@@ -84,12 +88,15 @@
 #'     for the 2020 BIRS Workshop, see the link here:
 #'     url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 #'
-#' @param dataType character(1) Indicates study that produces this type of
+#' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
 #'
 #' @param modes character() The assay types or modes of data to obtain these
 #'     include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
 #'     RNA-seq ("rna") by default.
+#'
+#' @param version character(1) The data version available in ExperimentHub
+#'     defaults to the newest version ('2.0.0')
 #'
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
@@ -110,28 +117,32 @@
 #'     Argelaguet et al. (2019)
 #'
 #' @examples
-#' scNMT(dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
+#' scNMT(DataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
 #'
 #' @export scNMT
 scNMT <-
     function(
-        dataType = "mouse_gastrulation", modes = "*", dry.run = TRUE,
-        verbose = TRUE, ...
+        DataType = "mouse_gastrulation", modes = "*", version = "2.0.0",
+        dry.run = TRUE, verbose = TRUE, ...
     )
 {
     modes_file <- system.file("extdata", "metadata.csv",
         package = "SingleCellMultiModal", mustWork = TRUE)
 
-    dataType <- tolower(dataType)
-    stopifnot(is.character(dataType), length(dataType) == 1L, !is.na(dataType))
+    DataType <- tolower(DataType)
+    stopifnot(
+        .isSingleCharNA(DataType), .isSingleCharNA(version)
+    )
 
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    modes_metadat <- modes_metadat[modes_metadat[["DataType"]] == dataType, ]
+    filt <- modes_metadat[["DataType"]] == DataType &
+        modes_metadat[["SourceVersion"]] == version
+    modes_metadat <- modes_metadat[filt, ]
     eh_assays <- modes_metadat[["ResourceName"]]
     modesAvail <- .modesAvailable(eh_assays)
     if (identical(modes, "*") && dry.run) {
         message("Available data modes for\n",
-            "  ", dataType, ":\n",
+            "  ", DataType, ":\n",
             paste(
                 strwrap(paste(modesAvail, collapse = ", "),
                     width = 46, indent = 4, exdent = 4),
@@ -142,7 +153,9 @@ scNMT <-
     }
 
     resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(resultModes, eh_assays, function(x) grepl(x, eh_assays))
+    fileIdx <- .conditionToIndex(
+        resultModes, eh_assays, function(x) grepl(x, eh_assays)
+    )
     fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
 
     if (dry.run) { return(fileMatches) }
