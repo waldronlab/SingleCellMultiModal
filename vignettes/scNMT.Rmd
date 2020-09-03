@@ -52,6 +52,21 @@ Or by simply running:
 scNMT("mouse_gastrulation")
 ```
 
+## Data versions
+
+A more recent release of the 'mouse_gastrulation' dataset has been provided
+by Argelaguet and colleagues. This dataset includes additional cells that
+did not pass the original quality metrics as imposed for the version `1.0.0`
+dataset.
+
+Use the `version` argument to indicate the newer dataset version (`2.0.0`):
+
+```{r}
+scNMT("mouse_gastrulation", version = '2.0.0', dry.run = TRUE)
+```
+
+## Actual Data
+
 Example with actual data:
 
 ```{r,message=FALSE}
