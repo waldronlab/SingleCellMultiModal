@@ -24,15 +24,34 @@
     apply(logmat, 1L, any)
 }
 
-.getResources <- function(ExperimentHub, resTable, verbose) {
+.queryResources <- function(ExperimentHub, resTable, verbose) {
     fileNames <- stats::setNames(resTable[["RDataPath"]], resTable[["Title"]])
-    resources <- lapply(fileNames, function(res) {
+    lapply(fileNames, function(res) {
         if (verbose)
             message("Working on: ", gsub("\\.rda", "", basename(res)))
-        query(ExperimentHub, res)[[1L]]
+        query(ExperimentHub, res)
     })
+}
 
-    resources
+.getResources <- function(ExperimentHub, resTable, verbose) {
+    infos <- .queryResources(ExperimentHub, resTable, verbose)
+    lapply(infos, `[[`, 1L)
+}
+
+.getResourceInfo <- function(ExperimentHub, resTable, verbose) {
+    infos <- .queryResources(ExperimentHub, resTable, verbose)
+    resID <- vapply(infos, names, character(1L))
+    restab <- AnnotationHub::getInfoOnIds(ExperimentHub, resID)
+    restab <-
+        restab[, !names(restab) %in% c("fetch_id", "status", "biocversion")]
+    sizes <- as.numeric(restab[["file_size"]])
+    class(sizes) <- "object_size"
+    restab <- as.data.frame(append(
+        restab,
+        list(file_size = format(sizes, units = "Mb")),
+        which(names(restab) == "title")
+    ))
+    restab[, -length(restab)]
 }
 
 .test_eh <- function(...) {
@@ -109,7 +128,8 @@
 #'
 #' @seealso SingleCellMultiModal-package
 #'
-#' @return A single cell multi-modal \linkS4class{MultiAssayExperiment}
+#' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
+#'     informative data.frame when `dry.run` is `TRUE`
 #'
 #' @source \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 #'
@@ -140,26 +160,18 @@ scNMT <-
     modes_metadat <- modes_metadat[filt, ]
     eh_assays <- modes_metadat[["ResourceName"]]
     modesAvail <- .modesAvailable(eh_assays)
-    if (identical(modes, "*") && dry.run) {
-        message("Available data modes for\n",
-            "  ", DataType, ":\n",
-            paste(
-                strwrap(paste(modesAvail, collapse = ", "),
-                    width = 46, indent = 4, exdent = 4),
-                collapse = "\n"
-            )
-        )
-        return(invisible())
-    }
-
     resultModes <- .searchFromInputs(modes, modesAvail)
     fileIdx <- .conditionToIndex(
         resultModes, eh_assays, function(x) grepl(x, eh_assays)
     )
     fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-
-    if (dry.run) { return(fileMatches) }
     eh <- .test_eh(...)
+
+    if (dry.run) {
+        return(.getResourceInfo(
+            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], FALSE
+        ))
+    }
     modes_list <- .getResources(
         eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
     )
