@@ -37,7 +37,8 @@ download (default TRUE)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A single cell multi-modal \linkS4class{MultiAssayExperiment}
+A single cell multi-modal \linkS4class{MultiAssayExperiment} or
+    informative data.frame when `dry.run` is `TRUE`
 }
 \description{
 scNMT assembles data on-the-fly from `ExperimentHub` to
