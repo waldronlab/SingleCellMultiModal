@@ -46,12 +46,14 @@
         restab[, !names(restab) %in% c("fetch_id", "status", "biocversion")]
     sizes <- as.numeric(restab[["file_size"]])
     class(sizes) <- "object_size"
+    titleidx <- which(names(restab) == "title")
     restab <- as.data.frame(append(
         restab,
-        list(file_size = format(sizes, units = "Mb")),
-        which(names(restab) == "title")
+        list(mode = gsub("scnmt_", "", restab[["title"]]),
+            file_size = format(sizes, units = "Mb")),
+        titleidx
     ))
-    restab[, -length(restab)]
+    restab[, -c(length(restab), titleidx)]
 }
 
 .test_eh <- function(...) {
@@ -107,15 +109,23 @@
 #'     for the 2020 BIRS Workshop, see the link here:
 #'     url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 #'
+#' @section versions:
+#'     Version '1.0.0' of the scNMT mouse_gastrulation dataset includes all of
+#'     the above mentioned assay technologies with filtering of cells based on
+#'     quality control metrics. Version '2.0.0' contains all of the cells
+#'     without the QC filter and does not contain CTCF binding footprints or
+#'     p300 binding sites.
+#'
 #' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
 #'
-#' @param modes character() The assay types or modes of data to obtain these
-#'     include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
-#'     RNA-seq ("rna") by default.
+#' @param modes character() A wildcard / glob pattern of modes, such as
+#'     \code{"acc*"}. A wildcard of \code{"*"} will return all modes including
+#'     Chromatin Accessibilty ("acc"), Methylation ("met"), RNA-seq ("rna")
+#'     which is the default.
 #'
-#' @param version character(1) The data version available in ExperimentHub
-#'     defaults to the newest version ('2.0.0')
+#' @param version character(1) Either version '1.0.0' or '2.0.0' depending on
+#'     data version required. See versions section.
 #'
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
@@ -129,23 +139,31 @@
 #' @seealso SingleCellMultiModal-package
 #'
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-#'     informative data.frame when `dry.run` is `TRUE`
+#'     informative `data.frame` when `dry.run` is `TRUE`
 #'
 #' @source \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 #'
 #' @references
 #'     Argelaguet et al. (2019)
 #'
+#' @md
+#'
 #' @examples
-#' scNMT(DataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
+#'
+#' scNMT(DataType = "mouse_gastrulation", modes = "*",
+#'     version = "1.0.0", dry.run = TRUE)
 #'
 #' @export scNMT
 scNMT <-
     function(
-        DataType = "mouse_gastrulation", modes = "*", version = "2.0.0",
+        DataType = "mouse_gastrulation", modes = "*", version,
         dry.run = TRUE, verbose = TRUE, ...
     )
 {
+    stopifnot(.isSingleChar(version), .isSingleChar(DataType))
+
+    if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
+        stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
     modes_file <- system.file("extdata", "metadata.csv",
         package = "SingleCellMultiModal", mustWork = TRUE)
 
