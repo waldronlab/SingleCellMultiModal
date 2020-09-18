@@ -38,7 +38,7 @@
 #'     include seq-FISH and scRNA-seq data by default.
 #'
 #' @param version character(1) The data version available in ExperimentHub
-#'     defaults to the newest version ('2.0.0').
+#'     defaults to the newest version.
 #'     
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
@@ -61,7 +61,7 @@
 #' seqFISH(dataType = "mouse_visual_cortex", modes = "*", dry.run = TRUE)
 seqFISH <- 
     function(
-        DataType="mouse_visual_cortex", modes="*", version="2.0.0", 
+        DataType="mouse_visual_cortex", modes="*", version, 
         dry.run=TRUE, verbose=TRUE, ...
     )
 {
