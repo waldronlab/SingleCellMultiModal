@@ -36,28 +36,28 @@ download (default TRUE)}
 A \linkS4class{MultiAssayExperiment} of seq-FISH data
 }
 \description{
-seqFISH function assembles data on-the-fly from `ExperimentHub` 
-    to provide a \linkS4class{MultiAssayExperiment} container. Actually 
-    the `dataType` argument provides access to the available datasets 
+seqFISH function assembles data on-the-fly from `ExperimentHub`
+    to provide a \linkS4class{MultiAssayExperiment} container. Actually
+    the `dataType` argument provides access to the available datasets
     associated to the package.
 }
 \details{
-seq FISH data are a combination of single cell spatial coordinates 
+seq FISH data are a combination of single cell spatial coordinates
     and transcriptomics for a few hundreds of genes.
-    seq-FISH data can be combined for example with scRNA-seq data to unveil 
-    multiple aspects of cellular behaviour based on their spatial 
+    seq-FISH data can be combined for example with scRNA-seq data to unveil
+    multiple aspects of cellular behaviour based on their spatial
     organization and transcription.
-    
+
     Available datasets are:
     \itemize{
         \item{mouse_visual_cortex: } combination of seq-FISH data as obtained
-        from Zhu et al. (2018) and scRNA-seq data as obtained from 
+        from Zhu et al. (2018) and scRNA-seq data as obtained from
         Tasic et al. (2016),
         Version 1.0.0 returns the full scRNA-seq data matrix, while version
-        2.0.0 returns the processed and subsetted scRNA-seq data matrix 
-        (produced for the Mathematical Frameworks for Integrative Analysis 
+        2.0.0 returns the processed and subsetted scRNA-seq data matrix
+        (produced for the Mathematical Frameworks for Integrative Analysis
         of Emerging Biological Data Types 2020 Workshop)
-        The returned seqFISH data are always the processed ones for the same 
+        The returned seqFISH data are always the processed ones for the same
         workshop.
         \itemize{
             \item{scRNA_Counts} - Tasic scRNA-seq gene count matrix

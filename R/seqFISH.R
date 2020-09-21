@@ -1,25 +1,25 @@
 #' seqFISH
-#' 
-#' @description seqFISH function assembles data on-the-fly from `ExperimentHub` 
-#'     to provide a \linkS4class{MultiAssayExperiment} container. Actually 
-#'     the `dataType` argument provides access to the available datasets 
+#'
+#' @description seqFISH function assembles data on-the-fly from `ExperimentHub`
+#'     to provide a \linkS4class{MultiAssayExperiment} container. Actually
+#'     the `dataType` argument provides access to the available datasets
 #'     associated to the package.
-#' @details seq FISH data are a combination of single cell spatial coordinates 
+#' @details seq FISH data are a combination of single cell spatial coordinates
 #'     and transcriptomics for a few hundreds of genes.
-#'     seq-FISH data can be combined for example with scRNA-seq data to unveil 
-#'     multiple aspects of cellular behaviour based on their spatial 
+#'     seq-FISH data can be combined for example with scRNA-seq data to unveil
+#'     multiple aspects of cellular behaviour based on their spatial
 #'     organization and transcription.
 #'
 #'     Available datasets are:
 #'     \itemize{
 #'         \item{mouse_visual_cortex: } combination of seq-FISH data as obtained
-#'         from Zhu et al. (2018) and scRNA-seq data as obtained from 
+#'         from Zhu et al. (2018) and scRNA-seq data as obtained from
 #'         Tasic et al. (2016),
 #'         Version 1.0.0 returns the full scRNA-seq data matrix, while version
-#'         2.0.0 returns the processed and subsetted scRNA-seq data matrix 
-#'         (produced for the Mathematical Frameworks for Integrative Analysis 
+#'         2.0.0 returns the processed and subsetted scRNA-seq data matrix
+#'         (produced for the Mathematical Frameworks for Integrative Analysis
 #'         of Emerging Biological Data Types 2020 Workshop)
-#'         The returned seqFISH data are always the processed ones for the same 
+#'         The returned seqFISH data are always the processed ones for the same
 #'         workshop.
 #'         \itemize{
 #'             \item{scRNA_Counts} - Tasic scRNA-seq gene count matrix
@@ -54,7 +54,7 @@
 #' @export
 seqFISH <-
     function(
-        DataType="mouse_visual_cortex", modes="*", version, 
+        DataType="mouse_visual_cortex", modes="*", version,
         dry.run=TRUE, verbose=TRUE, ...
     )
 {
@@ -64,8 +64,8 @@ seqFISH <-
     stopifnot(
         .isSingleCharNA(DataType), .isSingleCharNA(version)
     )
-    
-    
+
+
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
     filt <- modes_metadat[["DataType"]] == DataType &
         modes_metadat[["SourceVersion"]] == version
@@ -83,30 +83,30 @@ seqFISH <-
         )
         return(invisible())
     }
-    
-    
+
+
     resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(resultModes, eh_assays, 
+    fileIdx <- .conditionToIndex(resultModes, eh_assays,
                                 function(x) grepl(x, eh_assays))
     fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-    
-    
+
+
     if (dry.run) { return(fileMatches) }
     eh <- .test_eh(...)
     modes_list <- .getResources(
         eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
     )
-    
+
     names(modes_list) <- gsub("seqfish_", "", names(modes_list))
-    
+
     ess_names <- c("colData", "metadata", "sampleMap")
-    
+
     ess_idx <- .conditionToIndex(ess_names, eh_assays,
                                  function(x) grepl(x, eh_assays))
-    
+
     ess_list <- .getResources(eh,
                     modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
-    
+
     names(ess_list) <- gsub("seqfish_", "", names(ess_list))
 
     switch (DataType,
@@ -147,9 +147,9 @@ seqFISH <-
         assays=S4Vectors::SimpleList(
             counts=as.matrix(modes_list$seqFISH_Counts)),
         spatialCoords=modes_list$seqFISH_Coordinates)
-    
-    
-    
+
+
+
     mse <- MultiAssayExperiment::MultiAssayExperiment(
         experiments=c("seqFISH"=se, "scRNAseq"=sce))
     return(mse)
