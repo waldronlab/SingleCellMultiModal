@@ -25,7 +25,7 @@ allextpat <- "\\.[Rr][Dd][Aa]$"
     ext_map[["Dispatch"]][apply(hitMatrix, 1L, which)]
 }
 
-setwd("~/gh/SingleCellMultiModal")
+# setwd("~/gh/SingleCellMultiModal")
 source("inst/extdata/docuData/scNMT.R")
 
 make_metadata <- function(
