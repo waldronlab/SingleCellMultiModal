@@ -77,15 +77,15 @@ make_metadata <- function(
 #     doc_file = "inst/extdata/docuData/singlecellmultimodalv1.csv",
 #     dry_run = FALSE
 # )
-
-make_metadata(
-    directory="CITEseq/",
-    dataDirs = "cord_blood",
-    version = "1.0.0",
-    doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
-    dry.run = FALSE,
-    append=TRUE
-)
+# 
+# make_metadata(
+#     directory="CITEseq/",
+#     dataDirs = "cord_blood",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
+#     dry.run = FALSE,
+#     append=TRUE
+# )
 
 # make_metadata(
 #     dataDirs = c(rep("mouse_gastrulation", 2), "mouse_visual_cortex"),
