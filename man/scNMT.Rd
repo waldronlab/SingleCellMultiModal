@@ -20,7 +20,7 @@ scNMT(
 \item{DataType}{character(1) Indicates study that produces this type of
 data (default: 'mouse_gastrulation')}
 
-\item{modes}{character() The assay types or modes of data to obtain these
+\item{modes}{character() The assay types or modes of data to obtain, these
 include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
 RNA-seq ("rna") by default.}
 
@@ -37,7 +37,7 @@ download (default TRUE)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A single cell multi-modal \linkS4class{MultiAssayExperiment}
+A \linkS4class{MultiAssayExperiment} of scNMT data
 }
 \description{
 scNMT assembles data on-the-fly from `ExperimentHub` to

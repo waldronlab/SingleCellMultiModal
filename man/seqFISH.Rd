@@ -7,21 +7,21 @@
 seqFISH(
   DataType = "mouse_visual_cortex",
   modes = "*",
-  version = "2.0.0",
+  version,
   dry.run = TRUE,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{DataType}{character( ) indicating the identifier of the dataset to 
+\item{DataType}{character(1) indicating the identifier of the dataset to
 retrieve.  (default "mouse_visual_cortex")}
 
 \item{modes}{character( ) The assay types or modes of data to obtain these
 include seq-FISH and scRNA-seq data by default.}
 
 \item{version}{character(1) The data version available in ExperimentHub
-defaults to the newest version ('2.0.0').}
+defaults to the newest version ('2.0.0')}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -33,7 +33,7 @@ download (default TRUE)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A MultiAssayExperiment class object with seq-FISH data loaded
+A \linkS4class{MultiAssayExperiment} of seq-FISH data
 }
 \description{
 seqFISH function assembles data on-the-fly from `ExperimentHub` 
@@ -69,7 +69,10 @@ seq FISH data are a combination of single cell spatial coordinates
     }
 }
 \examples{
-seqFISH(dataType = "mouse_visual_cortex", modes = "*", dry.run = TRUE)
+
+seqFISH(dataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
+    dry.run = TRUE)
+
 }
 \author{
 Dario Righelli <dario.righelli <at> gmail.com>

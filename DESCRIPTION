@@ -26,8 +26,10 @@ Imports:
     AnnotationHub,
     BiocFileCache,
     ExperimentHub,
-    utils,
-    SpatialExperiment
+    S4Vectors,
+    SingleCellExperiment,
+    SpatialExperiment,
+    utils
 Suggests:
     knitr
 VignetteBuilder:

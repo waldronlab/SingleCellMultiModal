@@ -1,4 +1,3 @@
-
 #' seqFISH
 #' 
 #' @description seqFISH function assembles data on-the-fly from `ExperimentHub` 
@@ -10,7 +9,7 @@
 #'     seq-FISH data can be combined for example with scRNA-seq data to unveil 
 #'     multiple aspects of cellular behaviour based on their spatial 
 #'     organization and transcription.
-#'     
+#'
 #'     Available datasets are:
 #'     \itemize{
 #'         \item{mouse_visual_cortex: } combination of seq-FISH data as obtained
@@ -30,36 +29,30 @@
 #'             \item{seqFISH_Labels} - Zhu seq-FISH cell labels
 #'         }
 #'     }
-#'     
-#' @param DataType character( ) indicating the identifier of the dataset to 
+#'
+#' @inheritParams scNMT
+#'
+#' @param DataType character(1) indicating the identifier of the dataset to
 #'     retrieve.  (default "mouse_visual_cortex")
 #'
 #' @param modes character( ) The assay types or modes of data to obtain these
 #'     include seq-FISH and scRNA-seq data by default.
 #'
-#' @param version character(1) The data version available in ExperimentHub
-#'     defaults to the newest version.
-#'     
-#' @param dry.run logical(1) Whether to return the dataset names before actual
-#'     download (default TRUE)
+#' @return A \linkS4class{MultiAssayExperiment} of seq-FISH data
 #'
-#' @param verbose logical(1) Whether to show the dataset currently being
-#'     (down)loaded (default TRUE) 
-#'     
-#' @param ... Additional arguments passed on to the
-#'     \link[ExperimentHub]{ExperimentHub-class} constructor
-#'     
-#' @return A MultiAssayExperiment class object with seq-FISH data loaded
-#' 
 #' @author Dario Righelli <dario.righelli <at> gmail.com>
+#'
 #' @importFrom SpatialExperiment SpatialExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom S4Vectors DataFrame
-#' @export
+#'
 #' @examples
-#' seqFISH(dataType = "mouse_visual_cortex", modes = "*", dry.run = TRUE)
-seqFISH <- 
+#'
+#' seqFISH(dataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
+#'     dry.run = TRUE)
+#'
+#' @export
+seqFISH <-
     function(
         DataType="mouse_visual_cortex", modes="*", version, 
         dry.run=TRUE, verbose=TRUE, ...
