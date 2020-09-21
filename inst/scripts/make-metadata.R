@@ -61,8 +61,11 @@ make_metadata <- function(
     )
 
     if (!dry.run) {
-        file.remove(metafile)
-        readr::write_csv(metadat, metafile, append = append, col_names = TRUE)
+        if(!append)
+        {
+            file.remove(metafile)
+        }
+        readr::write_csv(metadat, metafile, append = append, na="NA")
     }
 
     metadat
@@ -76,10 +79,12 @@ make_metadata <- function(
 # )
 
 make_metadata(
-    dataDirs = "mouse_gastrulation",
-    version = c("1.0.0", "2.0.0"),
-    doc_file = "inst/extdata/docuData/singlecellmultimodalv2.csv",
-    dry.run = FALSE
+    directory="CITEseq/",
+    dataDirs = "cord_blood",
+    version = "1.0.0",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
+    dry.run = FALSE,
+    append=TRUE
 )
 
 # make_metadata(

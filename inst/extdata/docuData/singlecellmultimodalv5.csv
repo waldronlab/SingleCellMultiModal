@@ -1,0 +1,2 @@
+"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","SourceVersion","DataType","Maintainer"
+"Innovation Lab, New York Genome Center, New York, United States","9606","Homo Sapiens","https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866","TEXT","1.0.0","coord_blood","Dario Righelli <dario.righelli@gmail.com>"
