@@ -26,6 +26,9 @@ Imports:
     AnnotationHub,
     BiocFileCache,
     ExperimentHub,
+    S4Vectors,
+    SingleCellExperiment,
+    SpatialExperiment,
     utils
 Suggests:
     knitr

@@ -91,7 +91,7 @@
 #' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
 #'
-#' @param modes character() The assay types or modes of data to obtain these
+#' @param modes character() The assay types or modes of data to obtain, these
 #'     include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
 #'     RNA-seq ("rna") by default.
 #'
@@ -109,7 +109,7 @@
 #'
 #' @seealso SingleCellMultiModal-package
 #'
-#' @return A single cell multi-modal \linkS4class{MultiAssayExperiment}
+#' @return A \linkS4class{MultiAssayExperiment} of scNMT data
 #'
 #' @source \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 #'
