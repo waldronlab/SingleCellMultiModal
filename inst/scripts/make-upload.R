@@ -42,6 +42,7 @@ upload_aws <- function(
             bucket = bucketLocation)
 }
 
-upload_aws(DataType = "mouse_gastrulation", version = "1.0.0", upload=TRUE)
-upload_aws(DataType = "mouse_gastrulation", version = "2.0.0", upload=TRUE)
+# upload_aws(DataType = "mouse_gastrulation", version = "1.0.0", upload=TRUE)
+# upload_aws(DataType = "mouse_gastrulation", version = "2.0.0", upload=TRUE)
+# upload_aws(DataType = "cord_blood", directory="CITEseq", version = "1.0.0", upload=TRUE)
 # upload_aws(DataType = "mouse_visual_cortex", upload=TRUE)
