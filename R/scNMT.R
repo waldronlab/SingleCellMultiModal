@@ -38,7 +38,7 @@
     lapply(infos, `[[`, 1L)
 }
 
-.getResourceInfo <- function(ExperimentHub, resTable, verbose) {
+.getResourceInfo <- function(ExperimentHub, resTable, prefix, verbose) {
     infos <- .queryResources(ExperimentHub, resTable, verbose)
     resID <- vapply(infos, names, character(1L))
     restab <- AnnotationHub::getInfoOnIds(ExperimentHub, resID)
@@ -49,7 +49,7 @@
     titleidx <- which(names(restab) == "title")
     restab <- as.data.frame(append(
         restab,
-        list(mode = gsub("scnmt_", "", restab[["title"]]),
+        list(mode = gsub(prefix, "", restab[["title"]]),
             file_size = format(sizes, units = "Mb")),
         titleidx
     ))
@@ -72,6 +72,53 @@
     is.character(x) && length(x) == 1L && !is.na(x)
 }
 
+.getResourcesList <-
+    function(prefix, datatype, modes, version, dry.run, verbose, ...)
+{
+    modes_file <- system.file("extdata", "metadata.csv",
+        package = "SingleCellMultiModal", mustWork = TRUE)
+
+    DataType <- tolower(datatype)
+    stopifnot(
+        .isSingleCharNA(DataType), .isSingleCharNA(version)
+    )
+
+    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
+    filt <- modes_metadat[["DataType"]] == DataType &
+        modes_metadat[["SourceVersion"]] == version
+    modes_metadat <- modes_metadat[filt, , drop = FALSE]
+    eh_assays <- modes_metadat[["ResourceName"]]
+    modesAvail <- .modesAvailable(eh_assays)
+    resultModes <- .searchFromInputs(modes, modesAvail)
+    fileIdx <- .conditionToIndex(
+        resultModes, eh_assays, function(x) grepl(x, eh_assays)
+    )
+    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
+    eh <- .test_eh(...)
+
+    if (dry.run) {
+        return(.getResourceInfo(
+            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE 
+        ))
+    }
+    modes_list <- .getResources(
+        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
+    )
+    names(modes_list) <- gsub(prefix, "", names(modes_list))
+
+    eh_experiments <- ExperimentList(modes_list)[resultModes]
+
+    ess_names <- c("colData", "metadata", "sampleMap")
+
+    ess_idx <- .conditionToIndex(ess_names, eh_assays,
+        function(x) grepl(x, eh_assays))
+
+    ess_list <- .getResources(eh,
+        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
+    names(ess_list) <- gsub(prefix, "", names(ess_list))
+
+    c(list(experiments = eh_experiments), ess_list)
+}
 
 #' Single-cell Nucleosome, Methylation and Transcription sequencing
 #'
@@ -164,50 +211,15 @@ scNMT <-
 
     if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
         stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
-    modes_file <- system.file("extdata", "metadata.csv",
-        package = "SingleCellMultiModal", mustWork = TRUE)
-
-    DataType <- tolower(DataType)
-    stopifnot(
-        .isSingleCharNA(DataType), .isSingleCharNA(version)
-    )
-
-    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    filt <- modes_metadat[["DataType"]] == DataType &
-        modes_metadat[["SourceVersion"]] == version
-    modes_metadat <- modes_metadat[filt, ]
-    eh_assays <- modes_metadat[["ResourceName"]]
-    modesAvail <- .modesAvailable(eh_assays)
-    resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(
-        resultModes, eh_assays, function(x) grepl(x, eh_assays)
-    )
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-    eh <- .test_eh(...)
-
-    if (dry.run) {
-        return(.getResourceInfo(
-            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], FALSE
-        ))
-    }
-    modes_list <- .getResources(
-        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
-    )
-    names(modes_list) <- gsub("scnmt_", "", names(modes_list))
-
-    eh_experiments <- ExperimentList(modes_list)[resultModes]
-
-    ess_names <- c("colData", "metadata", "sampleMap")
-
-    ess_idx <- .conditionToIndex(ess_names, eh_assays,
-        function(x) grepl(x, eh_assays))
-
-    ess_list <- .getResources(eh,
-        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
-    names(ess_list) <- gsub("scnmt_", "", names(ess_list))
-
+        
+    ess_list <- .getResourcesList(prefix = "scnmt_", datatype = DataType,
+        modes = modes, version = version, dry.run = dry.run,
+        verbose = verbose, ...)
+    
+    if (dry.run) { return(ess_list) }
+    
     MultiAssayExperiment(
-        experiments = eh_experiments,
+        experiments = ess_list[["experiments"]],
         colData = ess_list[["colData"]],
         sampleMap = ess_list[["sampleMap"]],
     )
