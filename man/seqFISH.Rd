@@ -20,8 +20,8 @@ retrieve.  (default "mouse_visual_cortex")}
 \item{modes}{character( ) The assay types or modes of data to obtain these
 include seq-FISH and scRNA-seq data by default.}
 
-\item{version}{character(1) The data version available in ExperimentHub
-defaults to the newest version ('2.0.0')}
+\item{version}{character(1) Either version '1.0.0' or '2.0.0' depending on
+data version required. See versions section.}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -70,7 +70,7 @@ seq FISH data are a combination of single cell spatial coordinates
 }
 \examples{
 
-seqFISH(dataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
+seqFISH(DataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
     dry.run = TRUE)
 
 }

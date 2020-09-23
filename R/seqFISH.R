@@ -48,7 +48,7 @@
 #'
 #' @examples
 #'
-#' seqFISH(dataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
+#' seqFISH(DataType = "mouse_visual_cortex", modes = "*", version = "2.0.0",
 #'     dry.run = TRUE)
 #'
 #' @export
@@ -58,58 +58,15 @@ seqFISH <-
         dry.run=TRUE, verbose=TRUE, ...
     )
 {
-    modes_file <- system.file("extdata", "metadata.csv",
-            package = "SingleCellMultiModal", mustWork = TRUE)
-    DataType <- tolower(DataType)
-    stopifnot(
-        .isSingleCharNA(DataType), .isSingleCharNA(version)
-    )
+    ess_list <- .getResourcesList(prefix = "seqfish_", datatype = DataType,
+        modes = modes, version = version, dry.run = dry.run,
+        verbose = verbose, ...)
 
+    if (dry.run) { return(ess_list) }
 
-    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    filt <- modes_metadat[["DataType"]] == DataType &
-        modes_metadat[["SourceVersion"]] == version
-    modes_metadat <- modes_metadat[filt, ]
-    eh_assays <- modes_metadat[["ResourceName"]]
-    modesAvail <- .modesAvailable(eh_assays)
-    if (identical(modes, "*") && dry.run) {
-        message("Available data modes for\n",
-                "  ", DataType, ":\n",
-                paste(
-                    strwrap(paste(modesAvail, collapse = ", "),
-                            width = 46, indent = 4, exdent = 4),
-                    collapse = "\n"
-                )
-        )
-        return(invisible())
-    }
+    modes_list <- ess_list[["experiments"]]
 
-
-    resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(resultModes, eh_assays,
-                                function(x) grepl(x, eh_assays))
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-
-
-    if (dry.run) { return(fileMatches) }
-    eh <- .test_eh(...)
-    modes_list <- .getResources(
-        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
-    )
-
-    names(modes_list) <- gsub("seqfish_", "", names(modes_list))
-
-    ess_names <- c("colData", "metadata", "sampleMap")
-
-    ess_idx <- .conditionToIndex(ess_names, eh_assays,
-                                 function(x) grepl(x, eh_assays))
-
-    ess_list <- .getResources(eh,
-                    modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
-
-    names(ess_list) <- gsub("seqfish_", "", names(ess_list))
-
-    switch (DataType,
+    switch(DataType,
         "mouse_visual_cortex" = {
             mse <- .mouse_visual_cortex(modes_list=modes_list,
                                         version=version)
@@ -125,30 +82,23 @@ seqFISH <-
 
 .mouse_visual_cortex <- function(modes_list, version)
 {
-    switch(version,
-        "1.0.0" = {
-            sce <- SingleCellExperiment::SingleCellExperiment(
-                rowData=rownames(modes_list$scRNA_Full_Counts),
-                colData=modes_list$scRNA_Full_Labels,
-                assays=S4Vectors::SimpleList(
-                    counts=as.matrix(modes_list$scRNA_Full_Counts)))
-        },
-        "2.0.0" = {
-            sce <- SingleCellExperiment::SingleCellExperiment(
-                rowData=rownames(modes_list$scRNA_Counts),
-                colData=modes_list$scRNA_Labels,
-                assays=S4Vectors::SimpleList(
-                    counts=as.matrix(modes_list$scRNA_Counts)))
-        }
+    res <- paste0("scRNA",
+        if (identical(version, "1.0.0")) "_Full" else "",
+        "_", c("Counts", "Labels")
     )
+
+    sce <- SingleCellExperiment::SingleCellExperiment(
+        rowData=rownames(modes_list[[res[1]]]),
+        colData=modes_list[[res[2]]],
+        assays=S4Vectors::SimpleList(counts=as.matrix(modes_list[[res[1]]]))
+    )
+
     se <- SpatialExperiment::SpatialExperiment(
         rowData=rownames(modes_list$seqFISH_Counts),
         colData=modes_list$seqFISH_Labels,
         assays=S4Vectors::SimpleList(
             counts=as.matrix(modes_list$seqFISH_Counts)),
         spatialCoords=modes_list$seqFISH_Coordinates)
-
-
 
     mse <- MultiAssayExperiment::MultiAssayExperiment(
         experiments=c("seqFISH"=se, "scRNAseq"=sce))
