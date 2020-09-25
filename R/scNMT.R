@@ -38,7 +38,7 @@
     lapply(infos, `[[`, 1L)
 }
 
-.getResourceInfo <- function(ExperimentHub, resTable, verbose) {
+.getResourceInfo <- function(ExperimentHub, resTable, prefix, verbose) {
     infos <- .queryResources(ExperimentHub, resTable, verbose)
     resID <- vapply(infos, names, character(1L))
     restab <- AnnotationHub::getInfoOnIds(ExperimentHub, resID)
@@ -46,12 +46,14 @@
         restab[, !names(restab) %in% c("fetch_id", "status", "biocversion")]
     sizes <- as.numeric(restab[["file_size"]])
     class(sizes) <- "object_size"
+    titleidx <- which(names(restab) == "title")
     restab <- as.data.frame(append(
         restab,
-        list(file_size = format(sizes, units = "Mb")),
-        which(names(restab) == "title")
+        list(mode = gsub(prefix, "", restab[["title"]]),
+            file_size = format(sizes, units = "Mb")),
+        titleidx
     ))
-    restab[, -length(restab)]
+    restab[, -c(length(restab), titleidx)]
 }
 
 .test_eh <- function(...) {
@@ -70,6 +72,53 @@
     is.character(x) && length(x) == 1L && !is.na(x)
 }
 
+.getResourcesList <-
+    function(prefix, datatype, modes, version, dry.run, verbose, ...)
+{
+    modes_file <- system.file("extdata", "metadata.csv",
+        package = "SingleCellMultiModal", mustWork = TRUE)
+
+    DataType <- tolower(datatype)
+    stopifnot(
+        .isSingleCharNA(DataType), .isSingleCharNA(version)
+    )
+
+    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
+    filt <- modes_metadat[["DataType"]] == DataType &
+        modes_metadat[["SourceVersion"]] == version
+    modes_metadat <- modes_metadat[filt, , drop = FALSE]
+    eh_assays <- modes_metadat[["ResourceName"]]
+    modesAvail <- .modesAvailable(eh_assays)
+    resultModes <- .searchFromInputs(modes, modesAvail)
+    fileIdx <- .conditionToIndex(
+        resultModes, eh_assays, function(x) grepl(x, eh_assays)
+    )
+    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
+    eh <- .test_eh(...)
+
+    if (dry.run) {
+        return(.getResourceInfo(
+            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE 
+        ))
+    }
+    modes_list <- .getResources(
+        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
+    )
+    names(modes_list) <- gsub(prefix, "", names(modes_list))
+
+    eh_experiments <- ExperimentList(modes_list)[resultModes]
+
+    ess_names <- c("colData", "metadata", "sampleMap")
+
+    ess_idx <- .conditionToIndex(ess_names, eh_assays,
+        function(x) grepl(x, eh_assays))
+
+    ess_list <- .getResources(eh,
+        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
+    names(ess_list) <- gsub(prefix, "", names(ess_list))
+
+    c(list(experiments = eh_experiments), ess_list)
+}
 
 #' Single-cell Nucleosome, Methylation and Transcription sequencing
 #'
@@ -107,15 +156,23 @@
 #'     for the 2020 BIRS Workshop, see the link here:
 #'     url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 #'
+#' @section versions:
+#'     Version '1.0.0' of the scNMT mouse_gastrulation dataset includes all of
+#'     the above mentioned assay technologies with filtering of cells based on
+#'     quality control metrics. Version '2.0.0' contains all of the cells
+#'     without the QC filter and does not contain CTCF binding footprints or
+#'     p300 binding sites.
+#'
 #' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
 #'
-#' @param modes character() The assay types or modes of data to obtain these
-#'     include single cell Chromatin Accessibilty ("acc"), Methylation ("met"),
-#'     RNA-seq ("rna") by default.
+#' @param modes character() A wildcard / glob pattern of modes, such as
+#'     \code{"acc*"}. A wildcard of \code{"*"} will return all modes including
+#'     Chromatin Accessibilty ("acc"), Methylation ("met"), RNA-seq ("rna")
+#'     which is the default.
 #'
-#' @param version character(1) The data version available in ExperimentHub
-#'     defaults to the newest version ('2.0.0')
+#' @param version character(1) Either version '1.0.0' or '2.0.0' depending on
+#'     data version required. See versions section.
 #'
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
@@ -129,67 +186,40 @@
 #' @seealso SingleCellMultiModal-package
 #'
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-#'     informative data.frame when `dry.run` is `TRUE`
+#'     informative `data.frame` when `dry.run` is `TRUE`
 #'
 #' @source \url{http://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/}
 #'
 #' @references
 #'     Argelaguet et al. (2019)
 #'
+#' @md
+#'
 #' @examples
-#' scNMT(DataType = "mouse_gastrulation", modes = "*", dry.run = TRUE)
+#'
+#' scNMT(DataType = "mouse_gastrulation", modes = "*",
+#'     version = "1.0.0", dry.run = TRUE)
 #'
 #' @export scNMT
 scNMT <-
     function(
-        DataType = "mouse_gastrulation", modes = "*", version = "2.0.0",
+        DataType = "mouse_gastrulation", modes = "*", version,
         dry.run = TRUE, verbose = TRUE, ...
     )
 {
-    modes_file <- system.file("extdata", "metadata.csv",
-        package = "SingleCellMultiModal", mustWork = TRUE)
+    stopifnot(.isSingleChar(version), .isSingleChar(DataType))
 
-    DataType <- tolower(DataType)
-    stopifnot(
-        .isSingleCharNA(DataType), .isSingleCharNA(version)
-    )
-
-    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    filt <- modes_metadat[["DataType"]] == DataType &
-        modes_metadat[["SourceVersion"]] == version
-    modes_metadat <- modes_metadat[filt, ]
-    eh_assays <- modes_metadat[["ResourceName"]]
-    modesAvail <- .modesAvailable(eh_assays)
-    resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(
-        resultModes, eh_assays, function(x) grepl(x, eh_assays)
-    )
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-    eh <- .test_eh(...)
-
-    if (dry.run) {
-        return(.getResourceInfo(
-            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], FALSE
-        ))
-    }
-    modes_list <- .getResources(
-        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
-    )
-    names(modes_list) <- gsub("scnmt_", "", names(modes_list))
-
-    eh_experiments <- ExperimentList(modes_list)[resultModes]
-
-    ess_names <- c("colData", "metadata", "sampleMap")
-
-    ess_idx <- .conditionToIndex(ess_names, eh_assays,
-        function(x) grepl(x, eh_assays))
-
-    ess_list <- .getResources(eh,
-        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
-    names(ess_list) <- gsub("scnmt_", "", names(ess_list))
-
+    if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
+        stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
+        
+    ess_list <- .getResourcesList(prefix = "scnmt_", datatype = DataType,
+        modes = modes, version = version, dry.run = dry.run,
+        verbose = verbose, ...)
+    
+    if (dry.run) { return(ess_list) }
+    
     MultiAssayExperiment(
-        experiments = eh_experiments,
+        experiments = ess_list[["experiments"]],
         colData = ess_list[["colData"]],
         sampleMap = ess_list[["sampleMap"]],
     )
