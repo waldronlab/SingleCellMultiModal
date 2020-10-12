@@ -1,0 +1,117 @@
+---
+title: "CITEseq Cord Blood"
+author: "Dario Righelli"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+    BiocStyle::html_document:
+      toc_float: true
+vignette: >
+    %\VignetteIndexEntry{CITEseq Cord Blood}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+Package: SingleCellMultiModal
+bibliography: ../inst/REFERENCES.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# Load libraries
+
+```{r, include=TRUE, results="hide", message=FALSE, warning=FALSE}
+
+library(MultiAssayExperiment)
+library(SingleCellMultiModal)
+
+```
+
+
+# CITE-seq dataset
+
+CITE-seq data are a combination of two data types extracted at the same 
+time from the same cell.
+First data type is scRNA-seq data, while the second one consists of about a hundread 
+of antibody-derived tags (ADT).
+In particular this dataset is provided by @stoeckius2017simultaneous .
+
+## Downloading datasets
+
+The user can see the available dataset by using the default options
+
+```{r}
+
+SingleCellMultiModal::CITEseq(DataType="cord_blood", 
+                        modes="*", dry.run=TRUE, version="1.0.0")
+
+```
+
+Or simply by setting `dry.running=FALSE` it downloads the data and creates the
+a MultiAssayExperiment object.
+
+```{r}
+
+mse <- 
+SingleCellMultiModal::CITEseq(DataType="cord_blood", 
+                        modes="*", dry.run=FALSE, version="1.0.0")
+mse
+```
+
+Example with actual data:
+
+```{r}
+experiments(mse)
+```
+
+
+## Exploring the data structure
+
+Check row annotations:
+
+```{r}
+rownames(mse)
+```
+
+Take a peek at the `sampleMap`:
+
+```{r}
+sampleMap(mse)
+```
+
+
+## scRNA-seq data
+
+The scRNA-seq data are accessible with `$scRNAseq`, which returns a 
+*matrix* object.
+
+```{r}
+experiments(mse)$scRNAseq
+```
+
+## scADT data
+
+The scADT data are accessible with `$scADT`, which returns a 
+**matrix** object.
+
+```{r}
+experiments(mse)$scADT
+```
+
+# SingleCellExperiment object conversion
+
+Because of already large use of some methodologies (such as 
+in the [SingleCellExperiment vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets) or [CiteFuse Vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html)) where the SingleCellExperiment object is used for CITE-seq data,
+we provide a function for the conversion of our CITE-seq MultiAssayExperiment object
+into a SingleCellExperiment object with scRNA-seq data as counts and 
+scADT data as altExps.
+
+```{r}
+(sce <- CITEseqMseToSce(mse))
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
