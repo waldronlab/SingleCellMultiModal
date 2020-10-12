@@ -1,6 +1,5 @@
 # RStudio Files
 .Rproj.user
-
 # Data Files
 .RData
 /vignettes/cache/
@@ -10,11 +9,11 @@
 .Rhistory
 *GSE*
 *_cache
-
 # Merge residuals
 *.orig
-
 # compressed files
 *.gz
 # databases
 *.sqlite
+.DS_Store
+SingleCellMultiModal.Rproj
