@@ -46,7 +46,7 @@
 #' @export
 #'
 #' @examples
-#' mse <- CITEseq(dry_run=FALSE)
+#' mse <- CITEseq(dry.run=FALSE)
 #' experiments(mse)
 CITEseq <- function(DataType="cord_blood", modes="*", 
                     version="1.0.0", dry.run=TRUE, verbose=TRUE, ...)
@@ -55,17 +55,16 @@ CITEseq <- function(DataType="cord_blood", modes="*",
     ess_list <- .getResourcesList(prefix = "citeseq_", datatype = DataType,
                                 modes=modes, version=version, 
                                 dry.run=dry.run,
-                                verbose=verbose)#, ...)
+                                verbose=verbose, ...)
     if(!dry.run)
     {
-    
         switch (DataType,
                 "cord_blood"={
                     mse <- .cord_blood(ess_list=ess_list)
                 },
                 ## Add here other CITE-seq datasets based on DataType identifier
                 {
-                    stop("Unrecognized CITE-seq dataset name!")
+                    stop("Unrecognized CITE-seq dataset name")
                 }
         )
         return(mse)
@@ -89,6 +88,7 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
+#' @importFrom methods is
 #' @export
 #'
 #' @examples

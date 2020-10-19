@@ -29,6 +29,8 @@ Imports:
     S4Vectors,
     SingleCellExperiment,
     SpatialExperiment,
+    SummarizedExperiment,
+    methods,
     utils
 Suggests:
     knitr
