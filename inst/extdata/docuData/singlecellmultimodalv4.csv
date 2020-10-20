@@ -1,0 +1,6 @@
+"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","SourceVersion","DataType","Maintainer"
+"Dept. of Bioinformatics, The Babraham Institute, United Kingdom","10090","Mus musculus","https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ","RDS","1.0.0","mouse_gastrulation","Marcel Ramos <marcel.ramos@roswellpark.org>"
+"Dept. of Bioinformatics, The Babraham Institute, United Kingdom","10090","Mus musculus","https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ","RDS","2.0.0","mouse_gastrulation","Marcel Ramos <marcel.ramos@roswellpark.org>"
+"Dept. of Molecular Genetics, Allen Institute for Brain Science, United States","10090","Mus musculus","https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0","TXT","1.0.0","mouse_visual_cortex","Dario Righelli <dario.righelli@gmail.com>"
+"Dept. of Molecular Genetics, Allen Institute for Brain Science, United States","10090","Mus musculus","https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0","TXT","2.0.0","mouse_visual_cortex","Dario Righelli <dario.righelli@gmail.com>"
+"Innovation Lab, New York Genome Center, New York, United States","9606","Homo Sapiens","https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866","TXT","1.0.0","coord_blood","Dario Righelli <dario.righelli@gmail.com>"

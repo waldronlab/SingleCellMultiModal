@@ -73,7 +73,7 @@ seqFISH <-
         },
         ## Add here other seqFISH datasets based on DataType identifier
         {
-            stop("Unrecognized seqFISH dataset name!")
+            stop("Unrecognized seqFISH dataset name")
         }
     )
 
