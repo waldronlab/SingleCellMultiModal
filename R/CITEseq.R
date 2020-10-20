@@ -1,4 +1,4 @@
-.cord_blood <- function(ess_list) 
+.cord_blood <- function(ess_list)
 {
     names(ess_list$experiments) <- c("scADT","scRNAseq")
     mse <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
@@ -13,17 +13,17 @@
 #'     associated to the package.
 #' @details CITEseq data are a combination of single cell transcriptomics and
 #'     about a hundread of cell surface proteins.
-#'     
+#'
 #'     Available datasets are:
 #'     \itemize{
-#'         \item{cord_blood: } a dataset of single cells of cord blood as 
+#'         \item{cord_blood: } a dataset of single cells of cord blood as
 #'         provided in Stoeckius et al. (2017).
 #'          \itemize{
 #'             \item{scRNA_Counts} - Stoeckius scRNA-seq gene count matrix
 #'             \item{scADT} - Stoeckius antibody-derived tags (ADT) data
 #'             }
 #'      }
-#'      
+#'
 #' @param DataType character(1) indicating the identifier of the dataset to
 #'     retrieve.  (default "cord_blood")
 #'
@@ -48,12 +48,12 @@
 #' @examples
 #' mse <- CITEseq(dry.run=FALSE)
 #' experiments(mse)
-CITEseq <- function(DataType="cord_blood", modes="*", 
+CITEseq <- function(DataType="cord_blood", modes="*",
                     version="1.0.0", dry.run=TRUE, verbose=TRUE, ...)
 {
-    
+
     ess_list <- .getResourcesList(prefix = "citeseq_", datatype = DataType,
-                                modes=modes, version=version, 
+                                modes=modes, version=version,
                                 dry.run=dry.run,
                                 verbose=verbose, ...)
     if(!dry.run)
@@ -71,19 +71,19 @@ CITEseq <- function(DataType="cord_blood", modes="*",
     } else {
         return(ess_list)
     }
-    
-    
+
+
 }
 
 
 #' CITEseqMseToSce
 #' @description converts a MultiAssayExperiment object with CITEseq data into
-#' a SingleCellExperiment object to be used with already known methods and 
+#' a SingleCellExperiment object to be used with already known methods and
 #' packages in literature.
-#' 
+#'
 #' @param mse a MultiAssayExperiment object with scRNA and scADT named experiments
 #'
-#' @return a SingleCellExperiment object as widely with scRNA data as counts and 
+#' @return a SingleCellExperiment object as widely with scRNA data as counts and
 #' scADT data as altExps
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
@@ -92,16 +92,16 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' @export
 #'
 #' @examples
-#' mse <- CITEseq(dry_run=FALSE)
+#' mse <- CITEseq(dry.run=FALSE)
 #' sce <- CITEseqMseToSce(mse)
-#' 
+#'
 CITEseqMseToSce <- function(mse)
 {
     stopifnot(is(mse, "MultiAssayExperiment"))
-    
+
     scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
     scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
-    sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna), 
+    sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
                             altExps=scadt)
     return(sce)
 }

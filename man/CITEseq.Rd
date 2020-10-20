@@ -45,10 +45,10 @@ function assembles data on-the-fly from `ExperimentHub`
 \details{
 CITEseq data are a combination of single cell transcriptomics and
     about a hundread of cell surface proteins.
-    
+
     Available datasets are:
     \itemize{
-        \item{cord_blood: } a dataset of single cells of cord blood as 
+        \item{cord_blood: } a dataset of single cells of cord blood as
         provided in Stoeckius et al. (2017).
          \itemize{
             \item{scRNA_Counts} - Stoeckius scRNA-seq gene count matrix
@@ -57,7 +57,7 @@ CITEseq data are a combination of single cell transcriptomics and
      }
 }
 \examples{
-mse <- CITEseq(dry_run=FALSE)
+mse <- CITEseq(dry.run=FALSE)
 experiments(mse)
 }
 \references{
