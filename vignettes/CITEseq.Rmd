@@ -51,7 +51,7 @@ In this example, we will use one of the two available datasets `scADT_Counts`:
 ```{r,message=FALSE}
 
 mse <- CITEseq(
-    DataType="cord_blood", modes="scADT*", dry.run=FALSE, version="1.0.0"
+    DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0"
 )
 mse
 ```
@@ -83,7 +83,7 @@ sampleMap(mse)
 The scRNA-seq data are accessible with the name `scRNAseq`, which returns a
 *matrix* object.
 
-```{r,eval=FALSE}
+```{r}
 head(experiments(mse)$scRNAseq)[, 1:4]
 ```
 
