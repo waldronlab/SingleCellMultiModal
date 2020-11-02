@@ -1,9 +1,10 @@
 .cord_blood <- function(ess_list)
 {
-    
-    names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
-    mse <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
-    return(mse)
+    names(ess_list$experiments) <-
+        gsub("_Counts", "", names(ess_list$experiments))
+    MultiAssayExperiment::MultiAssayExperiment(
+        experiments=(ess_list$experiments)
+    )
 }
 
 
@@ -47,32 +48,27 @@
 #' @export
 #'
 #' @examples
+#'
 #' mse <- CITEseq(dry.run=FALSE)
 #' experiments(mse)
+#'
 CITEseq <- function(DataType="cord_blood", modes="*",
                     version="1.0.0", dry.run=TRUE, verbose=TRUE, ...)
 {
 
     ess_list <- .getResourcesList(prefix = "citeseq_", datatype = DataType,
-                                modes=modes, version=version,
-                                dry.run=dry.run,
-                                verbose=verbose, ...)
-    if(!dry.run)
-    {
-        switch (DataType,
-                "cord_blood"={
-                    mse <- .cord_blood(ess_list=ess_list)
-                },
+        modes=modes, version=version, dry.run=dry.run, verbose=verbose, ...)
+    if (!dry.run) {
+        mse <- switch(
+            DataType,
+            "cord_blood" = { .cord_blood(ess_list=ess_list) },
                 ## Add here other CITE-seq datasets based on DataType identifier
-                {
-                    stop("Unrecognized CITE-seq dataset name")
-                }
+            { stop("Unrecognized CITE-seq dataset name") }
         )
         return(mse)
     } else {
         return(ess_list)
     }
-
 
 }
 
@@ -82,10 +78,11 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' a SingleCellExperiment object to be used with already known methods and
 #' packages in literature.
 #'
-#' @param mse a MultiAssayExperiment object with scRNA and scADT named experiments
+#' @param mse a MultiAssayExperiment object with scRNA and scADT named
+#' experiments
 #'
-#' @return a SingleCellExperiment object as widely with scRNA data as counts and
-#' scADT data as altExps
+#' @return a SingleCellExperiment object as widely with scRNA data as counts
+#' and scADT data as altExps
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
@@ -93,6 +90,7 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' @export
 #'
 #' @examples
+#'
 #' mse <- CITEseq(dry.run=FALSE)
 #' sce <- CITEseqMseToSce(mse)
 #'
