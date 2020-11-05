@@ -85,6 +85,12 @@ without the QC filter and does not contain CTCF binding footprints or
 p300 binding sites.
 }
 
+\section{metadata}{
+
+The \code{MultiAssayExperiment} metadata includes the original function call
+that saves the function call and the data version requested.
+}
+
 \examples{
 
 scNMT(DataType = "mouse_gastrulation", modes = "*",
