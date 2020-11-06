@@ -76,14 +76,17 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' a SingleCellExperiment object to be used with already known methods and
 #' packages in literature.
 #'
-#' @param mse a MultiAssayExperiment object with scRNA and scADT named
-#' experiments
+#'
+#' @param mse a MultiAssayExperiment object with scRNA and/or scADT and/or 
+#' scHTO named experiments.
 #'
 #' @return a SingleCellExperiment object as widely with scRNA data as counts
-#' and scADT data as altExps
+#' and scADT, scHTO data as altExps.
+#' If only one modality is present, it has returned as main assay of the SCE.
+#' 
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @importFrom SingleCellExperiment SingleCellExperiment altExps
 #' @importFrom methods is
 #' @export
 #'
@@ -94,12 +97,46 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #'
 CITEseqMseToSce <- function(mse)
 {
-    stopifnot(is(mse, "MultiAssayExperiment"))
-
-    scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
-    scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
-    sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                            altExps=scadt)
+    stopifnot(c(is(mse, "MultiAssayExperiment"), !(length(mse)==0)))
+    
+    if(length(mse)==3)
+    {
+        scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
+        scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
+        schto <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
+                                                        altExps=list(scadt, schto))
+        names(altExps(sce)) <- c("scADT", "scHTO")
+    } else if(length(mse)==2) {
+        scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
+        if(length(grep("scADT", names(mse)))!=0)
+        {
+            scalt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
+            name <- "scADT"
+        } else {
+            scalt <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+            name <- "scHTO"
+        }
+        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
+                                                    altExps=list(scalt))
+        names(altExps(sce)) <- name
+    } else { ## case length 1
+        if(length(grep("scADT", names(mse)))!=0)
+        {
+            scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
+            sce <- SingleCellExperiment::SingleCellExperiment(list(adt=scadt))
+        } else if(length(grep("scHTO", names(mse)))!=0) {
+            schto <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+            sce <- SingleCellExperiment::SingleCellExperiment(list(hto=schto))
+        } else if(length(grep("scRNA", names(mse)))!=0) {
+            scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
+            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna))
+        } else if(length(grep("scHTO", names(mse)))!=0) {
+            schto <- experiments(mse)[[grep("scHTO", names(mse))]]
+            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=schto))
+        }
+    }
+    
     return(sce)
 }
 

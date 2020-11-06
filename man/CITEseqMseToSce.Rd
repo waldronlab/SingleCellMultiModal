@@ -7,12 +7,13 @@
 CITEseqMseToSce(mse)
 }
 \arguments{
-\item{mse}{a MultiAssayExperiment object with scRNA and scADT named
-experiments}
+\item{mse}{a MultiAssayExperiment object with scRNA and/or scADT and/or 
+scHTO named experiments.}
 }
 \value{
 a SingleCellExperiment object as widely with scRNA data as counts
-and scADT data as altExps
+and scADT, scHTO data as altExps.
+If only one modality is present, it has returned as main assay of the SCE.
 }
 \description{
 converts a MultiAssayExperiment object with CITEseq data into
