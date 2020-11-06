@@ -2,6 +2,10 @@
 
 ### New features
 
+* `CITEseq` function, vignette, and 'cord_blood' data available
+(@drighelli, #18)
+* Include `seqFISH` function, vignette, and 'mouse_visual_cortex' data
+(v1 and v2 from @drighelli, #14)
 * New 'mouse_gastrulation' dataset released (version "2.0.0").
 * Use `version` argument to indicate the `mouse_gastrulation` data version
 * The data includes **all** cells not only the ones that passed the QC
@@ -9,6 +13,11 @@ of all three 'omics (thanks @rargelaguet, @ajabadi).
 
 ### Bug fixes and minor improvements
 
+* Caching mechanism uses `tools::R_user_dir` and not `rappdirs`.
+* Improved display of available data using `ExperimentHub` metadata.
+* Improved documentation explaining versioning differences.
+* Contribution guidelines available at
+https://github.com/waldronlab/SingleCellMultiModal/wiki/Contributing-Guidelines
 * Default `version` argument in `scNMT` function now set to "2.0.0" (version
 "1.0.0" still available)
 

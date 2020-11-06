@@ -11,7 +11,7 @@ vignette: >
     %\VignetteEngine{knitr::rmarkdown}
 Package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -28,10 +28,9 @@ library(SingleCellMultiModal)
 
 # CITE-seq dataset
 
-CITE-seq data are a combination of two data types extracted at the same 
-time from the same cell.
-First data type is scRNA-seq data, while the second one consists of about a hundread 
-of antibody-derived tags (ADT).
+CITE-seq data are a combination of two data types extracted at the same
+time from the same cell.  First data type is scRNA-seq data, while the second
+one consists of about a hundread of antibody-derived tags (ADT).
 In particular this dataset is provided by @stoeckius2017simultaneous .
 
 ## Downloading datasets
@@ -40,18 +39,22 @@ The user can see the available dataset by using the default options
 
 ```{r}
 
-SingleCellMultiModal::CITEseq(DataType="cord_blood", 
-                        modes="*", dry.run=TRUE, version="1.0.0")
+CITEseq(DataType="cord_blood", modes="*", dry.run=TRUE, version="1.0.0")
 
 ```
 
-Or simply by setting `dry.running=FALSE` it downloads the data and creates the
-a MultiAssayExperiment object.
+Or simply by setting `dry.run = FALSE` it downloads the data and creates the
+a `MultiAssayExperiment` object.
 
-```{r}
+In this example, we will use one of the two available datasets `scADT_Counts`:
 
-mse <- SingleCellMultiModal::CITEseq(DataType="cord_blood", 
-                        modes="*", dry.run=FALSE, version="1.0.0")
+```{r,message=FALSE}
+
+
+mse <- CITEseq(
+    DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0"
+)
+
 mse
 ```
 
@@ -79,32 +82,36 @@ sampleMap(mse)
 
 ## scRNA-seq data
 
-The scRNA-seq data are accessible with `$scRNAseq`, which returns a 
+The scRNA-seq data are accessible with the name `scRNAseq`, which returns a
 *matrix* object.
 
 ```{r}
-experiments(mse)$scRNAseq
+head(experiments(mse)$scRNAseq)[, 1:4]
 ```
 
 ## scADT data
 
-The scADT data are accessible with `$scADT`, which returns a 
+The scADT data are accessible with the name `scADT`, which returns a
 **matrix** object.
 
 ```{r}
-experiments(mse)$scADT
+head(experiments(mse)$scADT)[, 1:4]
 ```
 
 # SingleCellExperiment object conversion
 
-Because of already large use of some methodologies (such as 
-in the [SingleCellExperiment vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets) or [CiteFuse Vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html)) where the SingleCellExperiment object is used for CITE-seq data,
-we provide a function for the conversion of our CITE-seq MultiAssayExperiment object
-into a SingleCellExperiment object with scRNA-seq data as counts and 
-scADT data as altExps.
+Because of already large use of some methodologies (such as
+in the [SingleCellExperiment vignette][1] or [CiteFuse Vignette][2] where the
+`SingleCellExperiment` object is used for CITE-seq data,
+we provide a function for the conversion of our CITE-seq `MultiAssayExperiment`
+object into a `SingleCellExperiment` object with scRNA-seq data as counts and
+scADT data as `altExp`s.
+
+[1]: https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
+[2]: http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
 
 ```{r}
-(sce <- CITEseqMseToSce(mse))
+CITEseqMseToSce(mse)
 ```
 
 
@@ -113,4 +120,6 @@ scADT data as altExps.
 ```{r}
 sessionInfo()
 ```
+
+# References
 

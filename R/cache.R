@@ -19,7 +19,8 @@
 #' @section setCache:
 #' Specify the directory location of the data cache. By default, it will
 #' go into the user's home and package name directory as given by
-#' \link[tools]{R_user_dir} (default: '$HOME/.cache/R/SingleCellMultiModal').
+#' \link[tools:userdir]{R_user_dir} (default: varies by system e.g., for Linux:
+#' '$HOME/.cache/R/SingleCellMultiModal').
 #'
 #' @section removeCache:
 #' Some files may become corrupt when downloading, this function allows
