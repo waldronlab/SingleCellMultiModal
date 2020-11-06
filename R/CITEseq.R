@@ -1,7 +1,6 @@
 .cord_blood <- function(ess_list) 
 {
-    
-    names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
+    names(ess_list$experiments) <- c("scADT","scRNAseq")
     mse <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
     return(mse)
 }

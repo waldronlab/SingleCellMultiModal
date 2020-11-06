@@ -50,8 +50,7 @@ a MultiAssayExperiment object.
 
 ```{r}
 
-mse <- 
-SingleCellMultiModal::CITEseq(DataType="cord_blood", 
+mse <- SingleCellMultiModal::CITEseq(DataType="cord_blood", 
                         modes="*", dry.run=FALSE, version="1.0.0")
 mse
 ```
