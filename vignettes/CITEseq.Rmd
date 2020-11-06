@@ -50,7 +50,6 @@ In this example, we will use one of the two available datasets `scADT_Counts`:
 
 ```{r,message=FALSE}
 
-
 mse <- CITEseq(
     DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0"
 )
