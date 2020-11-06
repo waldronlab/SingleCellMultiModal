@@ -57,8 +57,10 @@ CITEseq data are a combination of single cell transcriptomics and
      }
 }
 \examples{
+
 mse <- CITEseq(dry.run=FALSE)
 experiments(mse)
+
 }
 \references{
 Stoeckius et al. (2017)
