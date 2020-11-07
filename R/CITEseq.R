@@ -79,7 +79,7 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' packages in literature.
 #'
 #'
-#' @param mse a MultiAssayExperiment object with scRNA and/or scADT and/or 
+#' @param mse a MultiAssayExperiment object with scRNA and/or scADT and/or
 #' scHTO named experiments.
 #'
 #' @return a SingleCellExperiment object as widely with scRNA data as counts
@@ -88,7 +88,7 @@ CITEseq <- function(DataType="cord_blood", modes="*",
 #' 
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom SingleCellExperiment SingleCellExperiment altExps
+#' @importFrom SingleCellExperiment SingleCellExperiment altExps altExps<-
 #' @importFrom methods is
 #' @export
 #'
