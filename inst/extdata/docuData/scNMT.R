@@ -65,6 +65,9 @@ doc_helper <-
     }, filepaths, basefiles)
 }
 
+any.na <- function(x) {
+    any(is.na(x))
+}
 
 ## alist() with formals()<-
 ## fancyFUN <- function() {}
@@ -97,7 +100,6 @@ MetaHubCreate <-
     metaList <- Map(
         function(DataType, doc_file, resnames, filepaths, replength, version) {
             message("Working on: ", basename(DataType), " v", version)
-            dataList <- .loadRDAList(filepaths, ext_pattern)
             hubmeta <- R6::R6Class("EHubMeta",
                 public = list(
                     Title = NA_character_,
@@ -121,6 +123,9 @@ MetaHubCreate <-
 
                     initialize = function(doc_file)
                     {
+                        lapply(names(doc_file), function(i) {
+                            assign(i, doc_file[[i]], self)
+                        })
                         if (is.na(self$Title))
                             self$Title <- gsub(ext_pattern, "",
                                 basename(filepaths))
@@ -128,23 +133,22 @@ MetaHubCreate <-
                             self$Description <- paste(self$Title,
                                 "data specific to the", toupper(self$DataType),
                                 "project")
-                        if (is.na(self$SourceType))
+                        if (any.na(self$SourceType))
                             self$SourceType <- .inferSource(filepaths)
-                        if (is.na(self$SourceVersion))
+                        if (any.na(self$SourceVersion))
                             self$SourceVersion <- "1.0.0"
-                        if (is.na(self$Maintainer))
+                        if (any.na(self$Maintainer))
                             self$Maintainer <- utils::maintainer(pkg_name)
-                        if (is.na(self$RDataClass))
+                        if (any.na(self$RDataClass)) {
+                            dataList <- .loadRDAList(filepaths, ext_pattern)
                             self$RDataClass <- .getRDataClass(dataList)
+                        }
                         if (is.na(self$Location_Prefix))
                             self$Location_Prefix <- NULL
                         if (is.na(self$RDataPath))
                             self$RDataPath <- file.path(pkg_name,
                                 self$DataType, paste0("v", version),
                                 self$ResourceName)
-                        lapply(names(doc_file), function(i) {
-                            assign(i, doc_file[[i]], self)
-                        })
                     },
                     generate = function() {
                         lnames <- !names(self) %in%

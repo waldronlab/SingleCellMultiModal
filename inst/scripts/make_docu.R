@@ -109,35 +109,46 @@ write.csv(
     file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
     row.names = FALSE
 )
+#
+#
+# # version 2 with spatial
+# scmeta <- data.frame(
+#     DataProvider = c(
+#         rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", 2),
+#         rep("Dept. of Molecular Genetics, Allen Institute for Brain Science, United States", 2),
+#         "Innovation Lab, New York Genome Center, New York, United States"
+#     ),
+#     TaxonomyId = c(rep("10090",4), "9606"),
+#     Species = c(rep("Mus musculus", 4), "Homo Sapiens"),
+#     SourceUrl = c(
+#         rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ", 2),
+#         rep("https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0", 2),
+#         "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866"
+#     ),
+#     SourceType = c(rep("RDS", 2), rep("TXT",3)),
+#     SourceVersion = c("1.0.0", "2.0.0", "1.0.0", "2.0.0", "1.0.0"),
+#     DataType = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex",2), "coord_blood"),
+#     Maintainer = c(rep("Marcel Ramos <marcel.ramos@roswellpark.org>", 2),
+#                    rep("Dario Righelli <dario.righelli@gmail.com>",3)),
+#     stringsAsFactors = FALSE
+# )
+# write.csv(
+#     scmeta,
+#     file = "inst/extdata/docuData/singlecellmultimodalv3.csv",
+#     row.names = FALSE
+# )
 
-## version 6 PBMC
+# version 5 pbmc
 scmeta <- data.frame(
-    DataProvider = c(
-        rep("Dept. of Bioinformatics, The Babraham Institute, United Kingdom", 2),
-        rep("Dept. of Molecular Genetics, Allen Institute for Brain Science, United States", 2),
-        rep("Innovation Lab, New York Genome Center, New York, United States", 2),
-        rep("European Bioinformatics Institute (EMBL-EBI), United Kingdom" ,2)
-    ),
-    TaxonomyId = c(rep("10090", 4), rep("9606", 4)),
-    Species = c(rep("Mus Musculus", 4), rep("Homo sapiens", 4)),
-    SourceUrl = c(
-        rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ", 2),
-        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71585",
-        "https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0",
-        rep("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866", 2),
-        rep("http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/", 2)
-    ),
-    SourceType = c("RDS", "RDS", "TXT", "TXT", "TXT", "TXT", "RDS", "RDS"),
-    SourceVersion = c(rep(c("1.0.0", "2.0.0"), 2), rep("1.0.0", 4)),
-    DataType = c(
-        rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2),
-        rep("coord_blood", 2), rep("pbmc_multiome_10x", 2)
-    ),
-    Maintainer = c(
-        rep("Ricard Argelaguet <ricard@ebi.ac.uk>", 2),
-        rep("Dario Righelli <dario.righelli@gmail.com>", 4),
-        rep("Ricard Argelaguet <ricard@ebi.ac.uk>", 2)
-    ),
+    DataProvider = "European Bioinformatics Institute (EMBL-EBI), United Kingdom",
+    TaxonomyId = "10090",
+    Species = "Homo sapiens",
+    SourceUrl = "http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/",
+    SourceType = c("RDS", "HDF5", "MTX"),
+    RDataClass = c("SingleCellExperiment", "DelayedArray", "dgCMatrix"),
+    SourceVersion = "1.0.0",
+    DataType = "pbmc_10x",
+    Maintainer  = "Ricard Argelaguet <ricard@ebi.ac.uk>",
     stringsAsFactors = FALSE
 )
 
@@ -147,15 +158,3 @@ write.csv(
     row.names = FALSE
 )
 
-# indv pbmc_10x
-scmeta <- data.frame(
-    DataProvider = "European Bioinformatics Institute (EMBL-EBI), United Kingdom",
-    TaxonomyId = "10090",
-    Species = "Homo sapiens",
-    SourceUrl = "http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/",
-    SourceType = "RDS",
-    SourceVersion = "1.0.0",
-    DataType = "pbmc_multiome_10x",
-    Maintainer  = "Ricard Argelaguet <ricard@ebi.ac.uk>",
-    stringsAsFactors = FALSE
-)

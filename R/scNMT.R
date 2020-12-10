@@ -98,7 +98,7 @@
 
     if (dry.run) {
         return(.getResourceInfo(
-            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE
+            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], prefix, FALSE
         ))
     }
     modes_list <- .getResources(
@@ -216,13 +216,13 @@ scNMT <-
 
     if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
         stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
-        
+
     ess_list <- .getResourcesList(prefix = "scnmt_", datatype = DataType,
         modes = modes, version = version, dry.run = dry.run,
         verbose = verbose, ...)
-    
+
     if (dry.run) { return(ess_list) }
-    
+
     MultiAssayExperiment(
         experiments = ess_list[["experiments"]],
         colData = ess_list[["colData"]],

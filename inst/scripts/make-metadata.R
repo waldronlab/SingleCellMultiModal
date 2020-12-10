@@ -1,5 +1,3 @@
-allextpat <- "\\.[Rr][Dd][Aa]$"
-
 .get_Description <- function(data_name, DataType) {
     paste(data_name, "data specific to the", toupper(DataType), "project")
 }
@@ -15,8 +13,11 @@ allextpat <- "\\.[Rr][Dd][Aa]$"
 
 .get_DispatchClass <- function(resource_files, ext_pat) {
     ext_map <- data.frame(
-        ext_pattern = ext_pat,
-        Dispatch = "Rda",
+        ext_pattern = paste0(
+            c("[Rr][Dd][Aa]", "[Rr][Dd][Ss]", "[Hh]5", "[Mm][Tt][Xx]\\.[Gg][Zz]"),
+            "$"
+        ),
+        Dispatch = c("Rda", "Rds", "H5File", "MTX"),
         stringsAsFactors = FALSE
     )
     hitMatrix <- vapply(ext_map[["ext_pattern"]],
@@ -80,14 +81,24 @@ source("inst/extdata/docuData/scNMT.R")
 #'     dry.run = TRUE,
 #' )
 #'
+#' make_metadata(
+#'     directory = "~/data/scmm",
+#'     dataDirs = "pbmc"
+#'     version = "1.0.0"
+#'     ext_pattern = "\\.[Rr][Dd][AaSs]$|\\.[Mm][Tt][Xx]\\.[Gg][Zz]$",
+#'     doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+#'     pkg_name = "SingleCellMultiModal",
+#'     dry.run = TRUE,
+#' )
+#'
 #' @md
 #'
 #' @export
 make_metadata <- function(
     directory = "~/data/scmm",
-    dataDirs = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2)),
-    version = rep(c("1.0.0", "2.0.0"), 2),
-    ext_pattern = "\\.[Rr][Dd][Aa]$",
+    dataDirs = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2), "pbmc"),
+    version = c(rep(c("1.0.0", "2.0.0"), 2), "1.0.0"),
+    ext_pattern = "\\.[Rr][Dd][AaSs]$|\\.[Mm][Tt][Xx]\\.[Gg][Zz]$|\\.[Hh]5$",
     doc_file,
     pkg_name = "SingleCellMultiModal",
     dry.run = TRUE,
@@ -132,7 +143,7 @@ make_metadata <- function(
 #     doc_file = "inst/extdata/docuData/singlecellmultimodalv1.csv",
 #     dry_run = FALSE
 # )
-# 
+#
 # make_metadata(
 #     directory="CITEseq/",
 #     dataDirs = "cord_blood",
@@ -146,5 +157,14 @@ make_metadata <- function(
 #     dataDirs = c(rep("mouse_gastrulation", 2), "mouse_visual_cortex"),
 #     version = c("1.0.0", "2.0.0", "1.0.0"),
 #     doc_file = "inst/extdata/docuData/singlecellmultimodalv3.csv",
-#     dry_run = FALSE
+#     dry.run = FALSE
 # )
+
+make_metadata(
+    directory = "~/data/scmm",
+    dataDirs = "pbmc_10x",
+    version = "1.0.0",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+    dry.run = FALSE,
+    append = TRUE
+)
