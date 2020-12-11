@@ -1,4 +1,2 @@
-"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","RDataClass","SourceVersion","DataType","Maintainer"
-"European Bioinformatics Institute (EMBL-EBI), United Kingdom","10090","Homo sapiens","http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/","RDS","SingleCellExperiment","1.0.0","pbmc_10x","Ricard Argelaguet <ricard@ebi.ac.uk>"
-"European Bioinformatics Institute (EMBL-EBI), United Kingdom","10090","Homo sapiens","http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/","HDF5","DelayedArray","1.0.0","pbmc_10x","Ricard Argelaguet <ricard@ebi.ac.uk>"
-"European Bioinformatics Institute (EMBL-EBI), United Kingdom","10090","Homo sapiens","http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/","MTX","dgCMatrix","1.0.0","pbmc_10x","Ricard Argelaguet <ricard@ebi.ac.uk>"
+"DataProvider","TaxonomyId","Species","SourceUrl","SourceVersion","DataType","Maintainer"
+"European Bioinformatics Institute (EMBL-EBI), United Kingdom","10090","Homo sapiens","http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/","1.0.0","pbmc_10x","Ricard Argelaguet <ricard@ebi.ac.uk>"

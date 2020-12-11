@@ -144,8 +144,14 @@ scmeta <- data.frame(
     TaxonomyId = "10090",
     Species = "Homo sapiens",
     SourceUrl = "http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/",
-    SourceType = c("RDS", "HDF5", "MTX"),
-    RDataClass = c("SingleCellExperiment", "DelayedArray", "dgCMatrix"),
+# make sure order is correct!
+#    SourceType = c(
+#        rep(c("HDF5", "RDS", "MTX.GZ", "RDA"), 2),
+#    ),
+#    RDataClass = c(
+#        rep(c("SingleCellExperiment", "DelayedArray", "dgCMatrix"), 2),
+#        "DFrame", "DFrame"
+#    ),
     SourceVersion = "1.0.0",
     DataType = "pbmc_10x",
     Maintainer  = "Ricard Argelaguet <ricard@ebi.ac.uk>",

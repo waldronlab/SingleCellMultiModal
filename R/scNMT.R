@@ -1,12 +1,14 @@
-.removeExt <- function(fnames, ext = "\\.[Rr][Dd][Aa]$") {
-    gsub(ext, "", fnames)
+.removeExt <- function(fnames) {
+    resnames <- strsplit(basename(fnames), "\\.")
+    vapply(resnames, `[`, character(1L), 1L)
 }
 
 .modesAvailable <- function(listfiles) {
     slots <- c("metadata", "colData", "sampleMap")
     modes <- gsub("(^[a-z]*_)(.*)", "\\2", listfiles)
+    modes <- gsub("_assays|_se", "", modes)
     modes <- .removeExt(modes)
-    sort(modes[!modes %in% slots])
+    unique(sort(modes[!modes %in% slots]))
 }
 
 .searchFromInputs <- function(glob, searchFields) {
@@ -33,9 +35,23 @@
     })
 }
 
-.getResources <- function(ExperimentHub, resTable, verbose) {
+.getResources <- function(ExperimentHub, resTable, prefix, verbose) {
     infos <- .queryResources(ExperimentHub, resTable, verbose)
-    lapply(infos, `[[`, 1L)
+    rpath <- vapply(infos, function(x) `$`(x, "rdatapath"), character(1L))
+    h5resources <- grepl("_assays\\.[Hh]5$", rpath)
+    mtxresources <- grepl("\\.[Mm][Tt][Xx]\\.[Gg][Zz]$", rpath)
+    shells <- grepl("se\\.[Rr][Dd][Ss]$", rpath)
+    otherres <- !((h5resources | mtxresources) | shells)
+    if (any(h5resources))
+        matress <- .loadHDF5(ExperimentHub, rpath, verbose)
+    else if (any(mtxresources))
+        matress <- .loadMTX(ExperimentHub, rpath, verbose)
+    if (any(otherres)) {
+        rest <- lapply(infos[otherres], `[[`, 1L)
+        c(rest, matress)
+    } else {
+        matress
+    }
 }
 
 .getResourceInfo <- function(ExperimentHub, resTable, prefix, verbose) {
@@ -73,7 +89,7 @@
 }
 
 .getResourcesList <-
-    function(prefix, datatype, modes, version, dry.run, verbose, ...)
+    function(prefix, datatype, modes, version, format, dry.run, verbose, ...)
 {
     modes_file <- system.file("extdata", "metadata.csv",
         package = "SingleCellMultiModal", mustWork = TRUE)
@@ -84,8 +100,11 @@
     )
 
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
+    notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5", "FakeFormatNoMatch")
     filt <- modes_metadat[["DataType"]] == DataType &
-        modes_metadat[["SourceVersion"]] == version
+        modes_metadat[["SourceVersion"]] == version &
+        modes_metadat[["SourceType"]] != notfmt
+
     modes_metadat <- modes_metadat[filt, , drop = FALSE]
     eh_assays <- modes_metadat[["ResourceName"]]
     modesAvail <- .modesAvailable(eh_assays)
@@ -102,7 +121,7 @@
         ))
     }
     modes_list <- .getResources(
-        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
+        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], prefix, verbose
     )
     names(modes_list) <- gsub(prefix, "", names(modes_list))
 
@@ -114,7 +133,7 @@
         function(x) grepl(x, eh_assays))
 
     ess_list <- .getResources(eh,
-        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
+        modes_metadat[ess_idx, c("Title", "RDataPath")], prefix, verbose)
     names(ess_list) <- gsub(prefix, "", names(ess_list))
 
     c(list(experiments = eh_experiments), ess_list)

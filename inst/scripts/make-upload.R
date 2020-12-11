@@ -1,5 +1,5 @@
 # upload files to AWS S3
-allextpat <- "\\.[Rr][Dd][Aa]$"
+allextpat <- "\\.[Rr][Dd][AaSs]$|\\.[Mm][Tt][Xx]\\.[Gg][Zz]$|\\.[Hh]5$"
 
 .version_folder <- function(version) {
         paste0("v", version)
