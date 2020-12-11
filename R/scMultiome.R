@@ -13,6 +13,7 @@
         h5fileloc <- query(ehub, h5data)[[1L]]
         se_obj <- query(ehub, se_h5)[[1L]]
         h5array <- HDF5Array::HDF5Array(h5fileloc, "assay001")
+        ## does not preserve "sparse" tag VS loadHDF5SummarizedExperiment
         SummarizedExperiment::`assays<-`(
             x = se_obj, withDimnames = FALSE,
             value = list(counts = h5array)
