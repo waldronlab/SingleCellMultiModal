@@ -148,3 +148,11 @@ make_metadata <- function(
 #     doc_file = "inst/extdata/docuData/singlecellmultimodalv3.csv",
 #     dry_run = FALSE
 # )
+
+
+# ecciteSeq <- make_metadata(directory="~/Desktop/gDrive/works/coding/SingleCellMultiModal/CITEseq/", 
+#               dataDirs=c("peripheral_blood"),
+#               version="1.0.0",
+#               doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv")
+# write.table(x=ecciteSeq, file="inst/extdata/metadata.csv", quote=FALSE, row.names=FALSE, col.names=FALSE, sep=",", append=TRUE)
+# write.table(x=ecciteSeq, file="inst/extdata/metadata_eccite.csv", quote=FALSE, row.names=FALSE, col.names=FALSE, sep=",")
