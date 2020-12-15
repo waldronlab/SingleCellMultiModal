@@ -1,8 +1,8 @@
 .cord_blood <- function(ess_list)
 {
     names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
-    mse <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
-    return(mse)
+    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
+    return(mae)
 }
 
 
@@ -116,14 +116,14 @@
     }
     
     coldat <- .buildColDat(ll)
-    mse <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
+    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
                                                     sampleMap=sampmap, 
                                                     colData=coldat)
     if(!isEmpty(grep("TCR", names(ll))))
     {
-        metadata(mse) <- ll[grep("TCR", names(ll))]
+        metadata(mae) <- ll[grep("TCR", names(ll))]
     }
-    return(mse)
+    return(mae)
 }
 
 #' CITEseq
@@ -165,7 +165,7 @@
 #' @param DataType character(1) indicating the identifier of the dataset to
 #'     retrieve.  (default "cord_blood")
 #'
-#' @param modes character( ) The assay types or modes of data to obtain these
+#' @param modes character() The assay types or modes of data to obtain these
 #'     include scADT and scRNA-seq data by default.
 #'     
 #' @param version character(1) Either version '1.0.0' depending on
@@ -178,6 +178,9 @@
 #'
 #' @param ... Additional arguments passed on to the
 #'     \link[ExperimentHub]{ExperimentHub-class} constructor
+#'     
+#' @param DataClass either MultiAssayExperiment or SingleCellExperiment
+#' data classes can be returned (default MultiAssayExperiment)
 #'
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
 #'     informative `data.frame` when `dry.run` is `TRUE`
@@ -186,38 +189,43 @@
 #'
 #' @examples
 #'
-#' mse <- CITEseq(DataType="coord_blood", dry.run=FALSE)
-#' experiments(mse)
+#' mae <- CITEseq(DataType="coord_blood", dry.run=FALSE)
+#' experiments(mae)
 #'
 CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
-                    version="1.0.0", dry.run=TRUE, verbose=TRUE, ...)
+                    version="1.0.0", dry.run=TRUE, verbose=TRUE, 
+                    DataClass=c("MultiAssaiExperiment", "SingleCellExperiment"), 
+                    ...)
 {
-
-    ess_list <- .getResourcesList(prefix = "citeseq_", datatype = DataType,
+    dataType <- match.arg(DataType)
+    dataClass <- match.arg(DataClass)
+    
+    ess_list <- .getResourcesList(prefix = "citeseq_", datatype = dataType,
         modes=modes, version=version, dry.run=dry.run, verbose=verbose, ...)
     if (!dry.run) {
-        mse <- switch(
-            DataType,
+        mae <- switch(
+            dataType,
             "cord_blood" = { .cord_blood(ess_list=ess_list) },
             "peripheral_blood" = { .peripheral_blood(ess_list=ess_list) },
-                ## Add here other CITE-seq datasets based on DataType identifier
+            ## Add here other CITE-seq datasets based on DataType identifier
             { stop("Unrecognized CITE-seq dataset name: ", DataType) }
         )
-        return(mse)
+        
+        if(dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
+        return(mae)
     } else {
         return(ess_list)
     }
-
 }
 
 
-#' CITEseqMseToSce
+#' CITEseqMaeToSce
 #' @description converts a MultiAssayExperiment object with CITEseq data into
 #' a SingleCellExperiment object to be used with already known methods and
 #' packages in literature.
 #'
 #'
-#' @param mse a MultiAssayExperiment object with scRNA and/or scADT and/or 
+#' @param mae a MultiAssayExperiment object with scRNA and/or scADT and/or 
 #' scHTO named experiments.
 #'
 #' @return a SingleCellExperiment object as widely with scRNA data as counts
@@ -228,23 +236,16 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment altExps
 #' @importFrom methods is
-#' @export
-#'
-#' @examples
-#'
-#' mse <- CITEseq(dry.run=FALSE)
-#' sce <- CITEseqMseToSce(mse)
-#'
-CITEseqMseToSce <- function(mse)
+#' @keywords internal
+.CITEseqMaeToSce <- function(mae)
 {
-    stopifnot(c(is(mse, "MultiAssayExperiment"), !(length(mse)==0)))
-
-    if(length(mse)==3)
+    stopifnot(c(is(mae, "MultiAssayExperiment"), !(length(mae)==0)))
+    
+    if(length(mae)==3)
     {
-        
-        scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
-        scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
-        schto <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+        scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
+        scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
+        schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
         
         commonsamp <- intersect(intersect(colnames(scrna), colnames(scadt)), colnames(schto))
         
@@ -253,16 +254,16 @@ CITEseqMseToSce <- function(mse)
         scadt <- scadt[,(colnames(scadt) %in% commonsamp)]
         
         sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                        altExps=list(scADT=scadt, 
-                                                                     scHTO=schto))
-    } else if(length(mse)==2) {
-        scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
-        if(length(grep("scADT", names(mse)))!=0)
+                                                          altExps=list(scADT=scadt, 
+                                                                       scHTO=schto))
+    } else if(length(mae)==2) {
+        scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
+        if(length(grep("scADT", names(mae)))!=0)
         {
-            scalt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
+            scalt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
             name <- "scADT"
         } else {
-            scalt <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+            scalt <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
             name <- "scHTO"
         }
         commonsamp <- intersect(colnames(scrna), colnames(scalt))
@@ -272,24 +273,24 @@ CITEseqMseToSce <- function(mse)
         l <- list(scalt)
         names(l) <- name
         sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                    altExps=l)
+                                                          altExps=l)
     } else { ## case length 1
-        if(length(grep("scADT", names(mse)))!=0)
+        if(length(grep("scADT", names(mae)))!=0)
         {
-            scadt <- SummarizedExperiment(experiments(mse)[[grep("scADT", names(mse))]])
+            scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
             sce <- SingleCellExperiment::SingleCellExperiment(list(adt=scadt))
-        } else if(length(grep("scHTO", names(mse)))!=0) {
-            schto <- SummarizedExperiment(experiments(mse)[[grep("scHTO", names(mse))]])
+        } else if(length(grep("scHTO", names(mae)))!=0) {
+            schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
             sce <- SingleCellExperiment::SingleCellExperiment(list(hto=schto))
-        } else if(length(grep("scRNA", names(mse)))!=0) {
-            scrna <- experiments(mse)[[grep("scRNA", names(mse))]]
+        } else if(length(grep("scRNA", names(mae)))!=0) {
+            scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
             sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna))
-        } else if(length(grep("scHTO", names(mse)))!=0) {
-            schto <- experiments(mse)[[grep("scHTO", names(mse))]]
+        } else if(length(grep("scHTO", names(mae)))!=0) {
+            schto <- experiments(mae)[[grep("scHTO", names(mae))]]
             sce <- SingleCellExperiment::SingleCellExperiment(list(counts=schto))
         }
     }
-
+    
     return(sce)
 }
 
