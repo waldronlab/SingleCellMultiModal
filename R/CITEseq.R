@@ -2,6 +2,9 @@
 {
     names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
+    coldat <- sampleMap(mae)[,-c(1:2), drop=FALSE]
+    rownames(coldat) <- coldat[,1]
+    colnames(coldat) <- c("sampleID")
     return(mae)
 }
 
@@ -63,27 +66,28 @@
     {
         
         map <- DataFrame(assay=assayId,
-                        primary=gsub("_\\w+", "", colnames(mat1)), 
+                        #primary=gsub("_\\w+", "", colnames(mat1)), 
+                        primary=colnames(mat1),
                         colname=colnames(mat1), 
                         condition=gsub("_\\w+", "", colnames(mat1)))
         return(map)
     }
     
-    .buildColDat <- function(ll)
-    {
-        if(all(names(ll)[grep("CTCL|CTRL", names(ll))] %in% names(ll)))
-        {
-            cd <- data.frame(row.names=c("CTCL", "CTRL"), 
-                       condition=c("Cutaneous T-cell Limphoma", "Control"))
-        } else if(!isEmpty(grep("CTCL", names(ll)))) {
-            cd <- data.frame(row.names=c("CTCL"), 
-                              condition=c("Cutaneous T-cell Limphoma"))
-        } else if(!isEmpty(grep("CTRL", names(ll)))) {
-            cd <- data.frame(row.names=c("CTRL"), 
-                              condition=c("Control"))
-        }
-        return(cd)
-    }
+    # .buildColDat <- function(ll)
+    # {
+    #     if(all(names(ll)[grep("CTCL|CTRL", names(ll))] %in% names(ll)))
+    #     {
+    #         cd <- data.frame(row.names=c("CTCL", "CTRL"), 
+    #                    condition=c("Cutaneous T-cell Limphoma", "Control"))
+    #     } else if(!isEmpty(grep("CTCL", names(ll)))) {
+    #         cd <- data.frame(row.names=c("CTCL"), 
+    #                           condition=c("Cutaneous T-cell Limphoma"))
+    #     } else if(!isEmpty(grep("CTRL", names(ll)))) {
+    #         cd <- data.frame(row.names=c("CTRL"), 
+    #                           condition=c("Control"))
+    #     }
+    #     return(cd)
+    # }
     
     ll <- ess_list$experiments
     ll <- lapply(ll, function(x) 
@@ -115,7 +119,11 @@
         sampmap <- rbind(sampmap, RNAsMap)
     }
     
-    coldat <- .buildColDat(ll)
+    #coldat <- .buildColDat(ll)
+    coldat <- sampmap[,-c(1:2)]
+    colnames(coldat) <- c("sampleID", "condition")
+    rownames(coldat) <- coldat$sampleID
+    coldat <- unique(coldat)
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
                                                     sampleMap=sampmap, 
                                                     colData=coldat)
@@ -198,8 +206,8 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
                     ...)
 {
     dataType <- match.arg(DataType)
+    message("Dataset: ", dataType)
     dataClass <- match.arg(DataClass)
-    
     ess_list <- .getResourcesList(prefix = "citeseq_", datatype = dataType,
         modes=modes, version=version, dry.run=dry.run, verbose=verbose, ...)
     if (!dry.run) {

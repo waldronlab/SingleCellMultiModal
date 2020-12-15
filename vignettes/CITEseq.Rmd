@@ -44,7 +44,7 @@ CITEseq(DataType="cord_blood", modes="*", dry.run=TRUE, version="1.0.0")
 ```
 
 Or simply by setting `dry.run = FALSE` it downloads the data and creates the
-a `MultiAssayExperiment` object.
+`MultiAssayExperiment` object.
 
 In this example, we will use one of the two available datasets `scADT_Counts`:
 
