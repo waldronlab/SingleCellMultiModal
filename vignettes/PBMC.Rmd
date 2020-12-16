@@ -46,9 +46,7 @@ promoter level, etc.), you have download the `fragments.tsv.gz` file from the
 The user can see the available dataset by using the default options
 
 ```{r}
-# pbmc_10x_multiome("mouse_gastrulation", mode = "*", version = "1.0.0", dry.run = TRUE)
-# scMultiome("pbmc", mode = "*", version = "1.0.0", dry.run = TRUE, format = "mtx")
-mae <- readRDS("/Users/ricard/data/multiome_10x_public_data/PBMC/MultiAssayExperiment/mae.rds")
+mae <- scMultiome("pbmc_10x", mode = "*", dry.run = FALSE, format = "MTX")
 ```
 
 ```{r, echo=FALSE}
@@ -73,8 +71,7 @@ mae
 where the cells are the same in both assays:
 
 ```{r}
-all(colnames(experiments(mae)[["rna"]]) == colnames(experiments(mae)[["atac"]]))
-# upsetSamples(mae)
+upsetSamples(mae)
 ```
 
 ## Cell metadata
