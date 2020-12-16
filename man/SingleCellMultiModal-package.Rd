@@ -26,13 +26,10 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Ricard Argelaguet \email{ricard@ebi.ac.uk}
+  \item Dario Righelli \email{dario.righelli@gmail.com}
   \item Kelly Eckenrode \email{kelly.eckenrode@sph.cuny.edu}
   \item Levi Waldron \email{lwaldron.research@gmail.com}
-}
-
-Other contributors:
-\itemize{
-  \item Dario Righelli \email{dario.righelli@gmail.com} [contributor]
 }
 
 }

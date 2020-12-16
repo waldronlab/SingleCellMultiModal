@@ -3,6 +3,7 @@
 export(CITEseq)
 export(CITEseqMseToSce)
 export(removeCache)
+export(scMultiome)
 export(scNMT)
 export(scmmCache)
 export(seqFISH)
