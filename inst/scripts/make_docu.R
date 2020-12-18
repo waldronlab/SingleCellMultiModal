@@ -141,17 +141,9 @@ write.csv(
 # version 5 pbmc
 scmeta <- data.frame(
     DataProvider = "European Bioinformatics Institute (EMBL-EBI), United Kingdom",
-    TaxonomyId = "10090",
+    TaxonomyId = "9606",
     Species = "Homo sapiens",
     SourceUrl = "http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/",
-# make sure order is correct!
-#    SourceType = c(
-#        rep(c("HDF5", "RDS", "MTX.GZ", "RDA"), 2),
-#    ),
-#    RDataClass = c(
-#        rep(c("SingleCellExperiment", "DelayedArray", "dgCMatrix"), 2),
-#        "DFrame", "DFrame"
-#    ),
     SourceVersion = "1.0.0",
     DataType = "pbmc_10x",
     Maintainer  = "Ricard Argelaguet <ricard@ebi.ac.uk>",
