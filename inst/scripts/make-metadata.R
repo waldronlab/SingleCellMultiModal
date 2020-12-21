@@ -1,4 +1,5 @@
-# setwd("~/gh/SingleCellMultiModal")
+setwd("~/gh/SingleCellMultiModal")
+
 .getSourceType <- function(filepaths) {
     lfiles <- strsplit(basename(filepaths), "\\.")
     exts <- vapply(lfiles,
@@ -163,7 +164,7 @@ MetaHubCreate <-
                     Title = NA_character_,
                     Description = NA_character_,
                     BiocVersion = as.character(BiocManager::version()),
-                    Genome = character(1L),
+                    Genome = NA_character_,
                     SourceType = NA_character_,
                     SourceUrl = character(1L),
                     SourceVersion = version,
@@ -297,6 +298,7 @@ MetaHubCreate <-
 #' @md
 #'
 #' @export
+
 make_metadata <- function(
     directory = "~/data/scmm",
     dataDirs = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2), "pbmc"),
@@ -365,9 +367,19 @@ make_metadata <- function(
 
 make_metadata(
     directory = "~/data/scmm",
+    dataDirs = "peripheral_blood",
+    version = "1.0.0",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
+    dry.run = FALSE,
+    append = TRUE
+)
+
+make_metadata(
+    directory = "~/data/scmm",
     dataDirs = "pbmc_10x",
     version = "1.0.0",
     doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
     dry.run = FALSE,
     append = TRUE
 )
+
