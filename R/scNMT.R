@@ -98,7 +98,7 @@
 
     if (dry.run) {
         return(.getResourceInfo(
-            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE 
+            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE
         ))
     }
     modes_list <- .getResources(
@@ -163,6 +163,10 @@
 #'     without the QC filter and does not contain CTCF binding footprints or
 #'     p300 binding sites.
 #'
+#' @section metadata:
+#'     The `MultiAssayExperiment` metadata includes the original function call
+#'     that saves the function call and the data version requested.
+#'
 #' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
 #'
@@ -208,6 +212,7 @@ scNMT <-
     )
 {
     stopifnot(.isSingleChar(version), .isSingleChar(DataType))
+    meta <- list(call = match.call(), version = version)
 
     if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
         stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
@@ -222,5 +227,6 @@ scNMT <-
         experiments = ess_list[["experiments"]],
         colData = ess_list[["colData"]],
         sampleMap = ess_list[["sampleMap"]],
+        metadata = meta
     )
 }
