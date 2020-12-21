@@ -68,7 +68,7 @@ seqFISH <-
 
     switch(DataType,
         "mouse_visual_cortex" = {
-            mse <- .mouse_visual_cortex(modes_list=modes_list,
+            mae <- .mouse_visual_cortex(modes_list=modes_list,
                                         version=version)
         },
         ## Add here other seqFISH datasets based on DataType identifier
@@ -77,7 +77,7 @@ seqFISH <-
         }
     )
 
-    return(mse)
+    return(mae)
 }
 
 .mouse_visual_cortex <- function(modes_list, version)
@@ -100,7 +100,7 @@ seqFISH <-
             counts=as.matrix(modes_list$seqFISH_Counts)),
         spatialCoords=modes_list$seqFISH_Coordinates)
 
-    mse <- MultiAssayExperiment::MultiAssayExperiment(
+    mae <- MultiAssayExperiment::MultiAssayExperiment(
         experiments=c("seqFISH"=se, "scRNAseq"=sce))
-    return(mse)
+    return(mae)
 }
