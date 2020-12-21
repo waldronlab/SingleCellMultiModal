@@ -113,13 +113,14 @@ any.na <- function(x) {
     }, character(1L))
 }
 
-.get_DispatchClass <- function(resource_files, ext_pat) {
+.getDispatchClass <- function(resource_files, ext_pat) {
     ext_map <- data.frame(
         ext_pattern = paste0(
             c("[Rr][Dd][Aa]", "[Rr][Dd][Ss]", "[Hh]5", "[Mm][Tt][Xx]\\.[Gg][Zz]"),
             "$"
         ),
-        Dispatch = c("Rda", "Rds", "H5File", "MTX"),
+        ## currently MTX DispatchClass recipe unavailable
+        Dispatch = c("Rda", "Rds", "H5File", "FilePath"),
         stringsAsFactors = FALSE
     )
     hitMatrix <- vapply(ext_map[["ext_pattern"]],
@@ -174,7 +175,7 @@ MetaHubCreate <-
                     DataProvider = character(1L),
                     Maintainer = NA_character_,
                     RDataClass = NA_character_,
-                    DispatchClass = .get_DispatchClass(resnames, ext_pattern),
+                    DispatchClass = .getDispatchClass(resnames, ext_pattern),
                     Location_Prefix = NA_character_,
                     RDataPath = NA_character_,
                     ResourceName = resnames,
@@ -383,3 +384,7 @@ make_metadata(
     append = TRUE
 )
 
+## request to update Maintainer field in older AH resources
+# aq <- AnnotationHub::query(eh, "SingleCellMultiModal")
+# aq[aq$maintainer == "Marcel Ramos <marcel.ramos@roswellpark.org>" &
+#     grepl("v[12]", aq$rdatapath)]
