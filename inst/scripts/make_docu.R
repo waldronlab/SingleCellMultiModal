@@ -70,7 +70,7 @@ scmeta <- data.frame(
         "Innovation Lab, New York Genome Center, New York, United States"
     ),
     TaxonomyId = c(rep("10090",4), "9606"),
-    Species = c(rep("Mus musculus", 4), "Homo Sapiens"),
+    Species = c(rep("Mus musculus", 4), "Homo sapiens"),
     SourceUrl = c(
         rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ", 2),
         rep("https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0", 2),
@@ -95,7 +95,7 @@ citeseqmeta <- data.frame(
     DataProvider =
         "Innovation Lab, New York Genome Center, New York, United States",
     TaxonomyId = "9606",
-    Species = "Homo Sapiens",
+    Species = "Homo sapiens",
     SourceUrl = "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100866",
     SourceType = "TXT",
     SourceVersion = "1.0.0",
@@ -119,7 +119,7 @@ write.csv(
 #         "Innovation Lab, New York Genome Center, New York, United States"
 #     ),
 #     TaxonomyId = c(rep("10090",4), "9606"),
-#     Species = c(rep("Mus musculus", 4), "Homo Sapiens"),
+#     Species = c(rep("Mus musculus", 4), "Homo sapiens"),
 #     SourceUrl = c(
 #         rep("https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ", 2),
 #         rep("https://www.dropbox.com/sh/avj4nrd4la5i88u/AACafWwBbE-xsLvOGDwRZDpYa?dl=0", 2),
