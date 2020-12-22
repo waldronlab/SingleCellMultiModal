@@ -16,7 +16,7 @@ setwd("~/gh/SingleCellMultiModal")
             call. = FALSE)
     res <- vTypes[match(uexts, uTypes)]
     ## hot fix before AnnotationHubData 1.21.2
-    gsub("MTX", "MTX.GZ", res, fixed = TRUE)
+    gsub("MTX", "mtx.gz", res, fixed = TRUE)
 }
 
 doc_helper <-
