@@ -45,7 +45,7 @@ rownames(m2) <- rn
 ## 3. Store the count matrices in an H5 file
 ## ------------------------------------------------------- ##
                                  
-h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/scRNAseq_counts1+2.h5"
+h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts1+2.h5"
 writeHDF5Array(m1,
                filepath = h5file,
                name = "rna1",
