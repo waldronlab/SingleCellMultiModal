@@ -1,0 +1,4 @@
+"DataProvider","TaxonomyId","Species","SourceUrl","SourceType","SourceVersion","DataType","Maintainer"
+"Slavov Laboratory and SCP Center at Northeastern University, Boston, United states","9606","Homo Sapiens","https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392","CSV","1.0.0","SCopE2","Christophe Vanderaa <christophe.vanderaa@uclouvain.be>"
+"Slavov Laboratory and SCP Center at Northeastern University, Boston, United states","9606","Homo Sapiens","https://drive.google.com/file/d/1sF5STkofF_f2msnYaaYdWabou84Qf2Xr/view?usp=sharing","CSV","1.0.0","SCopE2","Christophe Vanderaa <christophe.vanderaa@uclouvain.be>"
+"Slavov Laboratory and SCP Center at Northeastern University, Boston, United states","9606","Homo Sapiens","https://drive.google.com/file/d/16vf6rjIsk-oK9naAH6BQnCFrlWnYtJsS/view?usp=sharing","CSV","1.0.0","SCopE2","Christophe Vanderaa <christophe.vanderaa@uclouvain.be>"

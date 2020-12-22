@@ -109,3 +109,39 @@ write.csv(
 #     row.names = FALSE
 # )
 # 
+
+
+## Creating metadata for the SCoPE2 dataset
+scope2meta <- data.frame(
+    DataProvider = paste0("Slavov Laboratory and SCP Center at ",
+                          "Northeastern University, Boston, United ",
+                          "states"),
+    TaxonomyId = "9606",
+    Species = "Homo Sapiens",
+    SourceUrl = c("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392",
+                  "https://drive.google.com/file/d/1sF5STkofF_f2msnYaaYdWabou84Qf2Xr/view?usp=sharing",
+                  "https://drive.google.com/file/d/16vf6rjIsk-oK9naAH6BQnCFrlWnYtJsS/view?usp=sharing"),
+    SourceType = c("CSV", "CSV", "CSV"),
+    SourceVersion = "1.0.0",
+    DataType = "SCopE2",
+    Maintainer = "Christophe Vanderaa <christophe.vanderaa@uclouvain.be>",
+    
+    stringsAsFactors = FALSE
+)
+
+write.csv(
+    scope2meta,
+    file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+    row.names = FALSE
+)
+## Test the output
+# make_metadata(
+#     directory = "../.localdata/SingleCellMultiModal/",
+#     dataDirs = "SCoPE2", # also the name of the DataType
+#     ext_pattern = "\\.[Rr][Dd][Aa]$|\\.h5",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+#     pkg_name = "SingleCellMultiModal",
+#     append = TRUE,
+#     dry.run = TRUE
+# )
