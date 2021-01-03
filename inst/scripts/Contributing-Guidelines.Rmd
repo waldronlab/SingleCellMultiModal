@@ -25,7 +25,7 @@ but all multi-modal technologies are welcome.
 # List of Multi-modal Datasets
 
 Please see this spreadsheet for a list of available datasets:
-[Google Drive Sheet](https://drive.google.com/drive)
+[Google Drive Sheet] (https://docs.google.com/spreadsheets/d/14Eq_Bt_3tKx_t1UDwan0qZZGWNyK-d2WLXtmoPGB5To/edit#gid=0)
 
 # Contributing
 
