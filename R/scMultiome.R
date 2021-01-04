@@ -37,8 +37,11 @@
         mtxfile <- query(ehub, mtxdata)[[1L]]
         mtxf <- HCAMatrixBrowser:::.read_mtx(mtxfile)
 
-        BiocGenerics::replaceSlots(
-            se, assays = Assays(SimpleList(counts = mtxf))
+        BiocGenerics:::replaceSlots(
+            object = se,
+            assays = SummarizedExperiment::Assays(
+                S4Vectors::SimpleList(counts = mtxf)
+            )
         )
     }, fn = names(mtxlist))
 }
