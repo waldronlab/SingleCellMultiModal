@@ -38,14 +38,19 @@
 .getResources <- function(ExperimentHub, resTable, prefix, verbose) {
     infos <- .queryResources(ExperimentHub, resTable, verbose)
     rpath <- vapply(infos, function(x) `$`(x, "rdatapath"), character(1L))
+
     h5resources <- grepl("_assays\\.[Hh]5$", rpath)
     mtxresources <- grepl("\\.[Mm][Tt][Xx]\\.[Gg][Zz]$", rpath)
     shells <- grepl("se\\.[Rr][Dd][Ss]$", rpath)
     otherres <- !((h5resources | mtxresources) | shells)
+
     if (any(h5resources))
         matress <- .loadHDF5(ExperimentHub, rpath, verbose)
     else if (any(mtxresources))
         matress <- .loadMTX(ExperimentHub, rpath, verbose)
+    else
+        matress <- list()
+
     if (any(otherres)) {
         rest <- lapply(infos[otherres], `[[`, 1L)
         c(rest, matress)
@@ -100,7 +105,10 @@
     )
 
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5", "FakeFormatNoMatch")
+    if (missing(format))
+        notfmt <- "FakeFormatNoMatch"
+    else
+        notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5")
     filt <- modes_metadat[["DataType"]] == DataType &
         modes_metadat[["SourceVersion"]] == version &
         modes_metadat[["SourceType"]] != notfmt

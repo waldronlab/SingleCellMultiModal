@@ -70,7 +70,7 @@
 #'
 #' @examples
 #'
-#' scMultiOme(DataType = "pbmc_10x", modes = "*", dry.run = TRUE)
+#' scMultiome(DataType = "pbmc_10x", modes = "*", dry.run = TRUE)
 #'
 #' @export
 scMultiome <-
