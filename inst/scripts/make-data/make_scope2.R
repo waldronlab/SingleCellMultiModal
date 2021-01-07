@@ -13,6 +13,9 @@ library(BiocFileCache)
 ## 5. Retrieve the SCP matrix and annotation from Google Drive
 ## 6. Store the SCP data in Rda files
 
+## Note that step 3 is optional. I needed to migrate to HDF5 due to 
+## memory limitations.
+
 ## -------------------------------------- ##
 ## 1. Retrieve the scRNASeq matrices (n=2) from NCBI
 ## -------------------------------------- ##
@@ -27,6 +30,7 @@ bfcrpath(bfc, url2)
 ## ---------------------- ##
 ## 2. Read count matrices
 ## ---------------------- ##
+
 ## Batch 1
 m1 <- data.table::fread(file = bfcquery(bfc, "GSM4226877")$rpath,
                         sep = ",", header = TRUE)
@@ -45,7 +49,8 @@ rownames(m2) <- rn
 ## ------------------------------------------------------- ##
 ## 3. Store the count matrices in an H5 file
 ## ------------------------------------------------------- ##
-h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts1+2.h5"
+
+h5file <- "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/SCoPE2_rna_counts1+2.h5"
 writeHDF5Array(m1,
                filepath = h5file,
                name = "rna1",
@@ -63,7 +68,7 @@ rm(m1, m2)
 m1 <- HDF5Array(file = h5file, name = "rna1")
 m2 <- HDF5Array(file = h5file, name = "rna2")
 m3 <- cbind(m1, m2) ## This process is delayed until writing
-h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts.h5"
+h5file <- "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/SCoPE2_rna_counts.h5"
 writeHDF5Array(m3,
                filepath = h5file,
                name = "assay001",
@@ -90,10 +95,10 @@ SCoPE2_protein_annot <- DataFrame(SCoPE2_protein_annot)
 ## 6. Store the SCP data in Rda files
 ## ------------------------------------------------------- ##
 
-SCoPE2_protein_exprs_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_exprs.Rda"
+SCoPE2_protein_exprs_file <- "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/SCoPE2_protein_exprs.Rda"
 save(SCoPE2_protein_exprs, 
      file = SCoPE2_protein_exprs_file)
-SCoPE2_protein_annot_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_annot.Rda"
+SCoPE2_protein_annot_file <- "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/SCoPE2_protein_annot.Rda"
 save(SCoPE2_protein_annot, 
      file = SCoPE2_protein_annot_file)
 
