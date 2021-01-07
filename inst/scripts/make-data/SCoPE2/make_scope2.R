@@ -9,8 +9,9 @@ library(BiocFileCache)
 ## 1. Retrieve the scRNASeq matrices (n=2) from NCBI
 ## 2. Read the count matrices
 ## 3. Store the count matrices in an H5 file
-## 4. Retrieve the SCP matrix and annotation from Google Drive
-## 5. Store the SCP data in Rda files
+## 4. Combine the two matrices in a new H5 file
+## 5. Retrieve the SCP matrix and annotation from Google Drive
+## 6. Store the SCP data in Rda files
 
 ## -------------------------------------- ##
 ## 1. Retrieve the scRNASeq matrices (n=2) from NCBI
@@ -44,7 +45,6 @@ rownames(m2) <- rn
 ## ------------------------------------------------------- ##
 ## 3. Store the count matrices in an H5 file
 ## ------------------------------------------------------- ##
-                                 
 h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts1+2.h5"
 writeHDF5Array(m1,
                filepath = h5file,
@@ -54,9 +54,23 @@ writeHDF5Array(m2,
                filepath = h5file,
                name = "rna2",
                with.dimnames = TRUE)
+rm(m1, m2)
 
 ## ------------------------------------------------------- ##
-## 4. Retrieve the SCP matrix and annotation from Google Drive
+## 4. Combine the two matrices in a new H5 file
+## ------------------------------------------------------- ##
+
+m1 <- HDF5Array(file = h5file, name = "rna1")
+m2 <- HDF5Array(file = h5file, name = "rna2")
+m3 <- cbind(m1, m2) ## This process is delayed until writing
+h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts.h5"
+writeHDF5Array(m3,
+               filepath = h5file,
+               name = "rna",
+               with.dimnames = TRUE)
+
+## ------------------------------------------------------- ##
+## 5. Retrieve the SCP matrix and annotation from Google Drive
 ## ------------------------------------------------------- ##
 
 ## Download the protein data provided by the Slavov lab
@@ -72,7 +86,7 @@ scp_annot <- t(scp_annot)
 scp_annot <- DataFrame(scp_annot)
 
 ## ------------------------------------------------------- ##
-## 5. Store the SCP data in Rda files
+## 6. Store the SCP data in Rda files
 ## ------------------------------------------------------- ##
 
 scp_exprs_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_exprs.Rda"
