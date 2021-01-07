@@ -1,0 +1,176 @@
+---
+title: "PBMCs profiled with the Chromium Single Cell Multiome ATAC + Gene Expression assay"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+  %\VignetteIndexEntry{PBMC 10x multiome}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+    BiocStyle::html_document:
+      toc_float: true
+Package: SingleCellMultiModal
+---
+
+# Installation
+
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SingleCellMultiModal")
+```
+
+## Load
+
+```{r,include=TRUE, results="hide", message=FALSE, warning=FALSE}
+library(SingleCellMultiModal)
+library(MultiAssayExperiment)
+library(scran)
+library(scater)
+```
+
+# Description
+
+This data set consists of about 10K Peripheral Blood Mononuclear Cells (PBMCs)
+derived from a single healthy donor. It is available
+[from the 10x Genomics website](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets).
+
+Provided are the RNA expression counts quantified at the gene level and the
+chromatin accessibility levels quantified at the peak level. Here we provide
+the default peaks called by the CellRanger software. If you want to explore
+other peak definitions or chromatin accessibility quantifications (at the
+promoter level, etc.), you have download the `fragments.tsv.gz` file from the
+10x Genomics website.
+
+# Downloading datasets
+
+The user can see the available dataset by using the default options
+
+```{r}
+mae <- scMultiome("pbmc_10x", mode = "*", dry.run = FALSE, format = "MTX")
+```
+
+```{r, echo=FALSE}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+colors <- gg_color_hue(length(unique(mae$celltype)))
+names(colors) <- unique(mae$celltype)
+```
+
+# Exploring the data structure
+
+There are two assays: `rna` and `atac`, stored as
+[SingleCellExperiment](http://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html)
+objects
+
+```{r}
+mae
+```
+
+where the cells are the same in both assays:
+
+```{r}
+upsetSamples(mae)
+```
+
+## Cell metadata
+
+Columns:
+
+- **nCount_RNA**: number of read counts
+- **nFeature_RNA**: number of genes with at least one read count
+- **nCount_ATAC**: number of ATAC read counts
+- **nFeature_ATAC**: number of ATAC peaks with at least one read count
+- **celltype**: The cell types have been annotated by the 10x Genomics R&D team using gene markers. They provide a rough characterisation of the cell type diversity, but keep in mind that they are not ground truth labels.
+- **broad_celltype**: `Lymphoid` or `Myeloid` origin
+
+The cells have not been QC-ed, choosing a minimum number of genes/peaks per
+cell depends is left to you! In addition, there are further quality control
+criteria that you may want to apply, including mitochondrial coverage, fraction
+of reads overlapping ENCODE Blacklisted regions, Transcription start site
+enrichment, etc. See suggestions below for software that can perform a
+semi-automated quality control pipeline
+
+```{r}
+head(colData(mae))
+```
+
+## RNA expression
+
+The RNA expression consists of 36,549 genes and 10,032 cells, stored using
+the `dgCMatrix` sparse matrix format
+
+```{r}
+dim(experiments(mae)[["rna"]])
+```
+
+```{r}
+names(experiments(mae))
+```
+
+Let's do some standard dimensionality reduction plot:
+
+```{r}
+sce.rna <- experiments(mae)[["rna"]]
+
+# Normalisation
+sce.rna <- logNormCounts(sce.rna)
+
+# Feature selection
+decomp <- modelGeneVar(sce.rna)
+hvgs <- rownames(decomp)[decomp$mean>0.01 & decomp$p.value <= 0.05]
+sce.rna <- sce.rna[hvgs,]
+
+# PCA
+sce.rna <- runPCA(sce.rna, ncomponents = 25)
+
+# UMAP
+set.seed(42)
+sce.rna <- runUMAP(sce.rna, dimred="PCA", n_neighbors = 25, min_dist = 0.3)
+plotUMAP(sce.rna, colour_by="celltype", point_size=0.5, point_alpha=1)
+```
+
+## Chromatin Accessibility
+
+The ATAC expression consists of 108,344 peaks and 10,032 cells:
+
+```{r}
+dim(experiments(mae)[["atac"]])
+```
+
+Let's do some standard dimensionality reduction plot. Note that scATAC-seq data is sparser than scRNA-seq, almost binary. The log normalisation + PCA approach that `scater` implements for scRNA-seq is not a good strategy for scATAC-seq data. Topic modelling or TFIDF+SVD are a better strategy. Please see the package recommendations below.
+
+```{r}
+sce.atac <- experiments(mae)[["atac"]]
+
+# Normalisation
+sce.atac <- logNormCounts(sce.atac)
+
+# Feature selection
+decomp <- modelGeneVar(sce.atac)
+hvgs <- rownames(decomp)[decomp$mean>0.25]
+sce.atac <- sce.atac[hvgs,]
+
+# PCA
+sce.atac <- runPCA(sce.atac, ncomponents = 25)
+
+# UMAP
+set.seed(42)
+sce.atac <- runUMAP(sce.atac, dimred="PCA", n_neighbors = 25, min_dist = 0.3)
+plotUMAP(sce.atac, colour_by="celltype", point_size=0.5, point_alpha=1)
+```
+
+# Suggested software for the downstream analysis
+
+These are my personal recommendations of R-based analysis software:
+
+-   **RNA expression**: [scater](http://bioconductor.org/packages/release/bioc/html/scater.html), [scran](https://bioconductor.org/packages/release/bioc/html/scran.html)
+-   **ATAC accessibility**: [archR](https://www.archrproject.com/), [snapATAC](https://github.com/r3fang/SnapATAC), [cisTopic](https://github.com/aertslab/cisTopic), [Signac](https://satijalab.org/signac), [chromVar](https://bioconductor.org/packages/release/bioc/html/chromVAR.html), [Cicero](https://www.bioconductor.org/packages/release/bioc/html/cicero.html)
+-   **Integrative analysis**: [MOFA+](https://biofam.github.io/MOFA2), [Seurat](https://satijalab.org/seurat). Note that both methods have released vignettes in their website where they analysed this same data set.
+
+# sessionInfo
+
+```{r}
+sessionInfo()
+```

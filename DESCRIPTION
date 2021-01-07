@@ -1,17 +1,19 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
-Version: 1.3.4
+Version: 1.3.5
 Authors@R: c(
     person(given = "Marcel", family = "Ramos",
         role = c("aut", "cre"), email = "marcel.ramos@roswellpark.org",
         comment = c(ORCID = "0000-0002-3242-0582")),
+    person(given = "Ricard", family = "Argelaguet",
+        role = "aut", email = "ricard@ebi.ac.uk"),
+    person(given = "Dario", family = "Righelli",
+        role = "aut", email = "dario.righelli@gmail.com"),
     person(given = "Kelly", family = "Eckenrode",
         role = "aut", email = "kelly.eckenrode@sph.cuny.edu"),
     person(given = "Levi", family = "Waldron",
-        role = "aut", email = "lwaldron.research@gmail.com"),
-    person(given = "Dario", family = "Righelli",
-        role = "ctb", email = "dario.righelli@gmail.com")
+        role = "aut", email = "lwaldron.research@gmail.com")
     )
 Description: SingleCellMultiModal is an ExperimentHub package
     that serves multiple datasets obtained from GEO and other sources and
