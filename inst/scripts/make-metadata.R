@@ -386,7 +386,7 @@ make_metadata(
 
 make_metadata(
     directory = "../.localdata/SingleCellMultiModal/",
-    dataDirs = "SCoPE2",
+    dataDirs = "macrophage_differentiation",
     version = "1.0.0",
     doc_file = "inst/extdata/docuData/singlecellmultimodalv7.csv",
     dry.run = FALSE,

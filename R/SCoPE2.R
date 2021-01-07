@@ -63,13 +63,13 @@
 #' 
 #' @examples
 #' 
-#' SCoPE2(DataType = "SCoPE2", 
+#' SCoPE2(DataType = "macrophage_differentiation", 
 #'        modes = "*", 
 #'        version = "1.0.0", 
 #'        dry.run = TRUE)
 #' 
 #' @export
-SCoPE2 <- function(DataType = "SCoPE2", 
+SCoPE2 <- function(DataType = "macrophage_differentiation", 
                    modes = "*", 
                    version = "1.0.0",
                    dry.run = TRUE, 
@@ -90,26 +90,33 @@ SCoPE2 <- function(DataType = "SCoPE2",
     if (dry.run) return(ess_list)
     ## The retrieved data is stored in the `experiments` element
     modes_list <- ess_list[["experiments"]]
-    ## Get a formated MultiAssayExperiment object from the list of 
+    ## Get a formatted MultiAssayExperiment object from the list of 
     ## data resources
-    .SCoPE2(modes_list = modes_list)
+    if (DataType == "macrophage_differentiation") {
+        mae <- .macrophage_differentiation(modes_list = modes_list,
+                                           version = version)
+    } else {
+           ## Add here other SCoPE2 datasets based on DataType 
+           ## identifier
+           stop("Unrecognized SCoPE2 dataset name")
+    }
+    return(mae)
 }
 
 ## Internal function that builds an MAE object from the data pieces 
 ## distributed on EH. 
-.SCoPE2 <- function(modes_list = modes_list) {
+.macrophage_differentiation <- function(modes_list,
+                                        version) {
+    ##  'version' is currently ignored 
+    
     ## Construct the scRNA-Seq data
-    ## Batch 1
-    rna1 <- HDF5Array(file = modes_list[[1]], name = "rna1")
-    sc1 <- SingleCellExperiment(assays = list(counts = rna1))
-    ## Batch 2
-    rna2 <- HDF5Array(file = modes_list[[1]], name = "rna2")
-    sc2 <- SingleCellExperiment(assays = list(counts = rna1))
+    rna <- HDF5Array(file = modes_list[[3]], 
+                      name = "assay001")
+    scr <- SingleCellExperiment(assays = list(counts = rna))
     ## Construct the SCP data
     scp <- SingleCellExperiment(assays = modes_list[[2]],
-                                colData = modes_list[[3]])
+                                colData = modes_list[[1]])
     ## Build the MAE
-    MultiAssayExperiment(experiments = ExperimentList(scRNAseq1 = sc1,
-                                                      scRNAseq2 = sc2,
-                                                      scp = scp))
+    MultiAssayExperiment(experiments = ExperimentList(rna = scr,
+                                                      protein = scp))
 }

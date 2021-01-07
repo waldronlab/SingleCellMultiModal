@@ -168,7 +168,7 @@ scope2meta <- data.frame(
                   "https://drive.google.com/file/d/16vf6rjIsk-oK9naAH6BQnCFrlWnYtJsS/view?usp=sharing"),
     SourceType = c("CSV", "CSV", "CSV"),
     SourceVersion = "1.0.0",
-    DataType = "SCopE2",
+    DataType = "macrophage_differentiation",
     Maintainer = "Christophe Vanderaa <christophe.vanderaa@uclouvain.be>",
     stringsAsFactors = FALSE
 )
