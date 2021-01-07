@@ -384,7 +384,18 @@ make_metadata(
     append = TRUE
 )
 
+make_metadata(
+    directory = "../.localdata/SingleCellMultiModal/",
+    dataDirs = "SCoPE2",
+    version = "1.0.0",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv7.csv",
+    dry.run = FALSE,
+    append = TRUE
+)
+
+
 ## request to update Maintainer field in older AH resources
 # aq <- AnnotationHub::query(eh, "SingleCellMultiModal")
 # aq[aq$maintainer == "Marcel Ramos <marcel.ramos@roswellpark.org>" &
 #     grepl("v[12]", aq$rdatapath)]
+

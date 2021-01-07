@@ -66,7 +66,7 @@ m3 <- cbind(m1, m2) ## This process is delayed until writing
 h5file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_rna_counts.h5"
 writeHDF5Array(m3,
                filepath = h5file,
-               name = "rna",
+               name = "assay001",
                with.dimnames = TRUE)
 
 ## ------------------------------------------------------- ##

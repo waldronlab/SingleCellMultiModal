@@ -156,7 +156,7 @@ write.csv(
     row.names = FALSE
 )
 
-## Creating metadata for the SCoPE2 dataset
+## version 7: creating metadata for the SCoPE2 dataset
 scope2meta <- data.frame(
     DataProvider = paste0("Slavov Laboratory and SCP Center at ",
                           "Northeastern University, Boston, United ",
@@ -175,6 +175,6 @@ scope2meta <- data.frame(
 
 write.csv(
     scope2meta,
-    file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+    file = "inst/extdata/docuData/singlecellmultimodalv7.csv",
     row.names = FALSE
 )
