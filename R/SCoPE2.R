@@ -71,10 +71,13 @@
 #' @export
 SCoPE2 <- function(DataType = "SCoPE2", 
                    modes = "*", 
-                   version,
+                   version = "1.0.0",
                    dry.run = TRUE, 
                    verbose = TRUE, 
                    ...) {
+    if (version != "1.0.0")
+        stop("Only version '1.0.0' is available.")
+    
     ## Retrieve the different resources from ExperimentHub
     ess_list <- .getResourcesList(prefix = "SCoPE2_", 
                                   datatype = DataType,
