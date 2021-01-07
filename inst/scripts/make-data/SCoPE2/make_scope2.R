@@ -75,26 +75,27 @@ writeHDF5Array(m3,
 
 ## Download the protein data provided by the Slavov lab
 ## https://drive.google.com/file/d/1sF5STkofF_f2msnYaaYdWabou84Qf2Xr/view?usp=sharing
-scp_exprs <- read.csv("../.localdata/SCP/specht2019/v3/Proteins-processed.csv",
-                      row.names = 1)
-scp_exprs <- scp_exprs[, colnames(scp_exprs) != "protein"]
+SCoPE2_protein_exprs <- read.csv("../.localdata/SCP/specht2019/v3/Proteins-processed.csv",
+                                 row.names = 1)
+SCoPE2_protein_exprs <- SCoPE2_protein_exprs[, colnames(SCoPE2_protein_exprs) != "protein"]
+SCoPE2_protein_exprs <- as.matrix(SCoPE2_protein_exprs)
 ## Download the protein data provided by the Slavov lab
 ## https://drive.google.com/file/d/16vf6rjIsk-oK9naAH6BQnCFrlWnYtJsS/view?usp=sharing
-scp_annot <- read.csv("../.localdata/SCP/specht2019/v3/Cells.csv",
-                      row.names = 1)
-scp_annot <- t(scp_annot)
-scp_annot <- DataFrame(scp_annot)
+SCoPE2_protein_annot <- read.csv("../.localdata/SCP/specht2019/v3/Cells.csv",
+                                 row.names = 1)
+SCoPE2_protein_annot <- t(SCoPE2_protein_annot)
+SCoPE2_protein_annot <- DataFrame(SCoPE2_protein_annot)
 
 ## ------------------------------------------------------- ##
 ## 6. Store the SCP data in Rda files
 ## ------------------------------------------------------- ##
 
-scp_exprs_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_exprs.Rda"
-save(scp_exprs, 
-     file = scp_exprs_file)
-scp_annot_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_annot.Rda"
-save(scp_annot, 
-     file = scp_annot_file)
+SCoPE2_protein_exprs_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_exprs.Rda"
+save(SCoPE2_protein_exprs, 
+     file = SCoPE2_protein_exprs_file)
+SCoPE2_protein_annot_file <- "../.localdata/SingleCellMultiModal/SCoPE2/v1.0.0/SCoPE2_protein_annot.Rda"
+save(SCoPE2_protein_annot, 
+     file = SCoPE2_protein_annot_file)
 
 ## ------------------------------------------------------- ##
 ## Conclusion
@@ -102,5 +103,5 @@ save(scp_annot,
 
 ## These files should be sent to ExperimentHub
 h5file
-scp_exprs_file
-scp_annot_file
+SCoPE2_protein_exprs_file
+SCoPE2_protein_annot_file
