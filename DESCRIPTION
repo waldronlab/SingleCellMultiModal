@@ -27,7 +27,10 @@ Depends:
 Imports:
     AnnotationHub,
     BiocFileCache,
+    BiocGenerics,
     ExperimentHub,
+    HCAMatrixBrowser,
+    HDF5Array,
     S4Vectors,
     SingleCellExperiment,
     SpatialExperiment,
