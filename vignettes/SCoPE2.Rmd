@@ -1,0 +1,118 @@
+---
+title: "SCoPE2: macrophage vs monocytes"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+    %\VignetteIndexEntry{SCoPE2: macrophage vs monocytes}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+output:
+    BiocStyle::html_document:
+    toc_float: true
+Package: SingleCellMultiModal
+bibliography: ../inst/REFERENCES.bib
+---
+    
+# Installation
+    
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SingleCellMultiModal")
+```
+
+## Load
+
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(SingleCellMultiModal)
+library(MultiAssayExperiment)
+```
+
+# SCoPE2
+
+The data set has been acquired and is provided by the Slavov Lab 
+(@Specht2020-jm). IT contains single-cell proteomics and single-cell 
+RNA sequencing data for macrophages and monocytes. The cells acquired
+for each modality are a **distinct** set of cells that were cultivated
+at a different time point. The identity of the cells are known only 
+for the **proteomics** data. The proteomics data was retrieved from 
+the authors' [website](https://scope2.slavovlab.net/docs/data) and the
+transcriptomic data was retrieved from the GEO database (accession id:
+[GSE142392](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392)).
+
+For more information on the protocol, see @Specht2020-jm.
+
+## Downloading datasets
+
+The user can see the available dataset by using the default options
+
+```{r}
+SCoPE2("SCoPE2", mode = "*", version = "1.0.0", dry.run = TRUE)
+```
+
+Or by simply running:
+    
+```{r}
+SCoPE2("SCoPE2")
+```
+
+## Data versions
+
+Only version `1.0.0` is currently available.
+
+## Actual Data
+
+Example with actual data:
+    
+```{r,message=FALSE}
+scope2 <- SCoPE2("SCoPE2",
+                 mode = c("rna", "protein"),
+                 dry.run = FALSE)
+scope2
+```
+
+One ass
+
+## Exploring the data structure
+
+Check row annotations:
+    
+```{r}
+rownames(scope2)
+```
+
+Take a peek at the `sampleMap`:
+    
+```{r}
+sampleMap(scope2)
+```
+
+Notice that the assays do not contain the same cells. 
+
+## Transcriptomics
+
+See the UMI counts: 
+
+```{r}
+assay(scope2, "rna")[1:5, 1:5]
+```
+
+## Proteomics
+
+See the processed protein data:
+    
+```{r}
+assay(scope2, "protein")[1:5, 1:5]
+```
+
+The data has been submitted to sample and feature quality control, 
+normalization, log transformation, imputation and batch correction. 
+See reference for more details about data processing.
+
+# sessionInfo
+
+```{r}
+sessionInfo()
+```
+
+# References
