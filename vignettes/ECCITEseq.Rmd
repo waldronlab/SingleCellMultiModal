@@ -1,12 +1,12 @@
 ---
-title: "CITEseq Cord Blood"
+title: "ECCITEseq Peripheral Blood"
 author: "Dario Righelli"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
     BiocStyle::html_document:
       toc_float: true
 vignette: >
-    %\VignetteIndexEntry{CITEseq Cord Blood}
+    %\VignetteIndexEntry{ECCITEseq Peripheral Blood}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
 Package: SingleCellMultiModal
@@ -14,7 +14,6 @@ bibliography: ../inst/REFERENCES.bib
 editor_options:
   chunk_output_type: console
 ---
-
 
 # Load libraries
 
@@ -26,34 +25,35 @@ library(SingleCellMultiModal)
 ```
 
 
-# CITE-seq dataset
+# ECCITE-seq dataset
 
-CITE-seq data are a combination of two data types extracted at the same
-time from the same cell.  First data type is scRNA-seq data, while the second
-one consists of about a hundread of antibody-derived tags (ADT).
-In particular this dataset is provided by \ref{@stoeckius2017simultaneous}.
+ECCITE-seq data are an evolution of the CITE-seq data 
+(see also [CITE-seq vignette](CITEseq.html) for more details)
+by extending the CITE-seq original data types with a third one always extracted
+from the same cell.
+Indeed, in addition to the CITE-seq provided scRNA-seq and antibody-derived tags
+(ADT), it provides around ten Hashtagged Oligo (HTO).
+In particular this dataset is provided by \ref{@mimitou2018expanding}.
 
 ## Downloading datasets
 
-The user can see the available dataset by using the default options
+The user can see the available dataset by using the default options through the
+CITE-seq function.
 
 ```{r}
 
-CITEseq(DataType="cord_blood", modes="*", dry.run=TRUE, version="1.0.0")
+CITEseq(DataType="peripheral_blood", modes="*", dry.run=TRUE, version="1.0.0")
 
 ```
 
-Or simply by setting `dry.run = FALSE` it downloads the data and creates the
-`MultiAssayExperiment` object.
+Or simply by setting `dry.run = FALSE` it downloads the data and by default 
+creates the `MultiAssayExperiment` object.
 
 In this example, we will use one of the two available datasets `scADT_Counts`:
 
-```{r,message=FALSE}
+```{r message=FALSE}
 
-mse <- CITEseq(
-    DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0"
-)
-
+mse <- CITEseq(DataType="peripheral_blood", modes="*", dry.run=FALSE, version="1.0.0")
 mse
 ```
 
@@ -63,6 +63,7 @@ Example with actual data:
 experiments(mse)
 ```
 
+Additionally, we stored into the object metedata 
 
 ## Exploring the data structure
 
@@ -121,5 +122,3 @@ sessionInfo()
 ```
 
 # References
-\cite{stoeckius2017simultaneous}
-
