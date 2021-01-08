@@ -27,7 +27,6 @@
     fact <- .removeExt(filepaths)
     fact <- gsub("_se", "", fact)
     mtxlist <- split(filepaths, fact)
-    names(mtxlist) <- fact
     lapply(mtxlist, function(mtxfile, fn) {
         if (verbose)
             message("Working on: ", paste(fn, collapse = ",\n "))
