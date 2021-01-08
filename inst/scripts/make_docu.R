@@ -162,7 +162,7 @@ scope2meta <- data.frame(
                           "Northeastern University, Boston, United ",
                           "states"),
     TaxonomyId = "9606",
-    Species = "Homo Sapiens",
+    Species = "Homo sapiens",
     SourceUrl = c("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392",
                   "https://drive.google.com/file/d/1sF5STkofF_f2msnYaaYdWabou84Qf2Xr/view?usp=sharing",
                   "https://drive.google.com/file/d/16vf6rjIsk-oK9naAH6BQnCFrlWnYtJsS/view?usp=sharing"),
