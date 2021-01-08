@@ -366,23 +366,23 @@ make_metadata <- function(
 #     dry.run = FALSE
 # )
 
-make_metadata(
-    directory = "~/data/scmm",
-    dataDirs = "peripheral_blood",
-    version = "1.0.0",
-    doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
-    dry.run = FALSE,
-    append = TRUE
-)
+# make_metadata(
+#     directory = "~/data/scmm",
+#     dataDirs = "peripheral_blood",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv5.csv",
+#     dry.run = FALSE,
+#     append = TRUE
+# )
 
-make_metadata(
-    directory = "~/data/scmm",
-    dataDirs = "pbmc_10x",
-    version = "1.0.0",
-    doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
-    dry.run = FALSE,
-    append = TRUE
-)
+# make_metadata(
+#     directory = "~/data/scmm",
+#     dataDirs = "pbmc_10x",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv6.csv",
+#     dry.run = FALSE,
+#     append = TRUE
+# )
 
 make_metadata(
     directory = "../.localdata/SingleCellMultiModal/",

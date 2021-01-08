@@ -91,11 +91,11 @@ colnames(protein_colData)[5] <- "batch_MS"
 ## 6. Combine the data in a SingleCellExperiment object
 ## ------------------------------------------------------- ##
 
-scp <- SingleCellExperiment(assay = list(logexprs = protein_assay),
-                            colData = protein_colData)
-format(object.size(scp), "MB")
+macrophage_protein <- SingleCellExperiment(assay = list(logexprs = protein_assay),
+                                           colData = protein_colData)
+format(object.size(macrophage_protein), "MB")
 ## Note the protein data can easily fit in memory. We save it as an Rda
-save(scp, file = "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/macrophage_protein.Rda")
+save(macrophage_protein, file = "../.localdata/SingleCellMultiModal/macrophage_differentiation/v1.0.0/macrophage_protein.Rda")
 
 ## ------------------------------------------------------- ##
 ## Conclusion
