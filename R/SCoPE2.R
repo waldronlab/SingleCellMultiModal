@@ -88,35 +88,6 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
                                   ...)
     ## If dry.run, return only the information table
     if (dry.run) return(ess_list)
-    ## The retrieved data is stored in the `experiments` element
-    modes_list <- ess_list[["experiments"]]
-    ## Get a formatted MultiAssayExperiment object from the list of 
-    ## data resources
-    if (DataType == "macrophage_differentiation") {
-        mae <- .macrophage_differentiation(modes_list = modes_list,
-                                           version = version)
-    } else {
-           ## Add here other SCoPE2 datasets based on DataType 
-           ## identifier
-           stop("Unrecognized SCoPE2 dataset name")
-    }
-    return(mae)
-}
-
-## Internal function that builds an MAE object from the data pieces 
-## distributed on EH. 
-.macrophage_differentiation <- function(modes_list,
-                                        version) {
-    ##  'version' is currently ignored 
-    
-    ## Construct the scRNA-Seq data
-    rna <- HDF5Array(file = modes_list[[3]], 
-                      name = "assay001")
-    scr <- SingleCellExperiment(assays = list(counts = rna))
-    ## Construct the SCP data
-    scp <- SingleCellExperiment(assays = modes_list[[2]],
-                                colData = modes_list[[1]])
-    ## Build the MAE
-    MultiAssayExperiment(experiments = ExperimentList(rna = scr,
-                                                      protein = scp))
+    ## Construct and return the MAE object
+    MultiAssayExperiment(experiments = ess_list[["experiments"]])
 }
