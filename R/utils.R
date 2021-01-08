@@ -16,3 +16,4 @@
 .isSingleChar <- function(x) {
     length(x) == 1L && is.character(x) && !is.na(x)
 }
+
