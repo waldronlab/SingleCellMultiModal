@@ -17,7 +17,6 @@ bibliography: ../inst/REFERENCES.bib
 ```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-
 BiocManager::install("SingleCellMultiModal")
 ```
 
@@ -32,25 +31,28 @@ library(MultiAssayExperiment)
 
 SCoPE2 is a mass spectrometry (MS)-based single-cell proteomics 
 protocol to quantify the proteome of single-cells in an untargeted
-fashion.
+fashion. It was initially developed by @Specht2020-jm.
 
 ## Downloading datasets
 
-The user can see the available dataset by using the default options
+The user can see the available dataset by using the default options.
 
 ```{r}
-SCoPE2("SCoPE2", mode = "*", version = "1.0.0", dry.run = TRUE)
+SCoPE2("macrophage_differentiation", 
+       mode = "*", 
+       version = "1.0.0", 
+       dry.run = TRUE)
 ```
 
 Or by simply running:
     
 ```{r}
-SCoPE2("SCoPE2")
+SCoPE2("macrophage_differentiation")
 ```
 
-## Data versions
+## Available projects
 
-Only version `1.0.0` is currently available.
+Currently, only the `macrophage_differentiation` is available.
 
 ## Retrieving data
 
@@ -61,7 +63,7 @@ project:
     
 ```{r,message=FALSE}
 scope2 <- SCoPE2("macrophage_differentiation",
-                 modes = c("rna", "protein_exprs"),
+                 modes = "rna|protein",
                  dry.run = FALSE)
 scope2
 ```
@@ -70,17 +72,22 @@ scope2
 
 This data set has been acquired by the Slavov Lab (@Specht2020-jm). 
 It contains single-cell proteomics and single-cell 
-RNA sequencing data for macrophages and monocytes. The research 
-question addressed in this project is to understand the PMA-induced 
-differentiation of monocytes to macrophages. The transcriptomic and 
+RNA sequencing data for macrophages and monocytes. The object of the 
+research that lead to generate this data is to understand whether 
+homogeneous monocytes differentiate in the absence of cytokines to
+macrophage with homogeneous or heterogeneous profiles. The transcriptomic and 
 proteomic acquisitions are conducted on two separate subset of similar 
-cells (same experimental design). The identity of the cells are known only 
+cells (same experimental design). The cell type of the samples are known only 
 for the **proteomics** data. The proteomics data was retrieved from 
 the authors' [website](https://scope2.slavovlab.net/docs/data) and the
 transcriptomic data was retrieved from the GEO database (accession id:
 [GSE142392](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392)).
 
 For more information on the protocol, see @Specht2020-jm.
+
+## Data versions
+
+Only version `1.0.0` is currently available.
 
 The `macrophage_differentiation` data set in this package contains two
 assays: `rna` and `protein`. 
