@@ -79,7 +79,7 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
         stop("Only version '1.0.0' is available.")
     
     ## Retrieve the different resources from ExperimentHub
-    ess_list <- SingleCellMultiModal:::.getResourcesList(prefix = "macrophage_", 
+    ess_list <- .getResourcesList(prefix = "macrophage_", 
                                   datatype = DataType,
                                   modes = modes, 
                                   version = version, 

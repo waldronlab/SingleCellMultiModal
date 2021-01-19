@@ -4,7 +4,6 @@
     fact <- .removeExt(filepaths)
     fact <- gsub("_se|_assays", "", fact)
     h5list <- split(filepaths, fact)
-    names(h5list) <- unique(fact)
     lapply(h5list, function(h5file, fn) {
         if (verbose)
             message("Working on: ", paste(fn, collapse = ",\n "))
