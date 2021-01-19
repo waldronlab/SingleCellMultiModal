@@ -173,6 +173,9 @@
         },
         lapply(x, colData)
     )
-    rownames(newcoldata) <- newcoldata[["Row.names"]]
-    newcoldata[, -which(colnames(newcoldata) == "Row.names")]
+    if (length(x) > 1L) {
+        rownames(newcoldata) <- newcoldata[["Row.names"]]
+        newcoldata <- newcoldata[, -which(colnames(newcoldata) == "Row.names")]
+    }
+    newcoldata
 }

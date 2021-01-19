@@ -24,8 +24,10 @@
 #'         }
 #'     }
 #'
+#' @inheritParams scNMT
+#'
 #' @param DataType character(1) Indicates study that produces this type of
-#'     data (default: 'mouse_gastrulation')
+#'     data (default: 'macrophage_differentiation')
 #'
 #' @param modes character() A wildcard / glob pattern of modes, such as
 #'     `"rna"`. A wildcard of `"*"` will return all modes, that are
@@ -34,15 +36,6 @@
 #'
 #' @param version character(1), currently only version '1.0.0' is 
 #'     available
-#'
-#' @param dry.run logical(1) Whether to return the dataset names before actual
-#'     download (default TRUE)
-#'
-#' @param verbose logical(1) Whether to show the dataset currently being
-#'     (down)loaded (default TRUE)
-#'
-#' @param ... Additional arguments passed on to the
-#'     \link[ExperimentHub]{ExperimentHub-class} constructor
 #'
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
 #'     informative `data.frame` when `dry.run` is `TRUE`

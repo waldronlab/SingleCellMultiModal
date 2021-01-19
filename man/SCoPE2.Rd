@@ -19,7 +19,7 @@ SCoPE2(
 }
 \arguments{
 \item{DataType}{character(1) Indicates study that produces this type of
-data (default: 'mouse_gastrulation')}
+data (default: 'macrophage_differentiation')}
 
 \item{modes}{character() A wildcard / glob pattern of modes, such as
 \code{"rna"}. A wildcard of \code{"*"} will return all modes, that are
