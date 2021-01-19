@@ -79,7 +79,7 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
         stop("Only version '1.0.0' is available.")
     
     ## Retrieve the different resources from ExperimentHub
-    ess_list <- .getResourcesList(prefix = "macrophage_", 
+    ess_list <- SingleCellMultiModal:::.getResourcesList(prefix = "macrophage_", 
                                   datatype = DataType,
                                   modes = modes, 
                                   version = version, 
@@ -88,6 +88,22 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
                                   ...)
     ## If dry.run, return only the information table
     if (dry.run) return(ess_list)
+    ## Get the colData
+    if (length(ess_list[["experiments"]]) == 1)
+        cd <- colData(ess_list[["experiments"]][[1]])
+    else { ## If more than one assay, assemble DFrames
+        ## Get the respective colData
+        cdProtein <- colData(ess_list[["experiments"]][[1]])
+        cdRna <- colData(ess_list[["experiments"]][[2]])
+        ## Fill missing fields with NA
+        cdProtein[, setdiff(colnames(cdRna), colnames(cdProtein))] <- NA
+        cdRna[, setdiff(colnames(cdProtein), colnames(cdRna))] <- NA
+        ## Combine in a single DFrame
+        cd <- rbind(cdProtein, cdRna)
+        ## Rename the 
+        colnames(cd)[6] <- "batch_Chromium"
+    }
     ## Construct and return the MAE object
-    MultiAssayExperiment(experiments = ess_list[["experiments"]])
+    MultiAssayExperiment(experiments = ess_list[["experiments"]],
+                         colData = cd)
 }

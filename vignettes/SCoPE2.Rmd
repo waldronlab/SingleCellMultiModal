@@ -33,9 +33,9 @@ SCoPE2 is a mass spectrometry (MS)-based single-cell proteomics
 protocol to quantify the proteome of single-cells in an untargeted
 fashion. It was initially developed by @Specht2020-jm.
 
-## Downloading datasets
+## Downloading data sets
 
-The user can see the available dataset by using the default options.
+The user can see the available data set by using the default options.
 
 ```{r}
 SCoPE2("macrophage_differentiation", 
@@ -94,8 +94,14 @@ assays: `rna` and `protein`.
 
 ### Cell annotation
 
-Since the cells that compose the two assays are distinct, there is no
-common cell annotation available:
+The single-cell proteomics data contains cell type annotation 
+(`celltype`), sample preparation batch (`batch_digest` and 
+`batch_sort`), chromatography batch (`batch_chromatography`), and the 
+MS acquisition run (`batch_MS`). The single-cell transcriptomics data 
+was acquired in two batches (`batch_Chromium`). Note that because the 
+cells that compose the two assays are distinct, there is no common 
+cell annotation available for both proteomics and transcriptomics. The
+annotation were therefore filled with `NA`s accordingly.
 
 ```{r}
 colData(scope2)
@@ -117,13 +123,6 @@ Note that the counts are UMI counts.
 assay(scope2[["rna"]])[1:5, 1:5]
 ```
 
-The scRNA-Seq data was acquired in two batches and this is available 
-in the assay-specific `colData`:
-
-```{r}
-colData(scope2[["rna"]])
-```
-
 ### Proteomic data 
 
 The `protein` assay contains MS-based proteomic data. 
@@ -143,15 +142,6 @@ measures intensities rather than counts as opposed to scRNA-Seq.
 
 ```{r}
 assay(scope2[["protein"]])[1:5, 1:5]
-```
-
-The protein-specific `colData` contains cell type annotation 
-(`celltype`), sample preparation batch (`batch_digest` and 
-`batch_sort`), chromatography batch (`batch_chromatography`), and the
-MS acquisition run (`batch_MS`). 
-
-```{r}
-colData(scope2[["protein"]])
 ```
 
 # sessionInfo
