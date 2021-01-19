@@ -53,14 +53,14 @@ In this example, we will use one of the two available datasets `scADT_Counts`:
 
 ```{r message=FALSE}
 
-mse <- CITEseq(DataType="peripheral_blood", modes="*", dry.run=FALSE, version="1.0.0")
-mse
+mae <- CITEseq(DataType="peripheral_blood", modes="*", dry.run=FALSE, version="1.0.0")
+mae
 ```
 
 Example with actual data:
 
 ```{r}
-experiments(mse)
+experiments(mae)
 ```
 
 Additionally, we stored into the object metedata 
@@ -70,13 +70,13 @@ Additionally, we stored into the object metedata
 Check row annotations:
 
 ```{r}
-rownames(mse)
+rownames(mae)
 ```
 
 Take a peek at the `sampleMap`:
 
 ```{r}
-sampleMap(mse)
+sampleMap(mae)
 ```
 
 
@@ -86,7 +86,7 @@ The scRNA-seq data are accessible with the name `scRNAseq`, which returns a
 *matrix* object.
 
 ```{r}
-head(experiments(mse)$scRNAseq)[, 1:4]
+head(experiments(mae)$scRNA)[, 1:4]
 ```
 
 ## scADT data
@@ -95,7 +95,49 @@ The scADT data are accessible with the name `scADT`, which returns a
 **matrix** object.
 
 ```{r}
-head(experiments(mse)$scADT)[, 1:4]
+head(experiments(mae)$scADT)[, 1:4]
+```
+
+## CTCL/CTRL conditions
+
+The dataset has two different conditions (CTCL and CTRL) which samples can be identified with the `colData` accessor.
+
+CTCL stands for cutaneous T-cell lymphoma while CTRL for control.
+
+For example, if we want only the CTCL samples, we can run:
+
+```{r}
+(ctclMae <- mae[,colData(mae)$condition == "CTCL",])
+```
+
+And if you're interested into the common samples across all the modalities
+you can use the `complete.cases` funtion.
+
+```{r}
+ctclMae[,complete.cases(ctclMae),]
+```
+
+ 
+## sgRNAs CRISPR pertubation data
+
+The CRIPR perturbated scRNAs data are stored in a different spot 
+to keep their original long format.
+
+They can be accessed with the `metadata` accessors which, in this case returns a named `list` of `data.frame`s.
+
+```{r}
+sgRNAs <- metadata(mae)
+names(sgRNAs)
+```
+
+There are four different sgRNAs datasets, one per each condition and family receptors combination.
+
+TCR stands for T-Cell Receptor, while a,b,g,d stand for alpha, beta, gamma and delta respectively.
+
+To look into the TCRab, simply run:
+
+```{r}
+sgRNAs$CTCL_TCRab
 ```
 
 # SingleCellExperiment object conversion
@@ -107,12 +149,10 @@ we provide a function for the conversion of our CITE-seq `MultiAssayExperiment`
 object into a `SingleCellExperiment` object with scRNA-seq data as counts and
 scADT data as `altExp`s.
 
-[1]: https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
-[2]: http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
 
 ```{r message=FALSE}
-sce <- CITEseq(DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0",
-              DataClass="SingleCellExperiment")
+sce <- CITEseq(DataType="peripheral_blood", modes="*", dry.run=FALSE, 
+               version="1.0.0", DataClass="SingleCellExperiment")
 ```
 
 # Session Info
@@ -122,3 +162,6 @@ sessionInfo()
 ```
 
 # References
+
+[1]: https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
+[2]: http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
