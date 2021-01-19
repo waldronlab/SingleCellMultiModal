@@ -52,7 +52,7 @@ scmeta <- data.frame(
     SourceVersion = c("1.0.0", "2.0.0", "1.0.0", "2.0.0"),
     DataType = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2)),
     Maintainer = c(rep("Ricard Argelaguet <ricard@ebi.ac.uk>", 2),
-        rep("Dario Righelli <dario.righelli@gmail.com>", 2)),
+                   rep("Dario Righelli <dario.righelli@gmail.com>", 2)),
     stringsAsFactors = FALSE
 )
 write.csv(
@@ -156,3 +156,25 @@ write.csv(
     row.names = FALSE
 )
 
+## version 7: creating metadata for the SCoPE2 dataset
+scope2meta <- data.frame(
+    DataProvider = paste0("Slavov Laboratory and SCP Center at ",
+                          "Northeastern University, Boston, United ",
+                          "states"),
+    TaxonomyId = "9606",
+    Species = "Homo sapiens",
+    SourceUrl = c("https://drive.google.com/file/d/1sF5STkofF_f2msnYaaYdWabou84Qf2Xr/view?usp=sharing",
+                  "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392",
+                  "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392"),
+    SourceType = c("CSV", "CSV", "CSV"),
+    SourceVersion = "1.0.0",
+    DataType = "macrophage_differentiation",
+    Maintainer = "Christophe Vanderaa <christophe.vanderaa@uclouvain.be>",
+    stringsAsFactors = FALSE
+)
+
+write.csv(
+    scope2meta,
+    file = "inst/extdata/docuData/singlecellmultimodalv7.csv",
+    row.names = FALSE
+)
