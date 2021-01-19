@@ -90,7 +90,7 @@ For more information on the protocol, see @Specht2020-jm.
 Only version `1.0.0` is currently available.
 
 The `macrophage_differentiation` data set in this package contains two
-assays: `rna` and `protein`. 
+assays: `macrophage_rna` and `macrophage_protein`. 
 
 ### Cell annotation
 
