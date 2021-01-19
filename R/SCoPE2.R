@@ -89,20 +89,9 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
     ## If dry.run, return only the information table
     if (dry.run) return(ess_list)
     ## Get the colData
-    if (length(ess_list[["experiments"]]) == 1)
-        cd <- colData(ess_list[["experiments"]][[1]])
-    else { ## If more than one assay, assemble DFrames
-        ## Get the respective colData
-        cdProtein <- colData(ess_list[["experiments"]][[1]])
-        cdRna <- colData(ess_list[["experiments"]][[2]])
-        ## Fill missing fields with NA
-        cdProtein[, setdiff(colnames(cdRna), colnames(cdProtein))] <- NA
-        cdRna[, setdiff(colnames(cdProtein), colnames(cdRna))] <- NA
-        ## Combine in a single DFrame
-        cd <- rbind(cdProtein, cdRna)
-        ## Rename the 
-        colnames(cd)[6] <- "batch_Chromium"
-    }
+    cd <- .mergeLowColData(ess_list[["experiments"]])
+    colnames(cd)[which(colnames(cd) == "Batch")] <- "batch_Chromium"
+
     ## Rename assays with project
     names(ess_list[["experiments"]]) <- 
         paste0("macrophage_", names(ess_list[["experiments"]]))
