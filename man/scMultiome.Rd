@@ -41,7 +41,7 @@ download (default TRUE)}
 scMultiome currently allows users to download 10K Peripheral
 Blood Mononuclear Cells provided by
 \href{https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets}{10x Genomics website}
-(`DataType = "pbmc_10x").
+(\code{DataType = "pbmc_10x"}).
 This technology enables simultaneous profiling of the transcriptome (using
 3’ gene expression) and epigenome (using ATAC-seq) from single cells to
 deepen your understanding of how genes are expressed and regulated across
