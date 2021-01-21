@@ -1,3 +1,15 @@
+## Changes in version 1.4.0
+
+### New features
+
+* `SCoPE2` data from Specht et al. now available thanks to @cvanderaa (#26)
+* `scMultiome` provides PBMC from 10X Genomics thanks to @rargelaguet
+
+### Bug fixes and minor improvements
+
+* `scNMT` includes the original call in the `MultiAssayExperiment` metadata
+* Improved and edited Contributing Guidelines for clarity
+
 ## Changes in version 1.2.0
 
 ### New features
