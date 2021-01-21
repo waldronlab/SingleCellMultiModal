@@ -25,7 +25,7 @@ but all multi-modal technologies are welcome.
 # List of Multi-modal Datasets
 
 Please see this spreadsheet for a list of available datasets:
-[Google Drive Sheet] (https://docs.google.com/spreadsheets/d/14Eq_Bt_3tKx_t1UDwan0qZZGWNyK-d2WLXtmoPGB5To/edit#gid=0)
+[Google Drive Sheet](https://docs.google.com/spreadsheets/d/14Eq_Bt_3tKx_t1UDwan0qZZGWNyK-d2WLXtmoPGB5To/edit#gid=0)
 
 # Contributing
 
@@ -45,6 +45,25 @@ meta <- system.file("extdata", "metadata.csv",
 head(read.csv(meta))
 ```
 
+# Versioning and folder structure
+
+We associate a version with all datasets. We start with version `1.0.0` using
+semantic versioning and include data in a corresponding version folder
+(`v1.0.0`). Thus, the recommended folder structure is as follows:
+
+```
+~/data
+  └ scmm/
+    └ marcrophage_differentiation/
+      └ v1.0.0/
+        └ macrophage_protein.rda
+        └ macrophage_rna_assays.h5
+        └ macrophage_rna_se.rds
+```
+
+In the `inst` section, we will discuss how to annotate these three data
+products.
+
 # vignettes
 
 Contributors are required to demonstrate user-level functionality via
@@ -57,22 +76,30 @@ of `scNMT` so that users have a sense of consistency in the usage of the
 package. This means having one main function that returns a
 `MultiAssayExperiment` object and having options that show the user what
 datasets are available for a particular technology. Contributors should use
-`roxygen2` for documenting datasets.
+`roxygen2` for documenting datasets and using `@inheritParams scNMT` tag
+to avoid copying `@param` documentation.
 
 See the current example for implementation details:
 
 ```{r}
-scNMT(dataType = "mouse_gastrulation", mode = "*", dry.run = TRUE)
+scNMT(
+    DataType = "mouse_gastrulation",
+    mode = "*",
+    version = "1.0.0",
+    dry.run = TRUE
+)
 ```
+
+**Note**. Contributors should ensure that the documentation is complete and the
+proper data sources have been attributed.
 
 # inst/*
 
 ## extdata/
 
-The data should be organized in a data directory (`directory` argument in
-`make_metadata`) that includes another folder with the name of the dataset
-(`dataDir` in `make_metadata`) and documented in the `metadata.csv` under the
-`DataType` name. The fields required by `ExperimentHub` are listed here:
+In the following section we will describe how to annotate and append to
+the `metadata.csv` file. First, we have to ensure that we are accounting for
+all of the fields required by `ExperimentHub`. They are listed here:
 
 * ResourceName
 * Title
@@ -90,12 +117,23 @@ The data should be organized in a data directory (`directory` argument in
 * RDataPath
 * RDataClass
 * DispatchClass
-* DataType
+* DataType+
+
+**Note**. `DataType` is a field we've added to help distinguish multimodal
+technologies and is required for `SingleCellMultiModal`. Some of the
+`DataType`s already available are `mouse_gastrulation`, `mouse_visual_cortex`,
+`cord_blood`, `peripheral_blood`, etc.
 
 To make it easy for contributions, we've provided a mechanism for easy
-documentation using a file from a `data.frame`.
+documentation using a file from a `data.frame` we call a `doc_file`.
 
-Interested contributors should modify the file in the location here:
+Interested contributors should create a `doc_file` in `inst/extdata/docuData`
+folder. Although we do not have a strict naming convention for the `doc_file`,
+we usually name the file `singlecellmultimodalvX.csv` where `X` is the *n*th
+dataset added to the package.
+
+Here is an example of the file from our second run (version 2) of the `scNMT`
+dataset:
 
 ```{r}
 docu <- system.file("extdata", "docuData", "singlecellmultimodalv2.csv",
@@ -103,17 +141,20 @@ docu <- system.file("extdata", "docuData", "singlecellmultimodalv2.csv",
 docu
 ```
 
-Contributors should add an additional row that documents the contributed
-dataset. The example below shows the currently present datasets
-(`dataType = "mouse_gastrulation"`):
+Contributors should provide their own annotation `doc_file` to append to the
+existing `metadata.csv`. The example below shows the documentation for the
+`DataType = "mouse_gastrulation"` dataset in `scNMT` function for two versions.
 
 ```{r}
 read.csv(docu, header = TRUE)
 ```
 
-Contributors can create an entry to `singlecellmultimodal.csv` as a
-`data.frame` and add the row. In this example, we create the data already
-contained in the `.csv` file:
+To create a `doc_file` `data.frame` with the file name
+`singlecellmultimodalvX.csv`, first we create a `data.frame` object.
+Each general annotation will be applied to all files uploaded to
+`ExperimentHub` (see the section below for annotating diverse data).
+We take advantage of the `data.frame` function to repeat data and create a
+uniform `data.frame` with equal values across the columns.
 
 ```{r}
 scmeta <- data.frame(
@@ -125,18 +166,16 @@ scmeta <- data.frame(
     SourceType = "RDS",
     SourceVersion = c("1.0.0", "2.0.0"),
     DataType = "mouse_gastrulation",
-    Maintainer = "Marcel Ramos <marcel.ramos@roswellpark.org>",
+    Maintainer = "Ricard Argelaguet <ricard@ebi.ac.uk>",
     stringsAsFactors = FALSE
 )
 scmeta
 ```
 
-If the contributor can then append the metadata to the existing file.
-
 ### Saving the data
 
-After creating the documentation `data.frame`, the contributor can save the
-dataset as a `.csv` file using `write.csv` and append to the existing
+After creating the documentation `data.frame` (`doc_file`), the contributor can
+save the dataset as a `.csv` file using `write.csv` and append to the existing
 documentation file.
 
 ```{r,eval=FALSE}
@@ -150,28 +189,45 @@ write.csv(
 ## Documenting diverse data
 
 In the case that the contributed data is not uniform, meaning that there are
-multiple file types in the data type folder, the `data.frame` will have to
-account for _all_ contributed data files.
+multiple file types from potentially different speciments, the `data.frame`
+will have to account for _all_ contributed data files.
+
 For example, if the contributed data has a number of different source types,
 the contributor is required to create a `data.frame` with the number of rows
 equal to the number of files to be uploaded.
 
-In this example, we have two datasets from different source types and formats:
+In this example, we have **two** data files from different source types and
+formats:
 
 ```{r}
 data.frame(
-    DataProvider = c("Institute of Population Genetics",
-        "Genetic Science Center"),
-    TaxonomyId = "9606",
-    Species = "Homo sapiens",
-    SourceUrl = c("https://science/org", "https://science/gov"),
+    DataProvider =
+        c("Institute of Population Genetics", "Mouse Science Center"),
+    TaxonomyId = c("9606", "10090"),
+    Species = c("Homo sapiens", "Mus musculus"),
+    SourceUrl = c("https://human.science/org", "https://mouse.science/gov"),
     SourceType = c("RDS", "XML"),
-    dataType = "human_genetics",
+    DataType = c("human_genetics", "mouse_genetics"),
     stringsAsFactors = FALSE
 )
 ```
 
 ## scripts/
+
+### make-data/
+
+The individual data products that will eventually come together into
+a `MultiAssayExperiment` can be uploaded as serialized `RDA` / `RDS` files,
+`HDF5`, and even `MTX` files. For examples on how to save data into
+their respective file formats, see the `make-data` folder.
+
+### make-metadata.R
+
+Based on the folder structure described previously, the `directory` argument in
+`make_metadata` will correspond to the `~/data/scmm` folder. The `dataDir`
+folder will correspond to the `DataType` / technology subfolder (e.g.,
+"mouse_gastrulation"). These will be used as inputs to the `make_metadata`
+function.
 
 Once the data is ready, the user can use the function in `make-metadata.R`
 in the `scripts` folder.  A typical call to `make_metadata` will either add to
@@ -180,33 +236,32 @@ the metadata or replace it entirely. The easiest for current contributors is to
 
 ```{r,eval=FALSE}
 make_metadata(
-    directory = "~/data/",
+    directory = "~/data/scmm",
     dataDirs = "mouse_gastrulation", # also the name of the DataType
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "../inst/extdata/docuData/singlecellmultimodalv3.csv",
+    doc_file = "../inst/extdata/docuData/singlecellmultimodalv2.csv",
     pkg_name = "SingleCellMultiModal",
     append = TRUE,
     dry.run = TRUE
 )
 ```
+
+Note that the extraction pattern (`ext_pattern`) will allow contributors to
+match a specific file extension in that folder and ignore any intermediate
+files.
 
 The user may also wish to run `dry.run=TRUE` to see the output `data.frame`
 to be added to the `metadata.csv` file.
 
-```{r,eval=FALSE}
-make_metadata(
-    directory = "~/data/",
-    dataDirs = "contributed_data", # also the name of the DataType
-    ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "../inst/extdata/docuData/mymeta.csv",
-    pkg_name = "SingleCellMultiModal",
-    append = TRUE,
-    dry.run = TRUE
-)
-```
-
 _Note_. The `make_metadata` function should be run from the base package
 directory from a GitHub / git checkout (`git clone ...`).
+
+# NEWS.md
+
+Contributors should update the `NEWS.md` file with a mention of the
+function and data that are being provided. See the `NEWS.md` for examples.
+
+# Next steps
 
 The contributor should then create a Pull Request on [GitHub][].
 
