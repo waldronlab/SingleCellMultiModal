@@ -1,125 +1,3 @@
-.removeExt <- function(fnames, ext = "\\.[Rr][Dd][Aa]$") {
-    gsub(ext, "", fnames)
-}
-
-.modesAvailable <- function(listfiles) {
-    slots <- c("metadata", "colData", "sampleMap")
-    modes <- gsub("(^[a-z]*_)(.*)", "\\2", listfiles)
-    modes <- .removeExt(modes)
-    sort(modes[!modes %in% slots])
-}
-
-.searchFromInputs <- function(glob, searchFields) {
-    regGlob <- glob2rx(unique(glob))
-    res <- unlist(lapply(regGlob, function(x) {
-        grep(x, searchFields, ignore.case = TRUE, value = TRUE)
-        }))
-    if (!length(res))
-        stop("No matches found, modify search criteria")
-    res
-}
-
-.conditionToIndex <- function(startVec, testVec, FUN) {
-    logmat <- vapply(startVec, FUN, logical(length(testVec)))
-    apply(logmat, 1L, any)
-}
-
-.queryResources <- function(ExperimentHub, resTable, verbose) {
-    fileNames <- stats::setNames(resTable[["RDataPath"]], resTable[["Title"]])
-    lapply(fileNames, function(res) {
-        if (verbose)
-            message("Working on: ", gsub("\\.rda", "", basename(res)))
-        query(ExperimentHub, res)
-    })
-}
-
-.getResources <- function(ExperimentHub, resTable, verbose) {
-    infos <- .queryResources(ExperimentHub, resTable, verbose)
-    lapply(infos, `[[`, 1L)
-}
-
-.getResourceInfo <- function(ExperimentHub, resTable, prefix, verbose) {
-    infos <- .queryResources(ExperimentHub, resTable, verbose)
-    resID <- vapply(infos, names, character(1L))
-    restab <- AnnotationHub::getInfoOnIds(ExperimentHub, resID)
-    restab <-
-        restab[, !names(restab) %in% c("fetch_id", "status", "biocversion")]
-    sizes <- as.numeric(restab[["file_size"]])
-    class(sizes) <- "object_size"
-    titleidx <- which(names(restab) == "title")
-    restab <- as.data.frame(append(
-        restab,
-        list(mode = gsub(prefix, "", restab[["title"]]),
-            file_size = format(sizes, units = "Mb")),
-        titleidx
-    ))
-    restab[, -c(length(restab), titleidx)]
-}
-
-.test_eh <- function(...) {
-    tryCatch({
-        ExperimentHub(...)
-    }, error = function(e) {
-        emsg <- conditionMessage(e)
-        if (grepl("Timeout", emsg))
-            warning("[experimenthub.bioconductor.org] timeout, localHub=TRUE",
-                call.=FALSE)
-        ExperimentHub(..., localHub = TRUE)
-    })
-}
-
-.isSingleCharNA <- function(x) {
-    is.character(x) && length(x) == 1L && !is.na(x)
-}
-
-.getResourcesList <-
-    function(prefix, datatype, modes, version, dry.run, verbose, ...)
-{
-    modes_file <- system.file("extdata", "metadata.csv",
-        package = "SingleCellMultiModal", mustWork = TRUE)
-
-    DataType <- tolower(datatype)
-    stopifnot(
-        .isSingleCharNA(DataType), .isSingleCharNA(version)
-    )
-
-    modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
-    filt <- modes_metadat[["DataType"]] == DataType &
-        modes_metadat[["SourceVersion"]] == version
-    modes_metadat <- modes_metadat[filt, , drop = FALSE]
-    eh_assays <- modes_metadat[["ResourceName"]]
-    modesAvail <- .modesAvailable(eh_assays)
-    resultModes <- .searchFromInputs(modes, modesAvail)
-    fileIdx <- .conditionToIndex(
-        resultModes, eh_assays, function(x) grepl(x, eh_assays)
-    )
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
-    eh <- .test_eh(...)
-
-    if (dry.run) {
-        return(.getResourceInfo(
-            eh, modes_metadat[fileIdx, c("Title", "RDataPath")], "scnmt_", FALSE 
-        ))
-    }
-    modes_list <- .getResources(
-        eh, modes_metadat[fileIdx, c("Title", "RDataPath")], verbose
-    )
-    names(modes_list) <- gsub(prefix, "", names(modes_list))
-
-    eh_experiments <- ExperimentList(modes_list)[resultModes]
-
-    ess_names <- c("colData", "metadata", "sampleMap")
-
-    ess_idx <- .conditionToIndex(ess_names, eh_assays,
-        function(x) grepl(x, eh_assays))
-
-    ess_list <- .getResources(eh,
-        modes_metadat[ess_idx, c("Title", "RDataPath")], verbose)
-    names(ess_list) <- gsub(prefix, "", names(ess_list))
-
-    c(list(experiments = eh_experiments), ess_list)
-}
-
 #' Single-cell Nucleosome, Methylation and Transcription sequencing
 #'
 #' @description scNMT assembles data on-the-fly from `ExperimentHub` to
@@ -162,6 +40,10 @@
 #'     quality control metrics. Version '2.0.0' contains all of the cells
 #'     without the QC filter and does not contain CTCF binding footprints or
 #'     p300 binding sites.
+#'
+#' @section metadata:
+#'     The `MultiAssayExperiment` metadata includes the original function call
+#'     that saves the function call and the data version requested.
 #'
 #' @param DataType character(1) Indicates study that produces this type of
 #'     data (default: 'mouse_gastrulation')
@@ -208,19 +90,21 @@ scNMT <-
     )
 {
     stopifnot(.isSingleChar(version), .isSingleChar(DataType))
+    meta <- list(call = match.call(), version = version)
 
     if (missing(version) || !version %in% c("1.0.0", "2.0.0"))
         stop("Enter version '1.0.0' or '2.0.0'; see '?scNMT' for details.")
-        
+
     ess_list <- .getResourcesList(prefix = "scnmt_", datatype = DataType,
         modes = modes, version = version, dry.run = dry.run,
         verbose = verbose, ...)
-    
+
     if (dry.run) { return(ess_list) }
-    
+
     MultiAssayExperiment(
         experiments = ess_list[["experiments"]],
         colData = ess_list[["colData"]],
         sampleMap = ess_list[["sampleMap"]],
+        metadata = meta
     )
 }

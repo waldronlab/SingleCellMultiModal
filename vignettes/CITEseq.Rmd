@@ -31,7 +31,7 @@ library(SingleCellMultiModal)
 CITE-seq data are a combination of two data types extracted at the same
 time from the same cell.  First data type is scRNA-seq data, while the second
 one consists of about a hundread of antibody-derived tags (ADT).
-In particular this dataset is provided by @stoeckius2017simultaneous .
+In particular this dataset is provided by \ref{@stoeckius2017simultaneous}.
 
 ## Downloading datasets
 
@@ -44,7 +44,7 @@ CITEseq(DataType="cord_blood", modes="*", dry.run=TRUE, version="1.0.0")
 ```
 
 Or simply by setting `dry.run = FALSE` it downloads the data and creates the
-a `MultiAssayExperiment` object.
+`MultiAssayExperiment` object.
 
 In this example, we will use one of the two available datasets `scADT_Counts`:
 
@@ -109,10 +109,10 @@ scADT data as `altExp`s.
 [1]: https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
 [2]: http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
 
-```{r}
-CITEseqMseToSce(mse)
+```{r message=FALSE}
+sce <- CITEseq(DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0",
+              DataClass="SingleCellExperiment")
 ```
-
 
 # Session Info
 
@@ -121,4 +121,5 @@ sessionInfo()
 ```
 
 # References
+\cite{stoeckius2017simultaneous}
 

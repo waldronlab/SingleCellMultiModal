@@ -5,11 +5,12 @@
 \title{CITEseq}
 \usage{
 CITEseq(
-  DataType = "cord_blood",
+  DataType = c("cord_blood", "peripheral_blood"),
   modes = "*",
   version = "1.0.0",
   dry.run = TRUE,
   verbose = TRUE,
+  DataClass = c("MultiAssaiExperiment", "SingleCellExperiment"),
   ...
 )
 }
@@ -17,7 +18,7 @@ CITEseq(
 \item{DataType}{character(1) indicating the identifier of the dataset to
 retrieve.  (default "cord_blood")}
 
-\item{modes}{character( ) The assay types or modes of data to obtain these
+\item{modes}{character() The assay types or modes of data to obtain these
 include scADT and scRNA-seq data by default.}
 
 \item{version}{character(1) Either version '1.0.0' depending on
@@ -28,6 +29,9 @@ download (default TRUE)}
 
 \item{verbose}{logical(1) Whether to show the dataset currently being
 (down)loaded (default TRUE)}
+
+\item{DataClass}{either MultiAssayExperiment or SingleCellExperiment
+data classes can be returned (default MultiAssayExperiment)}
 
 \item{...}{Additional arguments passed on to the
 \link[ExperimentHub]{ExperimentHub-class} constructor}
@@ -55,13 +59,33 @@ CITEseq data are a combination of single cell transcriptomics and
             \item{scADT} - Stoeckius antibody-derived tags (ADT) data
             }
      }
+     \itemize{
+        \item{peripheral_blood: } a dataset of single cells of peripheral 
+        blood as provided in Mimitou et al. (2019).
+        We provide two different conditions controls (CTRL) and 
+        Cutaneous T-cell Limphoma (CTCL).
+        Just build appropriate \code{modes} regex for subselecting the 
+        dataset modes. 
+         \itemize{
+            \item{scRNA} - Mimitou scRNA-seq gene count matrix
+            \item{scADT} - Mimitou antibody-derived tags (ADT) data
+            \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
+            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
+            available through the object metadata.
+            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
+            available through the object metadata.
+            }
+     }
 }
 \examples{
 
-mse <- CITEseq(dry.run=FALSE)
-experiments(mse)
+mae <- CITEseq(DataType="cord_blood", dry.run=FALSE)
+experiments(mae)
 
 }
 \references{
-Stoeckius et al. (2017)
+Stoeckius et al. (2017), Mimitou et al. (2019)
+}
+\author{
+Dario Righelli
 }
