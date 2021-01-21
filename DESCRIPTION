@@ -39,7 +39,8 @@ Imports:
     methods,
     utils
 Suggests:
-    knitr
+    knitr,
+    scran
 VignetteBuilder:
     knitr
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
