@@ -113,12 +113,15 @@ any.na <- function(x) {
     }, character(1L))
 }
 
-.getDispatchClass <- function(resource_files, ext_pat) {
+.getDispatchClass <- function(
+    resource_files,
+    ext_pat = paste0(
+        c("[Rr][Dd][Aa]", "[Rr][Dd][Ss]", "[Hh]5", "[Mm][Tt][Xx]\\.[Gg][Zz]"),
+        "$"
+    )
+) {
     ext_map <- data.frame(
-        ext_pattern = paste0(
-            c("[Rr][Dd][Aa]", "[Rr][Dd][Ss]", "[Hh]5", "[Mm][Tt][Xx]\\.[Gg][Zz]"),
-            "$"
-        ),
+        ext_pattern = ext_pat,
         ## currently MTX DispatchClass recipe unavailable
         Dispatch = c("Rda", "Rds", "H5File", "FilePath"),
         stringsAsFactors = FALSE
@@ -299,7 +302,6 @@ MetaHubCreate <-
 #' @md
 #'
 #' @export
-
 make_metadata <- function(
     directory = "~/data/scmm",
     dataDirs = c(rep("mouse_gastrulation", 2), rep("mouse_visual_cortex", 2), "pbmc"),
