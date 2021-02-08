@@ -98,9 +98,8 @@ seqFISH <-
         colData=modes_list$seqFISH_Labels,
         assays=S4Vectors::SimpleList(
             counts=as.matrix(modes_list$seqFISH_Counts)),
-        spatialCoords=modes_list$seqFISH_Coordinates)
-
+        spatialData=modes_list$seqFISH_Coordinates)
     mae <- MultiAssayExperiment::MultiAssayExperiment(
-        experiments=c("seqFISH"=se, "scRNAseq"=sce))
+        experiments=list("seqFISH"=se, "scRNAseq"=sce))
     return(mae)
 }
