@@ -112,20 +112,19 @@ stored in the `mae` *MultiAssayExperiment* object.
 head(assay(mae, "seqFISH"))[,1:4]
 ```
 
-Spatial coordinates can be retrieved with `spatialCoords` function on the 
+Spatial data can be retrieved with `spatialData` function on the 
 *SpatialExperiment* object.
 
 ```{r}
-(sc <- spatialCoords(experiments(mae)$seqFISH))
+(sd <- spatialData(experiments(mae)$seqFISH))
 ```
 
-They can also be stored by using the `<-` operator.
+
+Spatial coordinates within the spatial data can be retrieved in matrix form with `spatialCoords` 
+function on the *SpatialExperiment* object.
 
 ```{r}
-fakeCoords <- cbind(sc[,c(1:3)], sc[,3])
-colnames(fakeCoords)[4] <- "y"
-spatialCoords(experiments(mae)$seqFISH) <- fakeCoords
-spatialCoords(experiments(mae)$seqFISH)
+(sc <- spatialCoords(experiments(mae)$seqFISH))
 ```
 
 Direct access to the colnames of the spacial coordinates with
