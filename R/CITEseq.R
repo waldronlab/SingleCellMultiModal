@@ -53,11 +53,13 @@
                                             names(explist)[assIdx[2]]),
                                         dimslist[assIdx][[2]][2]), 
                                     colnames(explist[[assIdx[2]]])))
+            rownames(m1) <- rownames(explist[[assIdx[[1]]]])
         } else {
             colnames(m1) <- paste0(rep(gsub("scADT|scHTO|scRNA","", 
                                             names(explist)[assIdx[1]]),
                                         dimslist[assIdx][[1]][2]), 
                                     colnames(explist[[assIdx[1]]]))
+            rownames(m1) <- rownames(explist[[assIdx[[1]]]])
         }
         return(m1)
     }
@@ -66,28 +68,11 @@
     {
         
         map <- DataFrame(assay=assayId,
-                        #primary=gsub("_\\w+", "", colnames(mat1)), 
                         primary=colnames(mat1),
                         colname=colnames(mat1), 
                         condition=gsub("_\\w+", "", colnames(mat1)))
         return(map)
     }
-    
-    # .buildColDat <- function(ll)
-    # {
-    #     if(all(names(ll)[grep("CTCL|CTRL", names(ll))] %in% names(ll)))
-    #     {
-    #         cd <- data.frame(row.names=c("CTCL", "CTRL"), 
-    #                    condition=c("Cutaneous T-cell Limphoma", "Control"))
-    #     } else if(!isEmpty(grep("CTCL", names(ll)))) {
-    #         cd <- data.frame(row.names=c("CTCL"), 
-    #                           condition=c("Cutaneous T-cell Limphoma"))
-    #     } else if(!isEmpty(grep("CTRL", names(ll)))) {
-    #         cd <- data.frame(row.names=c("CTRL"), 
-    #                           condition=c("Control"))
-    #     }
-    #     return(cd)
-    # }
     
     ll <- ess_list$experiments
     ll <- lapply(ll, function(x) 

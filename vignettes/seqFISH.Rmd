@@ -159,7 +159,7 @@ mae
 
 # Session Info
 
-```{r}
+```{r, tidy=TRUE}
 sessionInfo()
 ```
 

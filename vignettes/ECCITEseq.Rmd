@@ -153,11 +153,12 @@ scADT data as `altExp`s.
 ```{r message=FALSE}
 sce <- CITEseq(DataType="peripheral_blood", modes="*", dry.run=FALSE, 
                version="1.0.0", DataClass="SingleCellExperiment")
+sce
 ```
 
 # Session Info
 
-```{r}
+```{r, tidy=TRUE}
 sessionInfo()
 ```
 
