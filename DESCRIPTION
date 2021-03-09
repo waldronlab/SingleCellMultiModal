@@ -40,7 +40,8 @@ Imports:
     utils
 Suggests:
     knitr,
-    scran
+    scran,
+    ggplot2
 VignetteBuilder:
     knitr
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
