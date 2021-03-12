@@ -1,11 +1,20 @@
-.internalMap <- data.frame(
-    prefix = c("scnmt_", "pbmc_"),
-    datatype = c("mouse_gastrulation", "pbmc_10x"),
-    version = c("2.0.0", "1.0.0")
+.internalMap <- S4Vectors::DataFrame(
+    FUN = c("scNMT", "scMultiome", "SCoPE2",
+        "CITEseq", "CITEseq", "seqFISH"),
+#    prefix = c("scnmt_", "pbmc_", "macrophage_",
+#        "citeseq_", "citeseq_", "seqfish_"),
+    DataType = c("mouse_gastrulation", "pbmc_10x",
+        "macrophage_differentiation", "cord_blood",
+        "peripheral_blood", "mouse_visual_cortex"
+    )
 )
 
-.filterMap <- function(DataTypes) {
-    .internalMap[.internalMap$datatype %in% DataTypes, ]
+.filterMap <- function(DataTypes, dry.run, verbose) {
+    inDTypes <- .internalMap[["DataType"]] %in% DataTypes
+    upmap <- .internalMap[inDTypes, , drop = FALSE]
+    upmap[["dry.run"]] <- dry.run
+    upmap[["verbose"]] <- verbose
+    upmap
 }
 
 #' Combining Modalities into one MultiAssayExperiment
@@ -18,7 +27,8 @@
 #' @param DataTypes character() A vector of data types as indicated in each
 #'     individual function by the `DataType` parameter.
 #'
-#' @param versions character() A vector of versions for each DataType.
+#' @param versions character() A vector of versions for each DataType. By
+#'     default, version `1.0.0` is obtained for all data types.
 #'
 #' @param modes list() A list or CharacterList of modes for each data type
 #'     where each element corresponds to one data type.
@@ -27,7 +37,8 @@
 #'
 #' @examples
 #'
-#' SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"), modes = "*",
+#' SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"),
+#'     modes = list(c("acc*", "met*"), "*"),
 #'     version = c("2.0.0", "1.0.0"), dry.run = TRUE, verbose = TRUE
 #' )
 #' SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"), modes = "*",
@@ -36,21 +47,29 @@
 #'
 #' @export
 SingleCellMultiModal <- function(
-        DataTypes, modes = "*", versions, dry.run = TRUE, verbose = TRUE, ...
+        DataTypes, modes = "*", versions = "1.0.0",
+        dry.run = TRUE, verbose = TRUE, ...
     )
 {
     stopifnot(is.character(DataTypes), is.character(versions))
-    if (is.character(modes) && length(modes) == 1L && identical(modes, "*"))
-        modes <- as.list(rep(modes, length(DataTypes)))
-    resmap <- .filterMap(DataTypes)
-    ess_lists <- Map(.getResourcesList, prefix = resmap[["prefix"]],
-        datatype = resmap[["datatype"]], modes = modes,
-        version = resmap[["version"]], dry.run = dry.run, verbose = verbose
+    if (.isSingleChar(modes) && identical(modes, "*"))
+        modes <- c(rep(modes, length(DataTypes)))
+    if (.isSingleChar(versions) && identical(versions, "1.0.0"))
+        versions <- c(rep(versions, length(DataTypes)))
+    resmap <- .filterMap(DataTypes, dry.run, verbose)
+    modes <- as(modes, "CharacterList")
+    resmap <- cbind(resmap, version = versions, modes = modes)
+
+    ess_lists <- apply(resmap, 1L,
+        function(resrow) {
+            do.call(get(resrow[[1]]), resrow[-1])
+        }
     )
-    names(ess_lists) <- resmap[["datatype"]]
+    names(ess_lists) <- DataTypes
 
     if (dry.run) { return(ess_lists) }
 
+    ## TODO: work with ess_lists to conver to MultiAssayExperiment
     new_prefix <- paste0(resmap[["datatype"]], "_")
     exps <- Map(function(x, y) {
         exs <- x[["experiments"]]
