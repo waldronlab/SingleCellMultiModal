@@ -64,12 +64,19 @@ SingleCellMultiModal <- function(
 
     ess_lists <- apply(resmap, 1L,
         function(resrow) {
+            if (verbose)
+                message("Running ", resrow[[1]], "...")
             do.call(get(resrow[[1]]), resrow[-1])
         }
     )
     names(ess_lists) <- DataTypes
 
     if (dry.run) { return(ess_lists) }
+
+    ## hotfix: remove extra column in sampleMap for merge
+    if ("peripheral_blood" %in% names(ess_lists))
+        sampleMap(ess_lists[["peripheral_blood"]]) <-
+            sampleMap(ess_lists[["peripheral_blood"]])[1:3]
 
     new_prefix <- paste0(resmap[["DataType"]], "_")
     ess_lists <- Map(function(x, y) {
