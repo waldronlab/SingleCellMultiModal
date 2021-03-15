@@ -2,6 +2,7 @@
 
 export(CITEseq)
 export(SCoPE2)
+export(SingleCellMultiModal)
 export(removeCache)
 export(scMultiome)
 export(scNMT)
