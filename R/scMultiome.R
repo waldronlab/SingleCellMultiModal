@@ -19,6 +19,20 @@
     }, fn = names(h5list))
 }
 
+## @mtmorgan's function from HCAMatrixBrowser
+.read_mtx <-
+    function(path, verbose = FALSE)
+{
+    headers <- readLines(path, 2L)
+    dims <- as.integer(strsplit(headers[2], " ")[[1]][c(1, 2)])
+    !verbose || .message("dim: ", dims[1], " ", dims[2])
+    v <- scan(
+        path, list(integer(), integer(), numeric()), skip = 2,
+        quiet = !verbose
+    )
+    Matrix::sparseMatrix(v[[1]], v[[2]], x = v[[3]], dims = dims)
+}
+
 .loadMTX <- function(ehub, filepaths, verbose) {
     matchres <-
         grepl("\\.[Mm][Tt][Xx]\\.[Gg][Zz]$|_se\\.[Rr][Dd][Ss]$", filepaths)
@@ -33,7 +47,7 @@
         mtxdata <- grep("mtx", mtxfile, value = TRUE, ignore.case = TRUE)
         se <- query(ehub, se_mtx)[[1L]]
         mtxfile <- query(ehub, mtxdata)[[1L]]
-        mtxf <- HCAMatrixBrowser:::.read_mtx(mtxfile)
+        mtxf <- .read_mtx(mtxfile)
 
         BiocGenerics:::replaceSlots(
             object = se,
