@@ -54,7 +54,7 @@ SingleCellMultiModal <- function(
     if (.isSingleChar(versions) && identical(versions, "1.0.0"))
         versions <- c(rep(versions, length(DataTypes)))
     resmap <- .filterMap(DataTypes, dry.run, verbose)
-    modes <- as(modes, "CharacterList")
+    modes <- methods::as(modes, "CharacterList")
     resmap <- cbind(resmap, version = versions, modes = modes)
 
     ess_lists <- apply(resmap, 1L,
