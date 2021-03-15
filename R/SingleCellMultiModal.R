@@ -1,8 +1,6 @@
 .internalMap <- S4Vectors::DataFrame(
     FUN = c("scNMT", "scMultiome", "SCoPE2",
         "CITEseq", "CITEseq", "seqFISH"),
-#    prefix = c("scnmt_", "pbmc_", "macrophage_",
-#        "citeseq_", "citeseq_", "seqfish_"),
     DataType = c("mouse_gastrulation", "pbmc_10x",
         "macrophage_differentiation", "cord_blood",
         "peripheral_blood", "mouse_visual_cortex"
@@ -10,7 +8,11 @@
 )
 
 .filterMap <- function(DataTypes, dry.run, verbose) {
-    inDTypes <- .internalMap[["DataType"]] %in% DataTypes
+    inDTypes <- match(DataTypes, .internalMap[["DataType"]])
+    notfound <- is.na(inDTypes)
+    if (any(notfound))
+        stop("'", paste(DataTypes[notfound], collapse = ", "),
+            "' is not available, ", "see ?SingleCellMultiModal")
     upmap <- .internalMap[inDTypes, , drop = FALSE]
     upmap[["dry.run"]] <- dry.run
     upmap[["verbose"]] <- verbose
@@ -25,7 +27,10 @@
 #' @inheritParams scNMT
 #'
 #' @param DataTypes character() A vector of data types as indicated in each
-#'     individual function by the `DataType` parameter.
+#'     individual function by the `DataType` parameter. These can be any of
+#'     the following: "mouse_gastrulation", "pbmc_10x",
+#'     "macrophage_differentiation", "cord_blood", "peripheral_blood",
+#'     "mouse_visual_cortex"
 #'
 #' @param versions character() A vector of versions for each DataType. By
 #'     default, version `1.0.0` is obtained for all data types.
