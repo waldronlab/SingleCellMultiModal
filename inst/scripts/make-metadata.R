@@ -78,7 +78,7 @@ doc_helper <-
 }
 
 .loadMTX.GZ <- function(filepath) {
-    HCAMatrixBrowser:::.read_mtx(filepath)
+    .read_mtx(filepath)
 }
 
 .loadDataList <- function(filepaths) {

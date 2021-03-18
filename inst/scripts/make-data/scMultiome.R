@@ -21,7 +21,7 @@ file.remove("pbmc_rna.mtx")
 
 stopifnot(file.exists("pbmc_rna.mtx.gz"))
 
-rna_mtx <- HCAMatrixBrowser:::.read_mtx("pbmc_rna.mtx.gz")
+rna_mtx <- .read_mtx("pbmc_rna.mtx.gz")
 
 ## save H5 file and SCE shell
 HDF5Array::saveHDF5SummarizedExperiment(pbmc[[1]], dir = "pbmc_rna",
@@ -41,7 +41,7 @@ Matrix::writeMM(assay(pbmc[[2]]), "pbmc_atac.mtx")
 R.utils::gzip(filename = "pbmc_atac.mtx", destname = "pbmc_atac.mtx.gz")
 pbmc_atac_mtx <- "pbmc_atac.mtx.gz"
 stopifnot(file.exists(pbmc_atac_mtx))
-atac_mtx <- HCAMatrixBrowser:::.read_mtx("pbmc_atac.mtx.gz")
+atac_mtx <- .read_mtx("pbmc_atac.mtx.gz")
 ## save H5 file and SCE shell
 HDF5Array::saveHDF5SummarizedExperiment(pbmc[[2]], dir = "pbmc_atac",
     prefix = "pbmc_atac_", as.sparse = TRUE)
