@@ -87,7 +87,7 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
 
     ## Rename assays with project
     names(ess_list[["experiments"]]) <- 
-        paste0("macroph_diff_", names(ess_list[["experiments"]]))
+        paste0(names(ess_list[["experiments"]]))
     ## Construct and return the MAE object
     MultiAssayExperiment(experiments = ess_list[["experiments"]],
                          colData = cd)

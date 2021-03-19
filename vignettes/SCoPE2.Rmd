@@ -93,7 +93,7 @@ For more information on the protocol, see @Specht2020-jm.
 Only version `1.0.0` is currently available.
 
 The `macrophage_differentiation` data set in this package contains two
-assays: `macroph_diff_rna` and `macroph_diff_protein`. 
+assays: `rna` and `protein`. 
 
 ### Cell annotation
 
@@ -115,7 +115,7 @@ colData(scope2)
 You can extract and check the transcriptomic data through subsetting:
 
 ```{r}
-scope2[["macroph_diff_rna"]]
+scope2[["rna"]]
 ```
 
 The data is rather large and is therefore stored on-disk using the 
@@ -123,7 +123,7 @@ HDF5 backend. You can verify this by looking at the assay data matrix.
 Note that the counts are UMI counts.
 
 ```{r}
-assay(scope2[["macroph_diff_rna"]])[1:5, 1:5]
+assay(scope2[["rna"]])[1:5, 1:5]
 ```
 
 ### Proteomic data 
@@ -136,7 +136,7 @@ information about the data processing is available in
 transcriptomic data:
 
 ```{r}
-scope2[["macroph_diff_protein"]]
+scope2[["protein"]]
 ```
 
 In this case, the protein data have reasonable size and are loaded
@@ -145,7 +145,7 @@ decided to not use the traditional `logcounts` because MS proteomics
 measures intensities rather than counts as opposed to scRNA-Seq. 
 
 ```{r}
-assay(scope2[["macroph_diff_protein"]])[1:5, 1:5]
+assay(scope2[["protein"]])[1:5, 1:5]
 ```
 
 # sessionInfo
