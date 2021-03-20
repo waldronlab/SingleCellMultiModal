@@ -85,9 +85,6 @@ SCoPE2 <- function(DataType = "macrophage_differentiation",
     cd <- .mergeLowColData(ess_list[["experiments"]])
     colnames(cd)[which(colnames(cd) == "Batch")] <- "batch_Chromium"
 
-    ## Rename assays with project
-    names(ess_list[["experiments"]]) <- 
-        paste0(names(ess_list[["experiments"]]))
     ## Construct and return the MAE object
     MultiAssayExperiment(experiments = ess_list[["experiments"]],
                          colData = cd)
