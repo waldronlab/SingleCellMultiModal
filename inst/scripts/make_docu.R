@@ -178,3 +178,21 @@ write.csv(
     file = "inst/extdata/docuData/singlecellmultimodalv7.csv",
     row.names = FALSE
 )
+
+# version 8: GTseq dataset
+gtseq <- data.frame(
+    DataProvider = "Wellcome Trust Sanger Institute, Cambridge, United Kingdom",
+    TaxonomyId = "10090",
+    Species = "Mus musculus",
+    SourceUrl = "https://www.ebi.ac.uk/ena/browser/view/PRJEB9051",
+    SourceVersion = "1.0.0",
+    DataType = "mouse_embryo_8_cell",
+    Maintainer  = "Ludwig Geistlinger <ludwig_geistlinger@hms.harvard.edu>",
+    stringsAsFactors = FALSE
+)
+
+write.csv(
+    gtseq,
+    file = "inst/extdata/docuData/singlecellmultimodalv8.csv",
+    row.names = FALSE
+)
