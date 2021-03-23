@@ -6,7 +6,7 @@ RVER="devel"
 
 cd $SCMM
 
-export R_LIBS_USER="/media/$USER/1D24A0EA4286043C1/bioc-devel/"
+export R_LIBS_USER="/media/$USER/1D24A0EA4286043C1/bioc-$RVER/"
 
 RCMD="$HOME/src/svn/r-$RVER/R/bin/R --no-save --no-restore-data"
 

@@ -17,23 +17,31 @@ options(tibble.print_min = 5, tibble.print_max = 5)
 
 Thank you for your interest!
 
-The `SingleCellMultiModal` package aims to provide datasets that have similar
-pre-processing techniques from several different technologies. In particular,
-our initial focus is on providing data from `scNMT` and `scM&T` technologies
-but all multi-modal technologies are welcome.
+The `SingleCellMultiModal` package aims to provide single cell datasets
+from several different technologies / modalities for benchmarking and analysis.
+We currently provide from `scNMT`, `scM&T`, `seqFISH`, `CITEseq`, and other
+technologies. Contributions are very much welcome.
 
 # List of Multi-modal Datasets
 
-Please see this spreadsheet for a list of available datasets:
+For a full list of available datasets, see here:
 [Google Drive Sheet](https://docs.google.com/spreadsheets/d/14Eq_Bt_3tKx_t1UDwan0qZZGWNyK-d2WLXtmoPGB5To/edit#gid=0)
 
 # Contributing
 
-In order to contribute, we require data in a specific format.
-Aside from the usual required `metadata.csv` documentation in
-the package, contributors are required to add a name to the
-`DataType` column in the metadata table that indicates the name of the
-contributed dataset.
+In order to contribute, we generally require data in `Rda` or `Rds` format
+though we also support `HDF5` and `MTX` formats. Aside from the usual required
+`metadata.csv` documentation in the package, contributors are required to add a
+name to the `DataType` column in the metadata table that indicates the name of
+the contributed dataset. To illustrate, here are some `DataType` names already
+in the package:
+
+* mouse_gastrulation
+* mouse_visual_cortex
+* cord_blood
+* pbmc_10x
+* macrophage_differentiation
+* mouse_embryo_8_cell
 
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
@@ -54,15 +62,26 @@ semantic versioning and include data in a corresponding version folder
 ```
 ~/data
   └ scmm/
-    └ marcrophage_differentiation/
+    └ mouse_gastrulation/
       └ v1.0.0/
-        └ macrophage_protein.rda
-        └ macrophage_rna_assays.h5
-        └ macrophage_rna_se.rds
+        └ scnmt_acc_cgi.rda
+        └ scnmt_met_genebody.rda
+        └ scnmt_met_cgi.rda
+        └ scnmt_rna.rda
+        └ scnmt_colData.rda
+        └ scnmt_sampleMap.rda
 ```
 
-In the `inst` section, we will discuss how to annotate these three data
-products.
+In the `inst` section, we will discuss how to annotate these data products.
+
+# Files
+
+It is customary to include one `Rda` / `Rds` file per assay or per assay and
+region combination of interest (as above). We also highly recommend including
+`sampleMap` and `colData` datasets for the `MultiAssayExperiment` that will
+be built on the fly. In this example, there are three modalities in the `scNMT`
+dataset, `rna` (transcriptome), `acc` (chromatin accessibility), and `met`
+(methylation).
 
 # vignettes
 
@@ -132,29 +151,23 @@ folder. Although we do not have a strict naming convention for the `doc_file`,
 we usually name the file `singlecellmultimodalvX.csv` where `X` is the *n*th
 dataset added to the package.
 
-Here is an example of the file from our second run (version 2) of the `scNMT`
-dataset:
+Here is an example of the file from version `v1.0.0` of the `scNMT` dataset:
 
 ```{r}
-docu <- system.file("extdata", "docuData", "singlecellmultimodalv2.csv",
+doc_file <- system.file("extdata", "docuData", "singlecellmultimodalv1.csv",
     package = "SingleCellMultiModal", mustWork = TRUE)
-docu
+read.csv(doc_file, header = TRUE)
 ```
 
-Contributors should provide their own annotation `doc_file` to append to the
-existing `metadata.csv`. The example below shows the documentation for the
-`DataType = "mouse_gastrulation"` dataset in `scNMT` function for two versions.
-
-```{r}
-read.csv(docu, header = TRUE)
-```
+Contributors will then use their `doc_file` to append to the existing
+`metadata.csv`.
 
 To create a `doc_file` `data.frame` with the file name
 `singlecellmultimodalvX.csv`, first we create a `data.frame` object.
-Each general annotation will be applied to all files uploaded to
-`ExperimentHub` (see the section below for annotating diverse data).
-We take advantage of the `data.frame` function to repeat data and create a
-uniform `data.frame` with equal values across the columns.
+Each general annotation or row in this `data.frame` will be applied to all
+files uploaded to `ExperimentHub`. We take advantage of the `data.frame`
+function to repeat data and create a uniform `data.frame` with equal values
+across the columns.
 
 ```{r}
 scmeta <- data.frame(
@@ -164,7 +177,7 @@ scmeta <- data.frame(
     Species = "Mus musculus",
     SourceUrl = "https://cloudstor.aarnet.edu.au/plus/s/Xzf5vCgAEUVgbfQ",
     SourceType = "RDS",
-    SourceVersion = c("1.0.0", "2.0.0"),
+    SourceVersion = "1.0.0",
     DataType = "mouse_gastrulation",
     Maintainer = "Ricard Argelaguet <ricard@ebi.ac.uk>",
     stringsAsFactors = FALSE
@@ -175,8 +188,7 @@ scmeta
 ### Saving the data
 
 After creating the documentation `data.frame` (`doc_file`), the contributor can
-save the dataset as a `.csv` file using `write.csv` and append to the existing
-documentation file.
+save that dataset as a `.csv` file using `write.csv`.
 
 ```{r,eval=FALSE}
 write.csv(
@@ -221,6 +233,8 @@ a `MultiAssayExperiment` can be uploaded as serialized `RDA` / `RDS` files,
 `HDF5`, and even `MTX` files. For examples on how to save data into
 their respective file formats, see the `make-data` folder.
 
+## Generating the metadata.csv
+
 ### make-metadata.R
 
 Based on the folder structure described previously, the `directory` argument in
@@ -239,7 +253,7 @@ make_metadata(
     directory = "~/data/scmm",
     dataDirs = "mouse_gastrulation", # also the name of the DataType
     ext_pattern = "\\.[Rr][Dd][Aa]$",
-    doc_file = "../inst/extdata/docuData/singlecellmultimodalv2.csv",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv1.csv",
     pkg_name = "SingleCellMultiModal",
     append = TRUE,
     dry.run = TRUE
@@ -250,11 +264,23 @@ Note that the extraction pattern (`ext_pattern`) will allow contributors to
 match a specific file extension in that folder and ignore any intermediate
 files.
 
-The user may also wish to run `dry.run=TRUE` to see the output `data.frame`
-to be added to the `metadata.csv` file.
+The contributor may also wish to run `dry.run=TRUE` to see the output
+`data.frame` to be added to the `metadata.csv` file.
 
 _Note_. The `make_metadata` function should be run from the base package
 directory from a GitHub / git checkout (`git clone ...`).
+
+## Validation
+
+It is recommended to run the metadata validation function from
+`AnnotationHubData`:
+
+```{r,eval=FALSE}
+AnnotationHubData::makeAnnotationHubMetadata("SingleCellMultiModal")
+```
+
+to ensure that some of the metadata fields are properly annotated.
+
 
 # NEWS.md
 
