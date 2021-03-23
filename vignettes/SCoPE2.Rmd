@@ -11,7 +11,10 @@ output:
 Package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
 ---
-    
+
+This vignette will guide you through how accessing and manipulating 
+the SCoPE2 data sets available from the `SingleCellMultimodal` package.
+ 
 # Installation
     
 ```{r,eval=FALSE}
@@ -56,7 +59,7 @@ Currently, only the `macrophage_differentiation` is available.
 
 ## Retrieving data
 
-You can use retrieve the actual data from `ExperimentHub` by setting 
+You can retrieve the actual data from `ExperimentHub` by setting 
 `dry.run = FALSE`. This example retrieves the complete data set 
 (transcriptome and proteome) for the `macrophage_differentiation` 
 project:
@@ -72,10 +75,10 @@ scope2
 
 This data set has been acquired by the Slavov Lab (@Specht2020-jm). 
 It contains single-cell proteomics and single-cell 
-RNA sequencing data for macrophages and monocytes. The object of the 
-research that lead to generate this data is to understand whether 
+RNA sequencing data for macrophages and monocytes. The objective of the 
+research that led to generate the data is to understand whether 
 homogeneous monocytes differentiate in the absence of cytokines to
-macrophage with homogeneous or heterogeneous profiles. The transcriptomic and 
+macrophages with homogeneous or heterogeneous profiles. The transcriptomic and 
 proteomic acquisitions are conducted on two separate subset of similar 
 cells (same experimental design). The cell type of the samples are known only 
 for the **proteomics** data. The proteomics data was retrieved from 
@@ -90,7 +93,7 @@ For more information on the protocol, see @Specht2020-jm.
 Only version `1.0.0` is currently available.
 
 The `macrophage_differentiation` data set in this package contains two
-assays: `macrophage_rna` and `macrophage_protein`. 
+assays: `rna` and `protein`. 
 
 ### Cell annotation
 
@@ -127,9 +130,10 @@ assay(scope2[["rna"]])[1:5, 1:5]
 
 The `protein` assay contains MS-based proteomic data. 
 The data have been passed sample and feature quality control, 
-normalized, log transformed, imputed and batch corrected. See 
-reference for more details about data processing. You can extract the
-proteomic data similarly to the transcriptomic data:
+normalized, log transformed, imputed and batch corrected. Detailed 
+information about the data processing is available in 
+[another vignette](https://uclouvain-cbio.github.io/SCP.replication/articles/SCoPE2.html). You can extract the proteomic data similarly to the 
+transcriptomic data:
 
 ```{r}
 scope2[["protein"]]
