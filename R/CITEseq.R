@@ -110,7 +110,7 @@
     rownames(coldat) <- coldat$sampleID
     coldat <- unique(coldat)
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
-                                                    sampleMap=sampmap, 
+                                                    sampleMap=sampmap[,-4], 
                                                     colData=coldat)
     if(!isEmpty(grep("TCR", names(ll))))
     {
