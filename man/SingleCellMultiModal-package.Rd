@@ -2,7 +2,6 @@
 % Please edit documentation in R/SingleCellMultiModal-package.R
 \docType{package}
 \name{SingleCellMultiModal-package}
-\alias{SingleCellMultiModal}
 \alias{SingleCellMultiModal-package}
 \title{SingleCellMultiModal-package}
 \description{

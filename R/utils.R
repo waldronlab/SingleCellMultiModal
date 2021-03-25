@@ -18,13 +18,12 @@
 }
 
 .removeExt <- function(fnames) {
-    resnames <- strsplit(basename(fnames), "\\.")
-    vapply(resnames, `[`, character(1L), 1L)
+    gsub("\\..*$", "", fnames)
 }
 
-.modesAvailable <- function(listfiles) {
+.modesAvailable <- function(listfiles, prefix) {
     slots <- c("metadata", "colData", "sampleMap")
-    modes <- gsub("(^[A-Za-z]*_)(.*)", "\\2", listfiles)
+    modes <- gsub(prefix, "", listfiles, fixed = TRUE)
     modes <- gsub("_assays|_se", "", modes)
     modes <- .removeExt(modes)
     unique(sort(modes[!modes %in% slots]))
@@ -134,7 +133,7 @@
 
     modes_metadat <- modes_metadat[filt, , drop = FALSE]
     eh_assays <- modes_metadat[["ResourceName"]]
-    modesAvail <- .modesAvailable(eh_assays)
+    modesAvail <- .modesAvailable(eh_assays, prefix)
     resultModes <- .searchFromInputs(modes, modesAvail)
     fileIdx <- .conditionToIndex(
         resultModes, eh_assays, function(x) grepl(x, eh_assays)

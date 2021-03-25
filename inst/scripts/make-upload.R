@@ -53,3 +53,5 @@ upload_aws <- function(
 # upload_aws(DataType = "mouse_visual_cortex", upload=TRUE)
 # upload_aws(DataType = "pbmc_10x", directory = "~/data/scmm",
 #     version = "1.0.0", upload = TRUE)
+# upload_aws(DataType = "mouse_embryo_8_cell", directory = "~/data/scmm",
+#     version = "1.0.0", upload = TRUE)

@@ -113,19 +113,18 @@ any.na <- function(x) {
     }, character(1L))
 }
 
-.getDispatchClass <- function(
-    resource_files,
-    ext_pat = paste0(
+
+.file_pattern_map <- data.frame(
+    ext_pattern = paste0(
         c("[Rr][Dd][Aa]", "[Rr][Dd][Ss]", "[Hh]5", "[Mm][Tt][Xx]\\.[Gg][Zz]"),
         "$"
-    )
-) {
-    ext_map <- data.frame(
-        ext_pattern = ext_pat,
-        ## currently MTX DispatchClass recipe unavailable
-        Dispatch = c("Rda", "Rds", "H5File", "FilePath"),
-        stringsAsFactors = FALSE
-    )
+    ),
+    ## currently MTX DispatchClass recipe unavailable
+    Dispatch = c("Rda", "Rds", "H5File", "FilePath"),
+    stringsAsFactors = FALSE
+)
+
+.getDispatchClass <- function(resource_files, ext_map = .file_pattern_map) {
     hitMatrix <- vapply(ext_map[["ext_pattern"]],
         function(pat) grepl(pat, resource_files),
             logical(length(resource_files)))
@@ -178,7 +177,7 @@ MetaHubCreate <-
                     DataProvider = character(1L),
                     Maintainer = NA_character_,
                     RDataClass = NA_character_,
-                    DispatchClass = .getDispatchClass(resnames, ext_pattern),
+                    DispatchClass = .getDispatchClass(resnames),
                     Location_Prefix = NA_character_,
                     RDataPath = NA_character_,
                     ResourceName = resnames,
@@ -228,7 +227,9 @@ MetaHubCreate <-
             nhub <- hubmeta$new(doc_file)
             nhub$generate()
     }, DataType = DataTypes, doc_file = docList, resnames = namelist,
-    filepaths = fpathlist, replength = replengths, version = versions)
+    filepaths = fpathlist, replength = replengths, version = versions
+    )
+
     do.call(
         function(...) {
             rbind.data.frame(..., make.row.names = FALSE,
@@ -395,9 +396,17 @@ make_metadata <- function(
 #     append = TRUE
 # )
 
-
 ## request to update Maintainer field in older AH resources
 # aq <- AnnotationHub::query(eh, "SingleCellMultiModal")
 # aq[aq$maintainer == "Marcel Ramos <marcel.ramos@roswellpark.org>" &
 #     grepl("v[12]", aq$rdatapath)]
+
+make_metadata(
+    directory = "~/data/scmm",
+    dataDirs = "mouse_embryo_8_cell",
+    version = "1.0.0",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv8.csv",
+    dry.run = FALSE,
+    append = TRUE
+)
 
