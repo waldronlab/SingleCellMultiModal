@@ -1,0 +1,98 @@
+---
+title: "G&T-seq Mouse Embryo (8-cell stage)"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+  %\VignetteIndexEntry{GT-seq Mouse Embryo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+    BiocStyle::html_document:
+      toc_float: true
+Package: SingleCellMultiModal
+bibliography: ../inst/REFERENCES.bib
+---
+
+# Installation
+
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SingleCellMultiModal")
+```
+
+## Load
+
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(SingleCellMultiModal)
+library(MultiAssayExperiment)
+```
+
+# G&T-seq: parallel sequencing data of single-cell genomes and transcriptomes
+
+G&T-seq is a combination of Picoplex amplified gDNA sequencing (genome) and
+SMARTSeq2 amplified cDNA sequencing (transcriptome) of the same cell.
+For more information, see @Macaulay2015.
+
+## Downloading datasets
+
+The user can see the available dataset by using the default options
+
+```{r}
+GTseq("mouse_embryo_8_cell", mode = "*", dry.run = TRUE)
+```
+
+Or by simply running:
+
+```{r}
+GTseq()
+```
+
+## Obtaining the data
+
+To obtain the actual datasets:
+
+```{r,message=FALSE}
+gts <- GTseq(dry.run = FALSE)
+gts
+```
+
+## Exploring the data structure
+
+Check available metadata for each of the 112 mouse embryo cells assayed by G&T-seq:
+
+```{r}
+colData(gts)
+```
+
+Take a peek at the `sampleMap`:
+
+```{r}
+sampleMap(gts)
+```
+
+## Copy numbers
+
+To access the integer copy numbers as detected from scDNA-seq:
+
+```{r}
+head(assay(gts, "genomic"))[, 1:4]
+```
+
+## RNA-seq
+
+To access raw read counts as quantified from scRNA-seq:
+
+```{r}
+head(assay(gts, "transcriptomic"))[, 1:4]
+```
+
+For protocol information, see @Macaulay2016.
+
+# sessionInfo
+
+```{r}
+sessionInfo()
+```
+
+# References

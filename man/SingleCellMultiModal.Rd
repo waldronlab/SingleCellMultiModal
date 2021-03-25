@@ -7,7 +7,7 @@
 SingleCellMultiModal(
   DataTypes,
   modes = "*",
-  versions,
+  versions = "1.0.0",
   dry.run = TRUE,
   verbose = TRUE,
   ...
@@ -15,14 +15,16 @@ SingleCellMultiModal(
 }
 \arguments{
 \item{DataTypes}{character() A vector of data types as indicated in each
-individual function by the \code{DataType} parameter.}
+individual function by the \code{DataType} parameter. These can be any of
+the following: "mouse_gastrulation", "pbmc_10x",
+"macrophage_differentiation", "cord_blood", "peripheral_blood",
+"mouse_visual_cortex"}
 
-\item{modes}{character() A wildcard / glob pattern of modes, such as
-\code{"acc*"}. A wildcard of \code{"*"} will return all modes including
-Chromatin Accessibilty ("acc"), Methylation ("met"), RNA-seq ("rna")
-which is the default.}
+\item{modes}{list() A list or CharacterList of modes for each data type
+where each element corresponds to one data type.}
 
-\item{versions}{character() A vector of versions for each DataType.}
+\item{versions}{character() A vector of versions for each DataType. By
+default, version \verb{1.0.0} is obtained for all data types.}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -39,8 +41,9 @@ individual functions.
 }
 \examples{
 
-SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"), modes = "*",
-    dry.run = TRUE, verbose = TRUE
+SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"),
+    modes = list(c("acc*", "met*"), "rna"),
+    version = c("2.0.0", "1.0.0"), dry.run = TRUE, verbose = TRUE
 )
 
 }
