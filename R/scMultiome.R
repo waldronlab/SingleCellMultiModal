@@ -19,6 +19,13 @@
     }, fn = names(h5list))
 }
 
+.message <-
+    function(...)
+{
+    message(...)
+    TRUE
+}
+
 ## @mtmorgan's function from HCAMatrixBrowser
 .read_mtx <-
     function(path, verbose = FALSE)
