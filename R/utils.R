@@ -24,7 +24,7 @@
 
 .modesAvailable <- function(listfiles) {
     slots <- c("metadata", "colData", "sampleMap")
-    modes <- gsub("(^[a-z]*_)(.*)", "\\2", listfiles)
+    modes <- gsub("(^[A-Za-z]*_)(.*)", "\\2", listfiles)
     modes <- gsub("_assays|_se", "", modes)
     modes <- .removeExt(modes)
     unique(sort(modes[!modes %in% slots]))
