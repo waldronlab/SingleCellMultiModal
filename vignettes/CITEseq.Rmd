@@ -15,6 +15,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Installation 
+
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SingleCellMultiModal")
+```
+
 
 # Load libraries
 
@@ -31,7 +40,7 @@ library(SingleCellMultiModal)
 CITE-seq data are a combination of two data types extracted at the same
 time from the same cell.  First data type is scRNA-seq data, while the second
 one consists of about a hundread of antibody-derived tags (ADT).
-In particular this dataset is provided by \ref{@stoeckius2017simultaneous}.
+In particular this dataset is provided by @stoeckius2017simultaneous.
 
 ## Downloading datasets
 
@@ -122,5 +131,4 @@ sessionInfo()
 ```
 
 # References
-\cite{stoeckius2017simultaneous}
 

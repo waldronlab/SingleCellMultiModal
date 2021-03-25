@@ -19,7 +19,7 @@
         stopifnot( (length(grep(assayId, names(explist)))!=0), 
                    (length(grep(assayId, names(dimslist)))!=0) )
         assIdx <- grep(assayId, names(explist))
-        switch(assayId,
+        switch (assayId,
             "scADT"=, "scHTO"={
                 if(length(explist[assIdx]) == 2)
                 {
@@ -42,7 +42,7 @@
                 }
             },
             {stop("Unrecognized assayId: ", assayId)}
-            )
+        )
         if(length(explist[assIdx]) == 2)
         {
             colnames(m1) <- c(paste0(rep(gsub("scADT|scHTO|scRNA","", 
@@ -69,9 +69,17 @@
         
         map <- DataFrame(assay=assayId,
                         primary=colnames(mat1),
-                        colname=colnames(mat1), 
-                        condition=gsub("_\\w+", "", colnames(mat1)))
+                        colname=colnames(mat1)
+                        ) 
         return(map)
+    }
+    .buildColData <- function(mat1, assayId)
+    {
+        
+        cd <- DataFrame(colname=colnames(mat1), 
+                        condition=gsub("_\\w+", "", colnames(mat1))
+                        )
+        return(cd)
     }
     
     ll <- ess_list$experiments
@@ -82,36 +90,41 @@
     dims <- lapply(ll, dim)
     expslist <- c()
     sampmap <- DataFrame()
-    if(!isEmpty(grep("scADT", names(ll))))
+    coldata <- DataFrame()
+    if ( !isEmpty(grep("scADT", names(ll))) )
     {
         ADTs <- .combMatrixForAssay(explist=ll, dimslist=dims, assayId="scADT")
         expslist <- c(expslist, scADT=ADTs)
         ADTsMap <- .buildMap(ADTs, assayId="scADT")
+        ADTsCD <- .buildColData(ADTs, assayId="scADT")
         sampmap <- rbind(sampmap, ADTsMap)
+        coldata <- rbind(coldata, ADTsCD)
     }
-    if(!isEmpty(grep("scHTO", names(ll))))
+    if ( !isEmpty(grep("scHTO", names(ll))) )
     {
         HTOs <- .combMatrixForAssay(explist=ll, dimslist=dims, assayId="scHTO")
         expslist <- c(expslist, scHTO=HTOs)
         HTOsMap <- .buildMap(HTOs, assayId="scHTO")
+        HTOsCD <- .buildColData(HTOs, assayId="scHTO")
         sampmap <- rbind(sampmap, HTOsMap)
+        coldata <- rbind(coldata, HTOsCD)
     }
-    if(!isEmpty(grep("scRNA", names(ll))))
+    if ( !isEmpty(grep("scRNA", names(ll))) )
     {
         RNAs <- .combMatrixForAssay(explist=ll, dimslist=dims, assayId="scRNA")
         expslist <- c(expslist, scRNA=RNAs)
         RNAsMap <- .buildMap(RNAs, assayId="scRNA")
+        RNAsCD <- .buildColData(RNAs, assayId="scRNA")
         sampmap <- rbind(sampmap, RNAsMap)
+        coldata <- rbind(coldata, RNAsCD)
     }
     
-    #coldat <- .buildColDat(ll)
-    coldat <- sampmap[,-c(1:2)]
-    colnames(coldat) <- c("sampleID", "condition")
-    rownames(coldat) <- coldat$sampleID
-    coldat <- unique(coldat)
+    colnames(coldata) <- c("sampleID", "condition")
+    rownames(coldata) <- coldata$sampleID
+    coldata <- unique(coldata)
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
                                                     sampleMap=sampmap, 
-                                                    colData=coldat)
+                                                    colData=coldata)
     if(!isEmpty(grep("TCR", names(ll))))
     {
         metadata(mae) <- ll[grep("TCR", names(ll))]

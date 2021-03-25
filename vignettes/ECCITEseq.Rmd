@@ -15,6 +15,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Installation 
+
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SingleCellMultiModal")
+```
+
+
 # Load libraries
 
 ```{r, include=TRUE, results="hide", message=FALSE, warning=FALSE}
@@ -31,9 +41,9 @@ ECCITE-seq data are an evolution of the CITE-seq data
 (see also [CITE-seq vignette](CITEseq.html) for more details)
 by extending the CITE-seq original data types with a third one always extracted
 from the same cell.
-Indeed, in addition to the CITE-seq provided scRNA-seq and antibody-derived tags
+Indeed, in addition to the CITE-seq providing scRNA-seq and antibody-derived tags
 (ADT), it provides around ten Hashtagged Oligo (HTO).
-In particular this dataset is provided by \ref{@mimitou2018expanding}.
+In particular this dataset is provided by @mimitou2019multiplexed.
 
 ## Downloading datasets
 
@@ -120,7 +130,7 @@ ctclMae[,complete.cases(ctclMae),]
  
 ## sgRNAs CRISPR pertubation data
 
-The CRIPR perturbated scRNAs data are stored in a different spot 
+The CRISPR perturbed scRNAs data are stored in a different spot 
 to keep their original long format.
 
 They can be accessed with the `metadata` accessors which, in this case returns a named `list` of `data.frame`s.
@@ -137,7 +147,7 @@ TCR stands for T-Cell Receptor, while a,b,g,d stand for alpha, beta, gamma and d
 To look into the TCRab, simply run:
 
 ```{r}
-sgRNAs$CTCL_TCRab
+head(sgRNAs$CTCL_TCRab)
 ```
 
 # SingleCellExperiment object conversion
@@ -162,7 +172,9 @@ sce
 sessionInfo()
 ```
 
-# References
+# Additional References
 
-[1]: https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
-[2]: http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
+https://www.bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html#5_adding_alternative_feature_sets
+http://www.bioconductor.org/packages/release/bioc/vignettes/CiteFuse/inst/doc/CiteFuse.html
+
+# References
