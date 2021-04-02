@@ -18,7 +18,7 @@
 }
 
 .removeExt <- function(fnames) {
-    gsub("\\..*$", "", fnames)
+    gsub("\\..*$", "", basename(fnames))
 }
 
 .modesAvailable <- function(listfiles, prefix) {
