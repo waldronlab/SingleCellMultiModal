@@ -117,14 +117,14 @@ CTCL stands for cutaneous T-cell lymphoma while CTRL for control.
 For example, if we want only the CTCL samples, we can run:
 
 ```{r}
-(ctclMae <- mae[,colData(mae)$condition == "CTCL",])
+head(ctclMae <- mae[,colData(mae)$condition == "CTCL",])
 ```
 
 And if you're interested into the common samples across all the modalities
 you can use the `complete.cases` funtion.
 
 ```{r}
-ctclMae[,complete.cases(ctclMae),]
+head(ctclMae[,complete.cases(ctclMae),])
 ```
 
  
