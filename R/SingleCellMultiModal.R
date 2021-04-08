@@ -1,9 +1,10 @@
 .internalMap <- S4Vectors::DataFrame(
     FUN = c("scNMT", "scMultiome", "SCoPE2",
-        "CITEseq", "CITEseq", "seqFISH"),
+        "CITEseq", "CITEseq", "seqFISH", "GTseq"),
     DataType = c("mouse_gastrulation", "pbmc_10x",
         "macrophage_differentiation", "cord_blood",
-        "peripheral_blood", "mouse_visual_cortex"
+        "peripheral_blood", "mouse_visual_cortex",
+        "mouse_embryo_8_cell"
     )
 )
 
@@ -30,7 +31,7 @@
 #'     individual function by the `DataType` parameter. These can be any of
 #'     the following: "mouse_gastrulation", "pbmc_10x",
 #'     "macrophage_differentiation", "cord_blood", "peripheral_blood",
-#'     "mouse_visual_cortex"
+#'     "mouse_visual_cortex", "mouse_embryo_8_cell"
 #'
 #' @param versions character() A vector of versions for each DataType. By
 #'     default, version `1.0.0` is obtained for all data types.
