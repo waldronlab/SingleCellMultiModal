@@ -39,6 +39,8 @@ Imports:
     utils
 Suggests:
     knitr,
+    rmarkdown,
+    BiocStyle,
     scran,
     ggplot2
 VignetteBuilder:
