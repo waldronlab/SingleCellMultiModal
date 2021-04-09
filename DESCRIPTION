@@ -38,13 +38,14 @@ Imports:
     methods,
     utils
 Suggests:
-    knitr,
-    rmarkdown,
     BiocStyle,
+    ggplot2,
+    knitr,
     RaggedExperiment,
+    rmarkdown,
     scater,
     scran,
-    ggplot2
+    UpSetR
 VignetteBuilder:
     knitr
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
