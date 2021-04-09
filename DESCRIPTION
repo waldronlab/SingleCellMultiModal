@@ -41,6 +41,8 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
+    RaggedExperiment,
+    scater,
     scran,
     ggplot2
 VignetteBuilder:
