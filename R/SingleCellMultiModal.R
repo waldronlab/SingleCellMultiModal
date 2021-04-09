@@ -55,6 +55,8 @@ SingleCellMultiModal <- function(
     )
 {
     stopifnot(is.character(DataTypes), is.character(versions))
+    meta <- list(call = match.call(), version = version)
+
     if (.isSingleChar(modes) && identical(modes, "*"))
         modes <- c(rep(modes, length(DataTypes)))
     if (.isSingleChar(versions) && identical(versions, "1.0.0"))
@@ -86,5 +88,7 @@ SingleCellMultiModal <- function(
         x
     }, x = ess_lists, y = new_prefix)
 
-    Reduce(c, ess_lists)
+    result <- Reduce(c, ess_lists)
+    metadata(result) <- meta
+    result
 }
