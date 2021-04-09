@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     scater,
     scran,
-    UpSetR
+    UpSetR,
+    uwot
 VignetteBuilder:
     knitr
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
