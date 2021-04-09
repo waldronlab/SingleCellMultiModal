@@ -1,8 +1,8 @@
 ---
-title: "PBMCs profiled with the Chromium Single Cell Multiome ATAC + Gene Expression assay"
+title: "PBMCs profiled with the Chromium Single Cell Multiome ATAC + Gene Expression from 10x"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
-  %\VignetteIndexEntry{PBMC 10x multiome}
+  %\VignetteIndexEntry{scMultiome 10x PBMC}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:

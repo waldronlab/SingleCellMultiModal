@@ -18,7 +18,7 @@ SingleCellMultiModal(
 individual function by the \code{DataType} parameter. These can be any of
 the following: "mouse_gastrulation", "pbmc_10x",
 "macrophage_differentiation", "cord_blood", "peripheral_blood",
-"mouse_visual_cortex"}
+"mouse_visual_cortex", "mouse_embryo_8_cell"}
 
 \item{modes}{list() A list or CharacterList of modes for each data type
 where each element corresponds to one data type.}
