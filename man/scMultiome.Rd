@@ -37,6 +37,9 @@ download (default TRUE)}
 \item{...}{Additional arguments passed on to the
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
+\value{
+A 10X PBMC \code{MultiAssayExperiment} object
+}
 \description{
 scMultiome currently allows users to download 10K Peripheral
 Blood Mononuclear Cells provided by

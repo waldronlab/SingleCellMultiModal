@@ -22,7 +22,7 @@ Description: SingleCellMultiModal is an ExperimentHub package
 License: Artistic-2.0
 BugReports: https://github.com/waldronlab/SingleCellMultiModal/issues
 Depends:
-    R (>= 4.0.0),
+    R (>= 4.1.0),
     MultiAssayExperiment
 Imports:
     AnnotationHub,
@@ -52,5 +52,4 @@ VignetteBuilder:
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
     ExperimentHub, GEO
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1

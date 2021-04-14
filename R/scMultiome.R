@@ -85,6 +85,8 @@
 #'
 #' @param format Either HDF5 or MTX data formats (default HDF5)
 #'
+#' @return A 10X PBMC `MultiAssayExperiment` object
+#'
 #' @md
 #'
 #' @examples
