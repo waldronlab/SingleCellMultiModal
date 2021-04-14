@@ -2,11 +2,16 @@
 
 ### New features
 
+* `SingleCellMultiModal` function allows the combination of multiple
+multi-modal technologies.
+* `GTseq` data from Macaulay et al. (2015) now available (@lgeistlinger)
 * `SCoPE2` data from Specht et al. now available thanks to @cvanderaa (#26)
 * `scMultiome` provides PBMC from 10X Genomics thanks to @rargelaguet
 
 ### Bug fixes and minor improvements
 
+* Metadata information (function call and call to technology map) included in
+`SingleCellMultiModal`
 * `scNMT` includes the original call in the `MultiAssayExperiment` metadata
 * Improved and edited Contributing Guidelines for clarity
 
