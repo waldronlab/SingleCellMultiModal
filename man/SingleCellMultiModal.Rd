@@ -35,10 +35,21 @@ download (default TRUE)}
 \item{...}{Additional arguments passed on to the
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
+\value{
+A multi-modality \code{MultiAssayExperiment}
+}
 \description{
 Combine multiple single cell modalities into one using the input of the
 individual functions.
 }
+\section{metadata}{
+
+The metadata in the \code{MultiAssayExperiment} contains the original
+function call used to generate the object (labeled as \code{call}),
+a \code{call_map} which provides traceability of technology functions to
+\code{DataType} prefixes, and lastly, R version information as \code{version}.
+}
+
 \examples{
 
 SingleCellMultiModal(c("mouse_gastrulation", "pbmc_10x"),

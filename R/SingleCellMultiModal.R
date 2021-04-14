@@ -39,6 +39,14 @@
 #' @param modes list() A list or CharacterList of modes for each data type
 #'     where each element corresponds to one data type.
 #'
+#' @return A multi-modality `MultiAssayExperiment`
+#'
+#' @section metadata:
+#'     The metadata in the `MultiAssayExperiment` contains the original
+#'     function call used to generate the object (labeled as `call`),
+#'     a `call_map` which provides traceability of technology functions to
+#'     `DataType` prefixes, and lastly, R version information as `version`.
+#'
 #' @md
 #'
 #' @examples
@@ -55,7 +63,6 @@ SingleCellMultiModal <- function(
     )
 {
     stopifnot(is.character(DataTypes), is.character(versions))
-    meta <- list(call = match.call(), version = version)
 
     if (.isSingleChar(modes) && identical(modes, "*"))
         modes <- c(rep(modes, length(DataTypes)))
@@ -64,6 +71,7 @@ SingleCellMultiModal <- function(
     resmap <- .filterMap(DataTypes, dry.run, verbose)
     modes <- methods::as(modes, "CharacterList")
     resmap <- cbind(resmap, version = versions, modes = modes)
+    meta <- list(call = match.call(), call_map = resmap, version = version)
 
     ess_lists <- apply(resmap, 1L,
         function(resrow) {
@@ -75,11 +83,6 @@ SingleCellMultiModal <- function(
     names(ess_lists) <- DataTypes
 
     if (dry.run) { return(ess_lists) }
-
-    ## hotfix: remove extra column in sampleMap for merge
-    if ("peripheral_blood" %in% names(ess_lists))
-        sampleMap(ess_lists[["peripheral_blood"]]) <-
-            sampleMap(ess_lists[["peripheral_blood"]])[1:3]
 
     new_prefix <- paste0(resmap[["DataType"]], "_")
     ess_lists <- Map(function(x, y) {
