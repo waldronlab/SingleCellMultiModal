@@ -89,16 +89,16 @@ GTseq <-
     if (dry.run) { return(ess_list) }
 
     cdat <- ess_list[["colData"]]
-    prim.ids <- rep(paste0("cell", 1:112), 2)
+    prim.ids <- rep(paste0("cell", seq_len(112)), 2)
     smap <- S4Vectors::DataFrame(assay = tolower(cdat[,"Comment.LIBRARY_SOURCE."]),
                                  primary = prim.ids,
                                  colname = cdat[,"Sample.ID"])
 
     
     rcols <- c("organism", "sex", "cell.type")
-    rcols <- paste0("Characteristics.", rcols, ".") 
-    cdat <- cdat[1:112, rcols]
-    rownames(cdat) <- prim.ids[1:112]
+    rcols <- paste0("Characteristics.", rcols, ".")
+    cdat <- cdat[seq_len(112), rcols]
+    rownames(cdat) <- prim.ids[seq_len(112)]
 
     MultiAssayExperiment(
         experiments = ess_list[["experiments"]],

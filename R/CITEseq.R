@@ -2,7 +2,7 @@
 {
     names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
-    coldat <- sampleMap(mae)[,-c(1:2), drop=FALSE]
+    coldat <- sampleMap(mae)[,-c(1, 2), drop=FALSE]
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
     return(mae)
