@@ -17,8 +17,10 @@ Authors@R: c(
     )
 Description: SingleCellMultiModal is an ExperimentHub package
     that serves multiple datasets obtained from GEO and other sources and
-    represents them as MultiAssayExperiment objects. The current focus is
-    on datasets that use new technologies such as scNMT and scM&T.
+    represents them as MultiAssayExperiment objects. We provide several
+    multi-modal datasets including scNMT, 10X Multiome, seqFISH, CITEseq,
+    SCoPE2, and others. The scope of the package is is to provide data for
+    benchmarking and analysis.
 License: Artistic-2.0
 BugReports: https://github.com/waldronlab/SingleCellMultiModal/issues
 Depends:
