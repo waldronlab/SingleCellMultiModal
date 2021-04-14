@@ -60,19 +60,19 @@ CITEseq data are a combination of single cell transcriptomics and
             }
      }
      \itemize{
-        \item{peripheral_blood: } a dataset of single cells of peripheral 
+        \item{peripheral_blood: } a dataset of single cells of peripheral
         blood as provided in Mimitou et al. (2019).
-        We provide two different conditions controls (CTRL) and 
+        We provide two different conditions controls (CTRL) and
         Cutaneous T-cell Limphoma (CTCL).
-        Just build appropriate \code{modes} regex for subselecting the 
-        dataset modes. 
+        Just build appropriate \code{modes} regex for subselecting the
+        dataset modes.
          \itemize{
             \item{scRNA} - Mimitou scRNA-seq gene count matrix
             \item{scADT} - Mimitou antibody-derived tags (ADT) data
             \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
-            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
+            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta
             available through the object metadata.
-            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
+            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta
             available through the object metadata.
             }
      }

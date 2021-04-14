@@ -69,17 +69,17 @@ a distinct set of cell cultures.\preformatted{\\itemize\{
 }
 \examples{
 
-SCoPE2(DataType = "macrophage_differentiation", 
-       modes = "*", 
-       version = "1.0.0", 
+SCoPE2(DataType = "macrophage_differentiation",
+       modes = "*",
+       version = "1.0.0",
        dry.run = TRUE)
 
 }
 \references{
-\preformatted{Specht, Harrison, Edward Emmott, Aleksandra A. Petelski, R. 
-Gray Huffman, David H. Perlman, Marco Serra, Peter Kharchenko, 
-Antonius Koller, and Nikolai Slavov. 2020. “Single-Cell 
-Proteomic and Transcriptomic Analysis of Macrophage 
+\preformatted{Specht, Harrison, Edward Emmott, Aleksandra A. Petelski, R.
+Gray Huffman, David H. Perlman, Marco Serra, Peter Kharchenko,
+Antonius Koller, and Nikolai Slavov. 2020. “Single-Cell
+Proteomic and Transcriptomic Analysis of Macrophage
 Heterogeneity.” bioRxiv. https://doi.org/10.1101/665307.
 }
 }
