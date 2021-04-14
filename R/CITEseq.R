@@ -1,7 +1,10 @@
 .cord_blood <- function(ess_list)
 {
-    names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
-    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
+    names(ess_list$experiments) <-
+        gsub("_Counts", "", names(ess_list$experiments))
+    mae <- MultiAssayExperiment::MultiAssayExperiment(
+        experiments=(ess_list$experiments)
+    )
     coldat <- sampleMap(mae)[,-c(1, 2), drop=FALSE]
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
@@ -12,78 +15,80 @@
 #' @importFrom Matrix Matrix
 .peripheral_blood <- function(ess_list)
 {
-    .combMatrixForAssay <- function(explist, dimslist, 
-                                    assayId=c("scADT", "scHTO", "scRNA"))
+    .combMatrixForAssay <-
+        function(explist, dimslist, assayId=c("scADT", "scHTO", "scRNA"))
     {
         match.arg(assayId)
-        stopifnot( (length(grep(assayId, names(explist)))!=0), 
-                   (length(grep(assayId, names(dimslist)))!=0) )
+        stopifnot( (length(grep(assayId, names(explist)))!=0),
+            (length(grep(assayId, names(dimslist)))!=0) )
         assIdx <- grep(assayId, names(explist))
         switch (assayId,
             "scADT"=, "scHTO"={
-                if(length(explist[assIdx]) == 2)
+                if (length(explist[assIdx]) == 2)
                 {
-                    m1 <- Matrix::Matrix(unlist(explist[assIdx]), 
-                                nrow=dimslist[assIdx][[1]][1],
-                                ncol=(dimslist[assIdx][[1]][2]+dimslist[assIdx][[2]][2]), 
-                                sparse=TRUE)
+                    m1 <- Matrix::Matrix(unlist(explist[assIdx]),
+                        nrow=dimslist[assIdx][[1]][1],
+                        ncol=(
+                            dimslist[assIdx][[1]][2]+dimslist[assIdx][[2]][2]
+                        ),
+                        sparse=TRUE)
                 } else {
                     m1 <- Matrix::Matrix(explist[[assIdx]])
                 }
             },
             "scRNA"={
-                if(length(explist[assIdx]) == 2)
+                if (length(explist[assIdx]) == 2)
                 {
                     ## we can have at last 2 matrices
                     m1 <- cbind(explist[[assIdx[1]]], explist[[assIdx[2]]])
-                    
+
                 } else {
                     m1 <- explist[[assIdx]]
                 }
             },
             {stop("Unrecognized assayId: ", assayId)}
         )
-        if(length(explist[assIdx]) == 2)
+        if (length(explist[assIdx]) == 2)
         {
-            colnames(m1) <- c(paste0(rep(gsub("scADT|scHTO|scRNA","", 
-                                            names(explist)[assIdx[1]]),
-                                        dimslist[assIdx][[1]][2]), 
-                                    colnames(explist[[assIdx[1]]])),
-                              paste0(rep(gsub("scADT|scHTO|scRNA","", 
-                                            names(explist)[assIdx[2]]),
-                                        dimslist[assIdx][[2]][2]), 
-                                    colnames(explist[[assIdx[2]]])))
+            colnames(m1) <- c(paste0(rep(gsub("scADT|scHTO|scRNA","",
+                names(explist)[assIdx[1]]),
+                dimslist[assIdx][[1]][2]),
+                colnames(explist[[assIdx[1]]])),
+                paste0(rep(gsub("scADT|scHTO|scRNA","",
+                names(explist)[assIdx[2]]),
+                dimslist[assIdx][[2]][2]),
+                colnames(explist[[assIdx[2]]])))
             rownames(m1) <- rownames(explist[[assIdx[[1]]]])
         } else {
-            colnames(m1) <- paste0(rep(gsub("scADT|scHTO|scRNA","", 
-                                            names(explist)[assIdx[1]]),
-                                        dimslist[assIdx][[1]][2]), 
-                                    colnames(explist[[assIdx[1]]]))
+            colnames(m1) <- paste0(rep(gsub("scADT|scHTO|scRNA","",
+                names(explist)[assIdx[1]]),
+                dimslist[assIdx][[1]][2]),
+                colnames(explist[[assIdx[1]]]))
             rownames(m1) <- rownames(explist[[assIdx[[1]]]])
         }
         return(m1)
     }
-    
+
     .buildMap <- function(mat1, assayId)
     {
-        
         map <- DataFrame(assay=assayId,
-                        primary=colnames(mat1),
-                        colname=colnames(mat1)
-                        ) 
+            primary=colnames(mat1),
+            colname=colnames(mat1)
+        )
         return(map)
     }
     .buildColData <- function(mat1, assayId)
     {
-        
-        cd <- DataFrame(colname=colnames(mat1), 
-                        condition=gsub("_\\w+", "", colnames(mat1))
-                        )
+
+        cd <- DataFrame(
+            colname=colnames(mat1),
+            condition=gsub("_\\w+", "", colnames(mat1))
+        )
         return(cd)
     }
-    
+
     ll <- ess_list$experiments
-    ll <- lapply(ll, function(x) 
+    ll <- lapply(ll, function(x)
     {
         x <- x[order(rownames(x)),]
     })
@@ -118,14 +123,16 @@
         sampmap <- rbind(sampmap, RNAsMap)
         coldata <- rbind(coldata, RNAsCD)
     }
-    
+
     colnames(coldata) <- c("sampleID", "condition")
     rownames(coldata) <- coldata$sampleID
     coldata <- unique(coldata)
-    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
-                                                    sampleMap=sampmap, 
-                                                    colData=coldata)
-    if(!isEmpty(grep("TCR", names(ll))))
+    mae <- MultiAssayExperiment::MultiAssayExperiment(
+        experiments=expslist,
+        sampleMap=sampmap,
+        colData=coldata
+    )
+    if (!isEmpty(grep("TCR", names(ll))))
     {
         metadata(mae) <- ll[grep("TCR", names(ll))]
     }
@@ -151,19 +158,19 @@
 #'             }
 #'      }
 #'      \itemize{
-#'         \item{peripheral_blood: } a dataset of single cells of peripheral 
+#'         \item{peripheral_blood: } a dataset of single cells of peripheral
 #'         blood as provided in Mimitou et al. (2019).
-#'         We provide two different conditions controls (CTRL) and 
+#'         We provide two different conditions controls (CTRL) and
 #'         Cutaneous T-cell Limphoma (CTCL).
-#'         Just build appropriate \code{modes} regex for subselecting the 
-#'         dataset modes. 
+#'         Just build appropriate \code{modes} regex for subselecting the
+#'         dataset modes.
 #'          \itemize{
 #'             \item{scRNA} - Mimitou scRNA-seq gene count matrix
 #'             \item{scADT} - Mimitou antibody-derived tags (ADT) data
 #'             \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
-#'             \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
+#'             \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta
 #'             available through the object metadata.
-#'             \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
+#'             \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta
 #'             available through the object metadata.
 #'             }
 #'      }
@@ -199,9 +206,9 @@
 #' experiments(mae)
 #'
 CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
-                    version="1.0.0", dry.run=TRUE, verbose=TRUE,
-                    DataClass=c("MultiAssaiExperiment", "SingleCellExperiment"),
-                    ...)
+    version="1.0.0", dry.run=TRUE, verbose=TRUE,
+    DataClass=c("MultiAssaiExperiment", "SingleCellExperiment"),
+    ...)
 {
     dataType <- match.arg(DataType)
     message("Dataset: ", dataType)
@@ -217,7 +224,7 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
             { stop("Unrecognized CITE-seq dataset name: ", DataType) }
         )
 
-        if(dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
+        if (dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
         return(mae)
     } else {
         return(ess_list)
@@ -247,29 +254,39 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 {
     stopifnot(c(is(mae, "MultiAssayExperiment"), !(length(mae)==0)))
 
-    if(length(mae)==3)
+    if (length(mae)==3)
     {
         scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-        scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
-        schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
+        scadt <- SummarizedExperiment(
+            experiments(mae)[[grep("scADT", names(mae))]]
+        )
+        schto <- SummarizedExperiment(
+            experiments(mae)[[grep("scHTO", names(mae))]]
+        )
 
-        commonsamp <- intersect(intersect(colnames(scrna), colnames(scadt)), colnames(schto))
+        commonsamp <- intersect(intersect(
+            colnames(scrna), colnames(scadt)), colnames(schto)
+        )
 
         schto <- schto[,(colnames(schto) %in% commonsamp)]
         scrna <- scrna[,(colnames(scrna) %in% commonsamp)]
         scadt <- scadt[,(colnames(scadt) %in% commonsamp)]
 
-        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                          altExps=list(scADT=scadt,
-                                                                       scHTO=schto))
-    } else if(length(mae)==2) {
+        sce <- SingleCellExperiment::SingleCellExperiment(
+            list(counts=scrna), altExps=list(scADT=scadt, scHTO=schto)
+        )
+    } else if (length(mae)==2) {
         scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-        if(length(grep("scADT", names(mae)))!=0)
+        if (length(grep("scADT", names(mae)))!=0)
         {
-            scalt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
+            scalt <- SummarizedExperiment(
+                experiments(mae)[[grep("scADT", names(mae))]]
+            )
             name <- "scADT"
         } else {
-            scalt <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
+            scalt <- SummarizedExperiment(
+                experiments(mae)[[grep("scHTO", names(mae))]]
+            )
             name <- "scHTO"
         }
         commonsamp <- intersect(colnames(scrna), colnames(scalt))
@@ -278,22 +295,31 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         scrna <- scrna[,(colnames(scrna) %in% commonsamp)]
         l <- list(scalt)
         names(l) <- name
-        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                          altExps=l)
+        sce <- SingleCellExperiment::SingleCellExperiment(
+            list(counts=scrna), altExps=l
+        )
     } else { ## case length 1
-        if(length(grep("scADT", names(mae)))!=0)
+        if (length(grep("scADT", names(mae)))!=0)
         {
-            scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
+            scadt <- SummarizedExperiment(
+                experiments(mae)[[grep("scADT", names(mae))]]
+            )
             sce <- SingleCellExperiment::SingleCellExperiment(list(adt=scadt))
-        } else if(length(grep("scHTO", names(mae)))!=0) {
-            schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
+        } else if (length(grep("scHTO", names(mae)))!=0) {
+            schto <- SummarizedExperiment(
+                experiments(mae)[[grep("scHTO", names(mae))]]
+            )
             sce <- SingleCellExperiment::SingleCellExperiment(list(hto=schto))
-        } else if(length(grep("scRNA", names(mae)))!=0) {
+        } else if (length(grep("scRNA", names(mae)))!=0) {
             scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna))
-        } else if(length(grep("scHTO", names(mae)))!=0) {
+            sce <- SingleCellExperiment::SingleCellExperiment(
+                list(counts=scrna)
+            )
+        } else if (length(grep("scHTO", names(mae)))!=0) {
             schto <- experiments(mae)[[grep("scHTO", names(mae))]]
-            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=schto))
+            sce <- SingleCellExperiment::SingleCellExperiment(
+                list(counts=schto)
+            )
         }
     }
 

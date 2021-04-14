@@ -1,10 +1,10 @@
 ############################################################
-# 
+#
 # author: Ludwig Geistlinger
 # date: 2021-03-24 18:17:27
-# 
-# descr: G&T-seq data retrieval 
-# 
+#
+# descr: G&T-seq data retrieval
+#
 ############################################################
 
 #' Parallel sequencing data of single-cell genomes and transcriptomes
@@ -12,7 +12,7 @@
 #' @description GTseq assembles data on-the-fly from `ExperimentHub` to
 #'     provide a \linkS4class{MultiAssayExperiment} container. The `DataType`
 #'     argument provides access to the `mouse_embryo_8_cell` dataset as obtained
-#'     from Macaulay et al. (2015). Protocol information for this dataset is 
+#'     from Macaulay et al. (2015). Protocol information for this dataset is
 #'     available from Macaulay et al. (2016). See references.
 #'
 #' @details G&T-seq is a combination of Picoplex amplified gDNA sequencing
@@ -35,7 +35,7 @@
 #'
 #' @param modes character() A wildcard / glob pattern of modes, such as
 #'     \code{"*omic"}. A wildcard of \code{"*"} will return all modes including
-#'     copy numbers ("genomic") and RNA-seq read counts ("transcriptomic"), 
+#'     copy numbers ("genomic") and RNA-seq read counts ("transcriptomic"),
 #'     which is the default.
 #'
 #' @param version character(1). Currently, only version '1.0.0'.
@@ -79,22 +79,26 @@ GTseq <-
     stopifnot(.isSingleChar(version), .isSingleChar(DataType))
     meta <- list(call = match.call())
 
-    ess_list <- .getResourcesList(prefix = "GTseq_", 
-                                  datatype = DataType,
-                                  modes = modes,
-                                  version = version, 
-                                  dry.run = dry.run,
-                                  verbose = verbose, ...)
+    ess_list <- .getResourcesList(
+        prefix = "GTseq_",
+        datatype = DataType,
+        modes = modes,
+        version = version,
+        dry.run = dry.run,
+        verbose = verbose,
+        ...
+    )
 
     if (dry.run) { return(ess_list) }
 
     cdat <- ess_list[["colData"]]
     prim.ids <- rep(paste0("cell", seq_len(112)), 2)
-    smap <- S4Vectors::DataFrame(assay = tolower(cdat[,"Comment.LIBRARY_SOURCE."]),
-                                 primary = prim.ids,
-                                 colname = cdat[,"Sample.ID"])
+    smap <- S4Vectors::DataFrame(
+        assay = tolower(cdat[,"Comment.LIBRARY_SOURCE."]),
+        primary = prim.ids,
+        colname = cdat[,"Sample.ID"]
+    )
 
-    
     rcols <- c("organism", "sex", "cell.type")
     rcols <- paste0("Characteristics.", rcols, ".")
     cdat <- cdat[seq_len(112), rcols]
