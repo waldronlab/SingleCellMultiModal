@@ -14,6 +14,9 @@ multi-modal technologies.
 `SingleCellMultiModal`
 * `scNMT` includes the original call in the `MultiAssayExperiment` metadata
 * Improved and edited Contributing Guidelines for clarity
+* `seqFISH` uses the `spatialData` argument with `DataFrame` input based on
+changes to `SpatialExperiment` (@drighelli)
+* Removed the extra column in the `sampleMap` in `CITEseq` (@drighelli)
 
 ## Changes in version 1.2.0
 
