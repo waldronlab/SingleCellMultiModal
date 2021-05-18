@@ -207,7 +207,7 @@
 #'
 CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
     version="1.0.0", dry.run=TRUE, verbose=TRUE,
-    DataClass=c("MultiAssaiExperiment", "SingleCellExperiment"),
+    DataClass=c("MultiAssayExperiment", "SingleCellExperiment"),
     ...)
 {
     dataType <- match.arg(DataType)
