@@ -124,7 +124,7 @@ Spatial coordinates within the spatial data can be retrieved in matrix form with
 function on the *SpatialExperiment* object.
 
 ```{r}
-(sc <- spatialCoords(experiments(mae)$seqFISH))
+head(sc <- spatialCoords(experiments(mae)$seqFISH))
 ```
 
 Direct access to the colnames of the spacial coordinates with
