@@ -73,17 +73,17 @@
 #' (`DataType = "pbmc_10x"`).
 #' This technology enables simultaneous profiling of the transcriptome (using
 #' 3’ gene expression) and epigenome (using ATAC-seq) from single cells to
-#' deepen your understanding of how genes are expressed and regulated across
+#' deepen our understanding of how genes are expressed and regulated across
 #' different cell types. Data prepared by Ricard Argelaguet.
 #'
-#' @details Users are able to choose from either an `HDF5` or `MTX` file format
-#'     as the internal data representation. Choosing `HDF5` gives users a
-#'     sparse `HDF5Array` class object. The `MTX` (Matrix Market) format allows
-#'     users to load a sparse `dgCMatrix` representation.
+#' @details Users are able to choose from either an `MTX` or `HDF5` file format
+#'     as the internal data representation. The `MTX` (Matrix Market)
+#'     format allows users to load a sparse `dgCMatrix` representation.
+#'     Choosing `HDF5` gives users a sparse `HDF5Array` class object.
 #'
 #' @inheritParams scNMT
 #'
-#' @param format Either HDF5 or MTX data formats (default HDF5)
+#' @param format Either MTX or HDF5 data format (default MTX)
 #'
 #' @return A 10X PBMC `MultiAssayExperiment` object
 #'
@@ -97,7 +97,7 @@
 scMultiome <-
     function(
         DataType = "pbmc_10x", modes = "*", version = "1.0.0",
-        format = c("HDF5", "MTX"), dry.run = TRUE, verbose = TRUE, ...
+        format = c("MTX", "HDF5"), dry.run = TRUE, verbose = TRUE, ...
     )
 {
     stopifnot(.isSingleChar(version), .isSingleChar(DataType))

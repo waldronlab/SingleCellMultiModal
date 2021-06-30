@@ -8,7 +8,7 @@ scMultiome(
   DataType = "pbmc_10x",
   modes = "*",
   version = "1.0.0",
-  format = c("HDF5", "MTX"),
+  format = c("MTX", "HDF5"),
   dry.run = TRUE,
   verbose = TRUE,
   ...
@@ -26,7 +26,7 @@ which is the default.}
 \item{version}{character(1) Either version '1.0.0' or '2.0.0' depending on
 data version required. See versions section.}
 
-\item{format}{Either HDF5 or MTX data formats (default HDF5)}
+\item{format}{Either MTX or HDF5 data format (default MTX)}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -47,14 +47,14 @@ Blood Mononuclear Cells provided by
 (\code{DataType = "pbmc_10x"}).
 This technology enables simultaneous profiling of the transcriptome (using
 3’ gene expression) and epigenome (using ATAC-seq) from single cells to
-deepen your understanding of how genes are expressed and regulated across
+deepen our understanding of how genes are expressed and regulated across
 different cell types. Data prepared by Ricard Argelaguet.
 }
 \details{
-Users are able to choose from either an \code{HDF5} or \code{MTX} file format
-as the internal data representation. Choosing \code{HDF5} gives users a
-sparse \code{HDF5Array} class object. The \code{MTX} (Matrix Market) format allows
-users to load a sparse \code{dgCMatrix} representation.
+Users are able to choose from either an \code{MTX} or \code{HDF5} file format
+as the internal data representation. The \code{MTX} (Matrix Market)
+format allows users to load a sparse \code{dgCMatrix} representation.
+Choosing \code{HDF5} gives users a sparse \code{HDF5Array} class object.
 }
 \examples{
 
