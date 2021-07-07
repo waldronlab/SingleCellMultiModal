@@ -125,8 +125,7 @@
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
     if (missing(format))
         notfmt <- "FakeFormatNoMatch"
-    else
-        notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5")
+    notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5", format)
     filt <- modes_metadat[["DataType"]] == DataType &
         modes_metadat[["SourceVersion"]] == version &
         modes_metadat[["SourceType"]] != notfmt

@@ -196,3 +196,22 @@ write.csv(
     file = "inst/extdata/docuData/singlecellmultimodalv8.csv",
     row.names = FALSE
 )
+
+
+scmeta9 <- data.frame(
+    DataProvider = "European Bioinformatics Institute (EMBL-EBI), United Kingdom",
+    TaxonomyId = "9606",
+    Species = "Homo sapiens",
+    SourceUrl = "http://ftp.ebi.ac.uk/pub/databases/mofa/10x_rna_atac_vignette/filtered_feature_bc_matrix/",
+    SourceVersion = "1.0.1",
+    DataType = "pbmc_10x",
+    Maintainer  = "Marcel Ramos <marcel.ramos@roswellpark.org>",
+    stringsAsFactors = FALSE
+)
+
+write.csv(
+    scmeta9,
+    file = "inst/extdata/docuData/singlecellmultimodalv9.csv",
+    row.names = FALSE
+)
+

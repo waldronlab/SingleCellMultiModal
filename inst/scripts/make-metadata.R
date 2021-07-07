@@ -74,7 +74,10 @@ doc_helper <-
 }
 
 .loadH5 <- function(filepath) {
-    HDF5Array::HDF5Array(filepath, "assay001")
+    if (grepl("tenx", filepath))
+        HDF5Array::TENxMatrix(filepath, "pbmc")
+    else
+        HDF5Array::HDF5Array(filepath, "assay001")
 }
 
 .loadMTX.GZ <- function(filepath) {
@@ -401,12 +404,20 @@ make_metadata <- function(
 # aq[aq$maintainer == "Marcel Ramos <marcel.ramos@roswellpark.org>" &
 #     grepl("v[12]", aq$rdatapath)]
 
+# make_metadata(
+#     directory = "~/data/scmm",
+#     dataDirs = "mouse_embryo_8_cell",
+#     version = "1.0.0",
+#     doc_file = "inst/extdata/docuData/singlecellmultimodalv8.csv",
+#     dry.run = FALSE,
+#     append = TRUE
+# )
+
 make_metadata(
     directory = "~/data/scmm",
-    dataDirs = "mouse_embryo_8_cell",
-    version = "1.0.0",
-    doc_file = "inst/extdata/docuData/singlecellmultimodalv8.csv",
+    dataDirs = "pbmc_10x",
+    version = "1.0.1",
+    doc_file = "inst/extdata/docuData/singlecellmultimodalv9.csv",
     dry.run = FALSE,
     append = TRUE
 )
-

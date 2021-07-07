@@ -1,3 +1,26 @@
+## Load HDF5 file with either TENxMatrix or HDF5Array
+.getH5_TENx <- function(filelist) {
+    se_h5 <- grep("_se", filelist, value = TRUE)
+    se_obj <- query(ehub, se_h5)[[1L]]
+
+    hasTENx <- grepl("tenx", filelist)
+    patt <- if (hasTENx) "tenx" else "_assay"
+
+    h5data <- grep(patt, h5file, value = TRUE, ignore.case = TRUE)
+    h5fileloc <- query(ehub, h5data)[[1L]]
+
+    if (!hasTENx)
+        h5array <- HDF5Array::HDF5Array(h5fileloc, "assay001", as.sparse = TRUE)
+    else
+        h5array <- HDF5Array::TENxMatrix(h5fileloc, "pbmc")
+
+    SummarizedExperiment::`assays<-`(
+        x = se_obj, withDimnames = FALSE,
+        value = list(counts = h5array)
+    )
+
+}
+
 .loadHDF5 <- function(ehub, filepaths, verbose) {
     matchres <- grepl("_assays\\.[Hh]5|_se\\.[Rr][Dd][Ss]", filepaths)
     filepaths <- filepaths[matchres]
@@ -105,7 +128,7 @@ scMultiome <-
     format <- match.arg(format)
     meta <- list(call = match.call(), version = version)
 
-    if (version != "1.0.0")
+    if (!version %in% c("1.0.0", "1.0.1"))
         stop("Invalid 'version'; see '?scMultiome' for details.")
 
     ess_list <- .getResourcesList(prefix = "pbmc_", datatype = DataType,
