@@ -421,3 +421,8 @@ make_metadata(
     dry.run = FALSE,
     append = TRUE
 )
+
+## Check metadata.csv file with:
+ExperimentHubData::makeExperimentHubMetadata(
+    file.path(Sys.getenv("HOME"), "gh/SingleCellMultiModal"), "metadata.csv"
+)
