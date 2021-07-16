@@ -1,12 +1,14 @@
 ## Load HDF5 file with either TENxMatrix or HDF5Array
-.getH5_TENx <- function(filelist) {
+.getH5_TENx <- function(filelist, ehub, fn, verbose) {
+    if (verbose)
+        message("Working on: ", paste(fn, collapse = ",\n "))
     se_h5 <- grep("_se", filelist, value = TRUE)
     se_obj <- query(ehub, se_h5)[[1L]]
 
-    hasTENx <- grepl("tenx", filelist)
+    hasTENx <- any(grepl("tenx", filelist))
     patt <- if (hasTENx) "tenx" else "_assay"
 
-    h5data <- grep(patt, h5file, value = TRUE, ignore.case = TRUE)
+    h5data <- grep(patt, filelist, value = TRUE, ignore.case = TRUE)
     h5fileloc <- query(ehub, h5data)[[1L]]
 
     if (!hasTENx)
@@ -18,28 +20,18 @@
         x = se_obj, withDimnames = FALSE,
         value = list(counts = h5array)
     )
-
 }
 
 .loadHDF5 <- function(ehub, filepaths, verbose) {
-    matchres <- grepl("_assays\\.[Hh]5|_se\\.[Rr][Dd][Ss]", filepaths)
-    filepaths <- filepaths[matchres]
-    fact <- .removeExt(filepaths)
-    fact <- gsub("_se|_assays", "", fact)
+    matchres <- grepl("\\.[Hh]5|_se\\.[Rr][Dd][Ss]", filepaths)
+    fpaths <- filepaths[matchres]
+    fact <- .removeExt(fpaths)
+    fact <- gsub("_se|_assays|_tenx", "", fact)
     h5list <- split(filepaths, fact)
-    lapply(h5list, function(h5file, fn) {
-        if (verbose)
-            message("Working on: ", paste(fn, collapse = ",\n "))
-        se_h5 <- grep("_se", h5file, value = TRUE)
-        se_obj <- query(ehub, se_h5)[[1L]]
-        h5data <- grep("_assay", h5file, value = TRUE, ignore.case = TRUE)
-        h5fileloc <- query(ehub, h5data)[[1L]]
-        h5array <- HDF5Array::HDF5Array(h5fileloc, "assay001", as.sparse = TRUE)
-        SummarizedExperiment::`assays<-`(
-            x = se_obj, withDimnames = FALSE,
-            value = list(counts = h5array)
-        )
-    }, fn = names(h5list))
+    lapply(h5list,
+        .getH5_TENx,
+        ehub = ehub, fn = names(h5list), verbose = verbose
+    )
 }
 
 .message <-

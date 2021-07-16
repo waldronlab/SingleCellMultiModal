@@ -24,7 +24,7 @@
 .modesAvailable <- function(listfiles, prefix) {
     slots <- c("metadata", "colData", "sampleMap")
     modes <- gsub(prefix, "", listfiles, fixed = TRUE)
-    modes <- gsub("_assays|_se", "", modes)
+    modes <- gsub("_assays|_se|_tenx", "", modes)
     modes <- .removeExt(modes)
     unique(sort(modes[!modes %in% slots]))
 }
@@ -49,7 +49,8 @@
     lapply(fileNames, function(res) {
         if (verbose)
             message("Working on: ", gsub("\\.rda", "", basename(res)))
-        query(ExperimentHub, res)
+        # only take the last one for multiple matches
+        tail(query(ExperimentHub, res), 1)
     })
 }
 
@@ -57,7 +58,7 @@
     infos <- .queryResources(ExperimentHub, resTable, verbose)
     rpath <- vapply(infos, function(x) `$`(x, "rdatapath"), character(1L))
 
-    h5resources <- grepl("_assays\\.[Hh]5$", rpath)
+    h5resources <- grepl("\\.[Hh]5$", rpath)
     mtxresources <- grepl("\\.[Mm][Tt][Xx]\\.[Gg][Zz]$", rpath)
     shells <- grepl("se\\.[Rr][Dd][Ss]$", rpath)
     otherres <- !((h5resources | mtxresources) | shells)
@@ -137,7 +138,7 @@
     fileIdx <- .conditionToIndex(
         resultModes, eh_assays, function(x) grepl(x, eh_assays)
     )
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass")]
+    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass", "SourceVersion")]
     eh <- .test_eh(...)
 
     if (dry.run) {

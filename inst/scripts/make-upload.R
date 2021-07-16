@@ -15,7 +15,8 @@ allextpat <- "\\.[Rr][Dd][AaSs]$|\\.[Mm][Tt][Xx]\\.[Gg][Zz]$|\\.[Hh]5$"
     )
 }
 
-.getDataFiles()
+## check files are listed
+.getDataFiles(dataDir = "pbmc_10x", version = "1.0.1")
 
 # IMPORTANT!
 # Make sure that AWS_DEFAULT_REGION, AWS_ACCESS_KEY_ID, and
@@ -55,3 +56,6 @@ upload_aws <- function(
 #     version = "1.0.0", upload = TRUE)
 # upload_aws(DataType = "mouse_embryo_8_cell", directory = "~/data/scmm",
 #     version = "1.0.0", upload = TRUE)
+# upload_aws(DataType = "pbmc_10x", directory = "~/data/scmm",
+#     version = "1.0.1", upload = TRUE)
+
