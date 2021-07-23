@@ -50,7 +50,7 @@
         if (verbose)
             message("Working on: ", gsub("\\.rda", "", basename(res)))
         # only take the last one for multiple matches
-        tail(query(ExperimentHub, res), 1)
+        utils::tail(query(ExperimentHub, res), 1)
     })
 }
 
@@ -126,7 +126,8 @@
     modes_metadat <- read.csv(modes_file, stringsAsFactors = FALSE)
     if (missing(format))
         notfmt <- "FakeFormatNoMatch"
-    notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5", format)
+    else
+        notfmt <- switch(format, HDF5 = "MTX", MTX = "HDF5", format)
     filt <- modes_metadat[["DataType"]] == DataType &
         modes_metadat[["SourceVersion"]] == version &
         modes_metadat[["SourceType"]] != notfmt
