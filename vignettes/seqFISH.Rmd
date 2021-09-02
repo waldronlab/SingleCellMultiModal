@@ -11,19 +11,17 @@ vignette: >
     %\VignetteEngine{knitr::rmarkdown}
 Package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
 
-# Load libraries
+# Load packages
 
 ```{r,include=TRUE, results="hide", message=FALSE, warning=FALSE}
-
 library(MultiAssayExperiment)
 library(SpatialExperiment)
 library(SingleCellMultiModal)
-
 ```
 
 
@@ -33,9 +31,9 @@ The dataset consists of two data types,
 seq-FISH data was provided by @Zhu2018identification, while scRNA-seq data
 was provided by @Tasic2016adult.
 
-Data have been retrievedas part of the 
+Data have been retrievedas part of the
 [Hackathon](https://github.com/BIRSBiointegration/Hackathon/tree/master/seqFISH)
-in the 
+in the
 [Mathematical Frameworks for Integrative Analysis of Emerging Biological DataTypes](https://www.birs.ca/events/2020/5-day-workshops/20w5197) workshop.
 
 ## Downloading datasets
@@ -43,103 +41,100 @@ in the
 The user can see the available dataset by using the default options
 
 ```{r}
-
-SingleCellMultiModal::seqFISH(DataType="mouse_visual_cortex", 
-                        modes="*", dry.run=TRUE, version="2.0.0")
-
+seqFISH(
+    DataType="mouse_visual_cortex", modes="*", dry.run=TRUE, version="2.0.0"
+)
 ```
 
 Or simply by running:
 
 ```{r}
-
-mae <- SingleCellMultiModal::seqFISH(DataType="mouse_visual_cortex", 
-                        modes="*", dry.run=FALSE, version="2.0.0")
-mae
+seqfish <- seqFISH(
+    DataType="mouse_visual_cortex", modes="*", dry.run=FALSE, version="2.0.0"
+)
+seqfish
 ```
 
 Extract the list of experiments _without_ the associated colData.
 
 ```{r}
-experiments(mae)
+experiments(seqfish)
 ```
-
 
 ## Exploring the data structure
 
 Check row annotations for all experiments:
 
 ```{r}
-rownames(mae)
+rownames(seqfish)
 ```
 
 Take a peek at the `sampleMap` (graph representation of assays, cells, and
 barcodes):
 
 ```{r}
-rownames(mae)
+sampleMap(seqfish)
 ```
 
 ## Visualize matching cell identifiers across assays
 
 ```{r}
-sampleMap(mae)
+upsetSamples(seqfish)
 ```
 
 This shows that about 1597 cells match across both modalities / assays.
 
 ## scRNA-seq data
 
-The scRNA-seq data are accessible with `$scRNAseq`, which returns a 
+The scRNA-seq data are accessible with `$scRNAseq`, which returns a
 *SingleCellExperiment* class object, with all its associated methods.
 
 ```{r}
-experiments(mae)$scRNAseq
+seqfish[["scRNAseq"]]
 ```
 
 Otherwhise the `assay` function can be used to access the *scRNAseq* assay
-stored in the `mae` *MultiAssayExperiment* object.
+stored in the `seqfish` *MultiAssayExperiment* object.
 
 ```{r}
-head(assay(mae, "scRNAseq"))[,1:4]
+head(assay(seqfish, "scRNAseq"))[,1:4]
 ```
 
 ## seq-FISH data
 
-The seq-FISH data are accessible with `$seqFISH`, which returns a 
+The seq-FISH data are accessible with `$seqFISH`, which returns a
 **SpatialExperiment** class object.
 
 ```{r}
-experiments(mae)$seqFISH
+seqfish[["seqFISH"]]
 ```
 
 Otherwhise the `assay` function can be used to access the *seqFISH* assay
-stored in the `mae` *MultiAssayExperiment* object.
+stored in the `seqfish` *MultiAssayExperiment* object.
 
 ```{r}
-head(assay(mae, "seqFISH"))[,1:4]
+head(assay(seqfish, "seqFISH"))[,1:4]
 ```
 
-Spatial data can be retrieved with `spatialData` function on the 
+Spatial data can be retrieved with `spatialData` function on the
 *SpatialExperiment* object.
 
 ```{r}
-(sd <- spatialData(experiments(mae)$seqFISH))
+(sd <- spatialData(seqfish[["seqFISH"]]))
 ```
 
-
-Spatial coordinates within the spatial data can be retrieved in matrix form with `spatialCoords` 
-function on the *SpatialExperiment* object.
+Spatial coordinates within the spatial data can be retrieved in matrix form
+with `spatialCoords` function on the *SpatialExperiment* object.
 
 ```{r}
-head(sc <- spatialCoords(experiments(mae)$seqFISH))
+head(sc <- spatialCoords(seqfish[["seqFISH"]]))
 ```
 
 Direct access to the colnames of the spacial coordinates with
 `spatialCoordsNames` function.
 
 ```{r}
-spatialCoordsNames(experiments(mae)$seqFISH)
+spatialCoordsNames(seqfish[["seqFISH"]])
 ```
 
 
@@ -147,23 +142,24 @@ spatialCoordsNames(experiments(mae)$seqFISH)
 
 The provided seqFISH dataset comes out in two different versions:
 
-* V1.0.0 : provides the same seqFISH data as shown in the rest of this vignette, but it returns the full normalized scRNA-seq data matrix (with labels), as released from the original authors on the GEO database.
-* V2.0.0 : provides the same seqFISH data as shown in the rest of this vignette, but it returns a processed subset of the original scRNA-seq data, providing only the same genes present in the seqFISH data matrix.
+* 1.0.0 - provides the same seqFISH data as shown in the rest of this
+vignette, but it returns the full normalized scRNA-seq data matrix (with
+labels), as released from the original authors on the GEO database.
+* 2.0.0 - provides the same seqFISH data as shown in the rest of this
+vignette, but it returns a processed subset of the original scRNA-seq data,
+providing only the same genes present in the seqFISH data matrix.
 
-### V1.0.0 data
+### Data version 1.0.0
 
 The full scRNA-seq data matrix is 24057 rows x 1809 columns.
 
 To access the v1.0.0 simply run
 
 ```{r}
-
-mae <- SingleCellMultiModal::seqFISH(DataType="mouse_visual_cortex", 
-                        modes="*", dry.run=FALSE, version="1.0.0")
-mae
+seqFISH(
+    DataType="mouse_visual_cortex", modes="*", dry.run=FALSE, version="1.0.0"
+)
 ```
-
-
 
 # Session Info
 
