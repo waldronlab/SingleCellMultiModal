@@ -75,6 +75,15 @@ nmt <- scNMT("mouse_gastrulation", mode = c("*_DHS", "*_cgi", "*_genebody"),
 nmt
 ```
 
+## Checking the cell metadata
+
+Included are the variables `cellID`, `stage`, `lineage10x_2`, and
+`stage_lineage`.
+
+```{r}
+colData(nmt)
+```
+
 ## Exploring the data structure
 
 Check row annotations:
@@ -87,6 +96,12 @@ Take a peek at the `sampleMap`:
 
 ```{r}
 sampleMap(nmt)
+```
+
+Take a look at the cell identifiers across assays:
+
+```{r}
+colnames(nmt)
 ```
 
 ## Chromatin Accessibility

@@ -58,7 +58,7 @@ mae <- SingleCellMultiModal::seqFISH(DataType="mouse_visual_cortex",
 mae
 ```
 
-Example with actual data:
+Extract the list of experiments _without_ the associated colData.
 
 ```{r}
 experiments(mae)
@@ -67,18 +67,26 @@ experiments(mae)
 
 ## Exploring the data structure
 
-Check row annotations:
+Check row annotations for all experiments:
 
 ```{r}
 rownames(mae)
 ```
 
-Take a peek at the `sampleMap`:
+Take a peek at the `sampleMap` (graph representation of assays, cells, and
+barcodes):
+
+```{r}
+rownames(mae)
+```
+
+## Visualize matching cell identifiers across assays
 
 ```{r}
 sampleMap(mae)
 ```
 
+This shows that about 1597 cells match across both modalities / assays.
 
 ## scRNA-seq data
 
