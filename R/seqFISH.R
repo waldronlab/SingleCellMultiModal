@@ -87,10 +87,17 @@ seqFISH <-
         "_", c("Counts", "Labels")
     )
 
+    ## discrepancy between labels in counts and colData
+    counts <- as.matrix(modes_list[[res[1]]])
+    ## rowData is duplicate of rownames [removed]
+    coldata <- modes_list[[res[2]]]
+    vIDs <- intersect(rownames(coldata), colnames(counts))
+    counts <- counts[, vIDs]
+    coldata <- coldata[vIDs, ]
+
     sce <- SingleCellExperiment::SingleCellExperiment(
-        rowData=rownames(modes_list[[res[1]]]),
-        colData=modes_list[[res[2]]],
-        assays=S4Vectors::SimpleList(counts=as.matrix(modes_list[[res[1]]]))
+        colData=coldata,
+        assays=S4Vectors::SimpleList(counts=counts)
     )
 
     se <- SpatialExperiment::SpatialExperiment(
