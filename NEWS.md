@@ -1,3 +1,10 @@
+## Changes in version 1.6.0
+
+### Bug fixes and minor improvements
+
+* `scNMT` now defaults to version '1.0.0's QC filtered cells. For unfiltered
+cells see version section in `?scNMT`.
+
 ## Changes in version 1.4.0
 
 ### New features
