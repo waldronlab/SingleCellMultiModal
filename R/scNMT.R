@@ -54,7 +54,7 @@
 #'     which is the default.
 #'
 #' @param version character(1) Either version '1.0.0' or '2.0.0' depending on
-#'     data version required. See versions section.
+#'     data version required (default '1.0.0'). See version section.
 #'
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
@@ -85,7 +85,7 @@
 #' @export scNMT
 scNMT <-
     function(
-        DataType = "mouse_gastrulation", modes = "*", version,
+        DataType = "mouse_gastrulation", modes = "*", version = "1.0.0",
         dry.run = TRUE, verbose = TRUE, ...
     )
 {
