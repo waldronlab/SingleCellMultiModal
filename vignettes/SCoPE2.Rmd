@@ -34,7 +34,7 @@ library(MultiAssayExperiment)
 
 SCoPE2 is a mass spectrometry (MS)-based single-cell proteomics 
 protocol to quantify the proteome of single-cells in an untargeted
-fashion. It was initially developed by @Specht2020-jm.
+fashion. It was initially developed by @Specht2021-pm.
 
 ## Downloading data sets
 
