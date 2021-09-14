@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
-Version: 1.5.5
+Version: 1.5.6
 Authors@R: c(
     person(given = "Marcel", family = "Ramos",
         role = c("aut", "cre"), email = "marcel.ramos@roswellpark.org",
