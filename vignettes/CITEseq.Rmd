@@ -59,17 +59,17 @@ In this example, we will use one of the two available datasets `scADT_Counts`:
 
 ```{r,message=FALSE}
 
-mse <- CITEseq(
+mae <- CITEseq(
     DataType="cord_blood", modes="*", dry.run=FALSE, version="1.0.0"
 )
 
-mse
+mae
 ```
 
 Example with actual data:
 
 ```{r}
-experiments(mse)
+experiments(mae)
 ```
 
 
@@ -78,13 +78,13 @@ experiments(mse)
 Check row annotations:
 
 ```{r}
-rownames(mse)
+rownames(mae)
 ```
 
 Take a peek at the `sampleMap`:
 
 ```{r}
-sampleMap(mse)
+sampleMap(mae)
 ```
 
 
@@ -94,7 +94,7 @@ The scRNA-seq data are accessible with the name `scRNAseq`, which returns a
 *matrix* object.
 
 ```{r}
-head(experiments(mse)$scRNAseq)[, 1:4]
+head(experiments(mae)$scRNAseq)[, 1:4]
 ```
 
 ## scADT data
@@ -103,7 +103,7 @@ The scADT data are accessible with the name `scADT`, which returns a
 **matrix** object.
 
 ```{r}
-head(experiments(mse)$scADT)[, 1:4]
+head(experiments(mae)$scADT)[, 1:4]
 ```
 
 # SingleCellExperiment object conversion
