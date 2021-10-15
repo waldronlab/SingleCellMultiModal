@@ -12,18 +12,18 @@ Package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
 ---
 
-This vignette will guide you through how accessing and manipulating 
+This vignette will guide you through how accessing and manipulating
 the SCoPE2 data sets available from the `SingleCellMultimodal` package.
- 
+
 # Installation
-    
+
 ```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("SingleCellMultiModal")
 ```
 
-## Load
+## Load packages
 
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
@@ -32,7 +32,7 @@ library(MultiAssayExperiment)
 
 # SCoPE2
 
-SCoPE2 is a mass spectrometry (MS)-based single-cell proteomics 
+SCoPE2 is a mass spectrometry (MS)-based single-cell proteomics
 protocol to quantify the proteome of single-cells in an untargeted
 fashion. It was initially developed by @Specht2021-pm.
 
@@ -41,14 +41,14 @@ fashion. It was initially developed by @Specht2021-pm.
 The user can see the available data set by using the default options.
 
 ```{r}
-SCoPE2("macrophage_differentiation", 
-       mode = "*", 
-       version = "1.0.0", 
+SCoPE2("macrophage_differentiation",
+       mode = "*",
+       version = "1.0.0",
        dry.run = TRUE)
 ```
 
 Or by simply running:
-    
+
 ```{r}
 SCoPE2("macrophage_differentiation")
 ```
@@ -59,11 +59,11 @@ Currently, only the `macrophage_differentiation` is available.
 
 ## Retrieving data
 
-You can retrieve the actual data from `ExperimentHub` by setting 
-`dry.run = FALSE`. This example retrieves the complete data set 
-(transcriptome and proteome) for the `macrophage_differentiation` 
+You can retrieve the actual data from `ExperimentHub` by setting
+`dry.run = FALSE`. This example retrieves the complete data set
+(transcriptome and proteome) for the `macrophage_differentiation`
 project:
-    
+
 ```{r,message=FALSE}
 scope2 <- SCoPE2("macrophage_differentiation",
                  modes = "rna|protein",
@@ -73,15 +73,15 @@ scope2
 
 # The macrophage differentiation project
 
-This data set has been acquired by the Slavov Lab (@Specht2020-jm). 
-It contains single-cell proteomics and single-cell 
-RNA sequencing data for macrophages and monocytes. The objective of the 
-research that led to generate the data is to understand whether 
+This data set has been acquired by the Slavov Lab (@Specht2020-jm).
+It contains single-cell proteomics and single-cell
+RNA sequencing data for macrophages and monocytes. The objective of the
+research that led to generate the data is to understand whether
 homogeneous monocytes differentiate in the absence of cytokines to
-macrophages with homogeneous or heterogeneous profiles. The transcriptomic and 
-proteomic acquisitions are conducted on two separate subset of similar 
-cells (same experimental design). The cell type of the samples are known only 
-for the **proteomics** data. The proteomics data was retrieved from 
+macrophages with homogeneous or heterogeneous profiles. The transcriptomic and
+proteomic acquisitions are conducted on two separate subset of similar
+cells (same experimental design). The cell type of the samples are known only
+for the **proteomics** data. The proteomics data was retrieved from
 the authors' [website](https://scope2.slavovlab.net/docs/data) and the
 transcriptomic data was retrieved from the GEO database (accession id:
 [GSE142392](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392)).
@@ -93,16 +93,16 @@ For more information on the protocol, see @Specht2020-jm.
 Only version `1.0.0` is currently available.
 
 The `macrophage_differentiation` data set in this package contains two
-assays: `rna` and `protein`. 
+assays: `rna` and `protein`.
 
 ### Cell annotation
 
-The single-cell proteomics data contains cell type annotation 
-(`celltype`), sample preparation batch (`batch_digest` and 
-`batch_sort`), chromatography batch (`batch_chromatography`), and the 
-MS acquisition run (`batch_MS`). The single-cell transcriptomics data 
-was acquired in two batches (`batch_Chromium`). Note that because the 
-cells that compose the two assays are distinct, there is no common 
+The single-cell proteomics data contains cell type annotation
+(`celltype`), sample preparation batch (`batch_digest` and
+`batch_sort`), chromatography batch (`batch_chromatography`), and the
+MS acquisition run (`batch_MS`). The single-cell transcriptomics data
+was acquired in two batches (`batch_Chromium`). Note that because the
+cells that compose the two assays are distinct, there is no common
 cell annotation available for both proteomics and transcriptomics. The
 annotation were therefore filled with `NA`s accordingly.
 
@@ -110,7 +110,7 @@ annotation were therefore filled with `NA`s accordingly.
 colData(scope2)
 ```
 
-### Transcriptomic data 
+### Transcriptomic data
 
 You can extract and check the transcriptomic data through subsetting:
 
@@ -118,7 +118,7 @@ You can extract and check the transcriptomic data through subsetting:
 scope2[["rna"]]
 ```
 
-The data is rather large and is therefore stored on-disk using the 
+The data is rather large and is therefore stored on-disk using the
 HDF5 backend. You can verify this by looking at the assay data matrix.
 Note that the counts are UMI counts.
 
@@ -126,13 +126,13 @@ Note that the counts are UMI counts.
 assay(scope2[["rna"]])[1:5, 1:5]
 ```
 
-### Proteomic data 
+### Proteomic data
 
-The `protein` assay contains MS-based proteomic data. 
-The data have been passed sample and feature quality control, 
-normalized, log transformed, imputed and batch corrected. Detailed 
-information about the data processing is available in 
-[another vignette](https://uclouvain-cbio.github.io/SCP.replication/articles/SCoPE2.html). You can extract the proteomic data similarly to the 
+The `protein` assay contains MS-based proteomic data.
+The data have been passed sample and feature quality control,
+normalized, log transformed, imputed and batch corrected. Detailed
+information about the data processing is available in
+[another vignette](https://uclouvain-cbio.github.io/SCP.replication/articles/SCoPE2.html). You can extract the proteomic data similarly to the
 transcriptomic data:
 
 ```{r}
@@ -140,9 +140,9 @@ scope2[["protein"]]
 ```
 
 In this case, the protein data have reasonable size and are loaded
-directly into memory. The data matrix is stored in `logexprs`. We 
-decided to not use the traditional `logcounts` because MS proteomics 
-measures intensities rather than counts as opposed to scRNA-Seq. 
+directly into memory. The data matrix is stored in `logexprs`. We
+decided to not use the traditional `logcounts` because MS proteomics
+measures intensities rather than counts as opposed to scRNA-Seq.
 
 ```{r}
 assay(scope2[["protein"]])[1:5, 1:5]

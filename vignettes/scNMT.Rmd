@@ -21,14 +21,14 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SingleCellMultiModal")
 ```
 
-## Load
+## Load packages
 
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
 library(MultiAssayExperiment)
 ```
 
-# scNMT
+# scNMT: single-cell nucleosome, methylation and transcription sequencing
 
 The dataset was graciously provided by @Argelaguet2019-et.
 
@@ -38,15 +38,15 @@ https://github.com/rargelaguet/scnmt_gastrulation
 
 For more information on the protocol, see @Clark2018-qg.
 
-## Downloading datasets
+## Dataset lookup
 
-The user can see the available dataset by using the default options
+The user can see the available datasets by using the `dry.run` argument:
 
 ```{r}
 scNMT("mouse_gastrulation", mode = "*", version = "1.0.0", dry.run = TRUE)
 ```
 
-Or by simply running:
+Or by simply running the `scNMT` function with defaults:
 
 ```{r}
 scNMT("mouse_gastrulation", version = "1.0.0")
@@ -54,20 +54,24 @@ scNMT("mouse_gastrulation", version = "1.0.0")
 
 ## Data versions
 
-A more recent release of the 'mouse_gastrulation' dataset has been provided
+A more recent release of the 'mouse_gastrulation' dataset was provided
 by Argelaguet and colleagues. This dataset includes additional cells that
 did not pass the original quality metrics as imposed for the version `1.0.0`
 dataset.
 
-Use the `version` argument to indicate the newer dataset version (`2.0.0`):
+Use the `version` argument to indicate the newer dataset version
+(i.e., `2.0.0`):
 
 ```{r}
 scNMT("mouse_gastrulation", version = '2.0.0', dry.run = TRUE)
 ```
 
-## Actual Data
+## Downloading the data
 
-Example with actual data:
+To obtain the data, we can use the `mode` argument to indicate specific
+datasets using 'glob' patterns that will match the outputs above. For example,
+if we would like to have all 'genebody' datasets for all available assays,
+we would use `*_genebody` as an input to `mode`.
 
 ```{r,message=FALSE}
 nmt <- scNMT("mouse_gastrulation", mode = c("*_DHS", "*_cgi", "*_genebody"),
@@ -77,8 +81,10 @@ nmt
 
 ## Checking the cell metadata
 
-Included are the variables `cellID`, `stage`, `lineage10x_2`, and
-`stage_lineage`.
+Included in the `colData` `DataFrame` within the `MultiAssayExperiment` class
+are the variables `cellID`, `stage`, `lineage10x_2`, and `stage_lineage`.
+To extract this `DataFrame`, one has to use `colData` on the
+`MultiAssayExperiment` object:
 
 ```{r}
 colData(nmt)
@@ -92,19 +98,20 @@ Check row annotations:
 rownames(nmt)
 ```
 
-Take a peek at the `sampleMap`:
+The `sampleMap` is a graph representation of the relationships between cells
+and 'assay' datasets:
 
 ```{r}
 sampleMap(nmt)
 ```
 
-Take a look at the cell identifiers across assays:
+Take a look at the cell identifiers or barcodes across assays:
 
 ```{r}
 colnames(nmt)
 ```
 
-## Chromatin Accessibility
+## Chromatin Accessibility (acc_*)
 
 See the accessibilty levels (as proportions) for DNase Hypersensitive Sites:
 
@@ -112,7 +119,7 @@ See the accessibilty levels (as proportions) for DNase Hypersensitive Sites:
 head(assay(nmt, "acc_DHS"))[, 1:4]
 ```
 
-## DNA Methylation
+## DNA Methylation (met_*)
 
 See the methylation percentage / proportion:
 

@@ -15,8 +15,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Installation
 
-# Load packages
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SingleCellMultiModal")
+```
+
+## Load packages
 
 ```{r,include=TRUE, results="hide", message=FALSE, warning=FALSE}
 library(MultiAssayExperiment)
