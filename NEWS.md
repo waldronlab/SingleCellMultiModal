@@ -6,6 +6,7 @@
 
 ### Bug fixes and minor improvements
 
+* Updates to `seqFISH` vignette and documentation.
 * Updated to changes in `SummarizedExperiment` where `assayDimnames` are
 checked.
 * `scNMT` defaults to version '1.0.0's QC filtered cells. For unfiltered
