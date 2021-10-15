@@ -139,10 +139,10 @@
     return(mae)
 }
 
-#' CITEseq
-#' @description function assembles data on-the-fly from `ExperimentHub`
-#'     to provide a \linkS4class{MultiAssayExperiment} container. Actually
-#'     the `dataType` argument provides access to the available datasets
+#' Single-Cell Gene Expression + Protein Surface
+#' @description CITEseq function assembles data on-the-fly from `ExperimentHub`
+#'     to provide a \linkS4class{MultiAssayExperiment} container. 
+#'     The `DataType` argument provides access to the available datasets
 #'     associated to the package.
 #' @author Dario Righelli
 #' @details CITEseq data are a combination of single cell transcriptomics and
@@ -183,6 +183,7 @@
 #'
 #' @param version character(1) Either version '1.0.0' depending on
 #'     data version required.
+#'     
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
 #'
@@ -195,9 +196,11 @@
 #' @param DataClass either MultiAssayExperiment or SingleCellExperiment
 #' data classes can be returned (default MultiAssayExperiment)
 #'
-#' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-#'     informative `data.frame` when `dry.run` is `TRUE`
+#' @return A single cell multi-modal \linkS4class{MultiAssayExperiment}/
+#' \linkS4class{SingleCellExperiment} or informative `data.frame` when `dry.run`
+#'  is `TRUE`
 #' @references Stoeckius et al. (2017), Mimitou et al. (2019)
+#' @author Dario Righelli
 #' @export
 #'
 #' @examples

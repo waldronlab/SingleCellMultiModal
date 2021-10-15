@@ -2,7 +2,7 @@
 % Please edit documentation in R/seqFISH.R
 \name{seqFISH}
 \alias{seqFISH}
-\title{seqFISH}
+\title{Single-cell spatial + Gene Expression}
 \usage{
 seqFISH(
   DataType = "mouse_visual_cortex",
@@ -21,7 +21,7 @@ retrieve.  (default "mouse_visual_cortex")}
 include seq-FISH and scRNA-seq data by default.}
 
 \item{version}{character(1) Either version '1.0.0' or '2.0.0' depending on
-data version required. See versions section.}
+data version required (default '1.0.0'). See version section.}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
@@ -38,7 +38,7 @@ A \linkS4class{MultiAssayExperiment} of seq-FISH data
 \description{
 seqFISH function assembles data on-the-fly from `ExperimentHub`
     to provide a \linkS4class{MultiAssayExperiment} container. Actually
-    the `dataType` argument provides access to the available datasets
+    the `DataType` argument provides access to the available datasets
     associated to the package.
 }
 \details{

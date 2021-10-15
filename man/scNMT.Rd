@@ -10,7 +10,7 @@
 scNMT(
   DataType = "mouse_gastrulation",
   modes = "*",
-  version,
+  version = "1.0.0",
   dry.run = TRUE,
   verbose = TRUE,
   ...
@@ -26,7 +26,7 @@ Chromatin Accessibilty ("acc"), Methylation ("met"), RNA-seq ("rna")
 which is the default.}
 
 \item{version}{character(1) Either version '1.0.0' or '2.0.0' depending on
-data version required. See versions section.}
+data version required (default '1.0.0'). See version section.}
 
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
