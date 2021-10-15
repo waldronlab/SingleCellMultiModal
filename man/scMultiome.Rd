@@ -24,7 +24,7 @@ Chromatin Accessibilty ("acc"), Methylation ("met"), RNA-seq ("rna")
 which is the default.}
 
 \item{version}{character(1) Either version '1.0.0' or '2.0.0' depending on
-data version required. See versions section.}
+data version required (default '1.0.0'). See version section.}
 
 \item{format}{Either MTX or HDF5 data format (default MTX)}
 

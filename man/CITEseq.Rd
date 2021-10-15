@@ -2,7 +2,7 @@
 % Please edit documentation in R/CITEseq.R
 \name{CITEseq}
 \alias{CITEseq}
-\title{CITEseq}
+\title{Single-Cell Gene Expression + Protein Surface}
 \usage{
 CITEseq(
   DataType = c("cord_blood", "peripheral_blood"),
@@ -37,13 +37,14 @@ data classes can be returned (default MultiAssayExperiment)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-    informative `data.frame` when `dry.run` is `TRUE`
+A single cell multi-modal \linkS4class{MultiAssayExperiment}/
+\linkS4class{SingleCellExperiment} or informative `data.frame` when `dry.run`
+ is `TRUE`
 }
 \description{
-function assembles data on-the-fly from `ExperimentHub`
-    to provide a \linkS4class{MultiAssayExperiment} container. Actually
-    the `dataType` argument provides access to the available datasets
+CITEseq function assembles data on-the-fly from `ExperimentHub`
+    to provide a \linkS4class{MultiAssayExperiment} container. 
+    The `DataType` argument provides access to the available datasets
     associated to the package.
 }
 \details{
@@ -87,5 +88,7 @@ experiments(mae)
 Stoeckius et al. (2017), Mimitou et al. (2019)
 }
 \author{
+Dario Righelli
+
 Dario Righelli
 }
