@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
-Version: 1.9.0
+Version: 1.9.1
 Authors@R: c(
     person(given = "Marcel", family = "Ramos",
         role = c("aut", "cre"), email = "marcel.ramos@roswellpark.org",
@@ -24,7 +24,7 @@ Description: SingleCellMultiModal is an ExperimentHub package
 License: Artistic-2.0
 BugReports: https://github.com/waldronlab/SingleCellMultiModal/issues
 Depends:
-    R (>= 4.1.0),
+    R (>= 4.2.0),
     MultiAssayExperiment
 Imports:
     AnnotationHub,
