@@ -71,12 +71,11 @@ GTseq()
 
 }
 \references{
-\preformatted{Macaulay et al. (2015) G&T-seq: parallel sequencing of single-cell
+Macaulay et al. (2015) G&T-seq: parallel sequencing of single-cell
 genomes and transcriptomes. Nat Methods, 12:519–22.
 
 Macaulay et al. (2016) Separation and parallel sequencing of the genomes
 and transcriptomes of single cells using G&T-seq. Nat Protoc, 11:2081–103.
-}
 }
 \seealso{
 SingleCellMultiModal-package

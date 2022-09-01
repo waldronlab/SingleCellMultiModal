@@ -89,6 +89,4 @@ Stoeckius et al. (2017), Mimitou et al. (2019)
 }
 \author{
 Dario Righelli
-
-Dario Righelli
 }

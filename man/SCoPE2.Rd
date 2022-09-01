@@ -57,14 +57,15 @@ macrophage differentiation. No annotation is available for the
 transcriptome data, but batch and cell type annotations are
 available for the proteomics data. The transcriptomics and
 proteomics data were not measured from the same cells but from
-a distinct set of cell cultures.\preformatted{\\itemize\{
-    \\item\{SCoPE2:\}
-    \\itemize\{
-        \\item\{scRNAseq1\} - single-cell transcriptome (batch 1)
-        \\item\{scRNAseq2\} - single-cell transcriptome (batch 2)
-        \\item\{scp\} - single-cell proteomics
-    \}
-\}
+a distinct set of cell cultures.
+
+\itemize{
+\item{SCoPE2:}
+\itemize{
+\item{scRNAseq1} - single-cell transcriptome (batch 1)
+\item{scRNAseq2} - single-cell transcriptome (batch 2)
+\item{scp} - single-cell proteomics
+}
 }
 }
 \examples{
@@ -76,12 +77,11 @@ SCoPE2(DataType = "macrophage_differentiation",
 
 }
 \references{
-\preformatted{Specht, Harrison, Edward Emmott, Aleksandra A. Petelski, R.
+Specht, Harrison, Edward Emmott, Aleksandra A. Petelski, R.
 Gray Huffman, David H. Perlman, Marco Serra, Peter Kharchenko,
 Antonius Koller, and Nikolai Slavov. 2020. “Single-Cell
 Proteomic and Transcriptomic Analysis of Macrophage
 Heterogeneity.” bioRxiv. https://doi.org/10.1101/665307.
-}
 }
 \seealso{
 SingleCellMultiModal-package

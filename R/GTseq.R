@@ -16,38 +16,38 @@
 #'     available from Macaulay et al. (2016). See references.
 #'
 #' @details G&T-seq is a combination of Picoplex amplified gDNA sequencing
-#'     (genome) and SMARTSeq2 amplified cDNA sequencing (transcriptome) of the
-#'     same cell. For more information, see Macaulay et al. (2015).
-#'     \itemize{
-#'         \item{mouse_embryo_8_cell:}
-#'         \itemize{
-#'             \item{genomic} - integer copy numbers as detected from scDNA-seq
-#'             \item{transcriptomic} - raw read counts as quantified from scRNA-seq
-#'         }
-#'     }
+#'   (genome) and SMARTSeq2 amplified cDNA sequencing (transcriptome) of the
+#'   same cell. For more information, see Macaulay et al. (2015).
+#'   \itemize{
+#'       \item{mouse_embryo_8_cell:}
+#'       \itemize{
+#'           \item{genomic} - integer copy numbers as detected from scDNA-seq
+#'           \item{transcriptomic} - raw read counts as quantified from scRNA-seq
+#'       }
+#'   }
 #'
 #' @section metadata:
-#'     The `MultiAssayExperiment` metadata includes the original function call
-#'     that saves the function call and the data version requested.
+#'   The `MultiAssayExperiment` metadata includes the original function call
+#'   that saves the function call and the data version requested.
 #'
 #' @param DataType character(1) Indicates study that produces this type of
-#'     data (default: 'mouse_embryo_8_cell')
+#'   data (default: 'mouse_embryo_8_cell')
 #'
 #' @param modes character() A wildcard / glob pattern of modes, such as
-#'     \code{"*omic"}. A wildcard of \code{"*"} will return all modes including
-#'     copy numbers ("genomic") and RNA-seq read counts ("transcriptomic"),
-#'     which is the default.
+#'   \code{"*omic"}. A wildcard of \code{"*"} will return all modes including
+#'   copy numbers ("genomic") and RNA-seq read counts ("transcriptomic"),
+#'   which is the default.
 #'
 #' @param version character(1). Currently, only version '1.0.0'.
 #'
 #' @param dry.run logical(1) Whether to return the dataset names before actual
-#'     download (default TRUE)
+#'   download (default TRUE)
 #'
 #' @param verbose logical(1) Whether to show the dataset currently being
-#'     (down)loaded (default TRUE)
+#'   (down)loaded (default TRUE)
 #'
 #' @param ... Additional arguments passed on to the
-#'     \link[ExperimentHub]{ExperimentHub-class} constructor
+#'   \link[ExperimentHub]{ExperimentHub-class} constructor
 #'
 #' @seealso SingleCellMultiModal-package
 #'
@@ -57,11 +57,11 @@
 #' @source \url{https://www.ebi.ac.uk/ena/browser/view/PRJEB9051}
 #'
 #' @references
-#'     Macaulay et al. (2015) G&T-seq: parallel sequencing of single-cell
-#'     genomes and transcriptomes. Nat Methods, 12:519–22.
+#'   Macaulay et al. (2015) G&T-seq: parallel sequencing of single-cell
+#'   genomes and transcriptomes. Nat Methods, 12:519–22.
 #'
-#'     Macaulay et al. (2016) Separation and parallel sequencing of the genomes
-#'     and transcriptomes of single cells using G&T-seq. Nat Protoc, 11:2081–103.
+#'   Macaulay et al. (2016) Separation and parallel sequencing of the genomes
+#'   and transcriptomes of single cells using G&T-seq. Nat Protoc, 11:2081–103.
 #'
 #' @md
 #'

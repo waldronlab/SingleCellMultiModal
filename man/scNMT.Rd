@@ -55,26 +55,27 @@ the vignette for the full citation.
 scNMT is a combination of RNA-seq (transcriptome) and an adaptation
 of Nucleosome Occupancy and Methylation sequencing (NOMe-seq, the
 methylome and chromatin accessibility) technologies. For more
-information, see Reik et al. (2018) DOI: 10.1038/s41467-018-03149-4\preformatted{\\itemize\{
-    \\item\{mouse_gastrulation:\}
-    \\itemize\{
-        \\item\{rna\} - RNA-seq
-        \\item\{acc_*\} - chromatin accessibility
-        \\item\{met_*\} - DNA methylation
-        \\itemize\{
-            \\item\{cgi\} - CpG islands
-            \\item\{CTCF\} - footprints of CTCF binding
-            \\item\{DHS\} - DNase Hypersensitive Sites
-            \\item\{genebody\} - gene bodies
-            \\item\{p300\} - p300 binding sites
-            \\item\{promoter\} - gene promoters
-        \}
-    \}
-\}
+information, see Reik et al. (2018) DOI: 10.1038/s41467-018-03149-4
+
+\itemize{
+\item{mouse_gastrulation:}
+\itemize{
+\item{rna} - RNA-seq
+\item{acc_\emph{} - chromatin accessibility
+\item{met_}} - DNA methylation
+\itemize{
+\item{cgi} - CpG islands
+\item{CTCF} - footprints of CTCF binding
+\item{DHS} - DNase Hypersensitive Sites
+\item{genebody} - gene bodies
+\item{p300} - p300 binding sites
+\item{promoter} - gene promoters
+}
+}
+}
 Special thanks to Al J Abadi for preparing the published data in time
 for the 2020 BIRS Workshop, see the link here:
-url\{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq\}
-}
+url{https://github.com/BIRSBiointegration/Hackathon/tree/master/scNMT-seq}
 }
 \section{versions}{
 
@@ -98,8 +99,7 @@ scNMT(DataType = "mouse_gastrulation", modes = "*",
 
 }
 \references{
-\preformatted{Argelaguet et al. (2019)
-}
+Argelaguet et al. (2019)
 }
 \seealso{
 SingleCellMultiModal-package
