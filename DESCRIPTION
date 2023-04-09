@@ -12,6 +12,8 @@ Authors@R: c(
         role = "aut", email = "dario.righelli@gmail.com"),
     person(given = "Kelly", family = "Eckenrode",
         role = "aut", email = "kelly.eckenrode@sph.cuny.edu"),
+    person(given = "Ludwig", family = "Geistlinger",
+        role = "aut", email = "ludwig_geistlinger@hms.harvard.edu"),
     person(given = "Levi", family = "Waldron",
         role = "aut", email = "lwaldron.research@gmail.com")
     )
