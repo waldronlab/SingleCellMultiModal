@@ -418,7 +418,7 @@ make_metadata(
     dataDirs = "pbmc_10x",
     version = "1.0.1",
     doc_file = "inst/extdata/docuData/singlecellmultimodalv9.csv",
-    dry.run = FALSE,
+    dry.run = TRUE,
     append = TRUE
 )
 
