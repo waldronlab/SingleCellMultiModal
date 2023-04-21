@@ -1,3 +1,16 @@
+## Changes in version 1.12.0
+
+### Bug fixes and minor improvements
+
+* Added Ludwig Geistlinger as author (@lgeistlinger) for contributing the
+`GTseq` dataset.
+
+## Changes in version 1.8.0
+
+### Bug fixes and minor improvements
+
+* Updated the reference in the `SCoPE2` vignette (@cvanderaa).
+
 ## Changes in version 1.6.0
 
 ### New features
