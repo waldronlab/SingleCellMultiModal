@@ -2,7 +2,7 @@
 % Please edit documentation in R/CITEseq.R
 \name{CITEseq}
 \alias{CITEseq}
-\title{Single-Cell Gene Expression + Protein Surface}
+\title{CITEseq}
 \usage{
 CITEseq(
   DataType = c("cord_blood", "peripheral_blood"),
@@ -37,14 +37,13 @@ data classes can be returned (default MultiAssayExperiment)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A single cell multi-modal \linkS4class{MultiAssayExperiment}/
-\linkS4class{SingleCellExperiment} or informative `data.frame` when `dry.run`
- is `TRUE`
+A single cell multi-modal \linkS4class{MultiAssayExperiment} or
+    informative `data.frame` when `dry.run` is `TRUE`
 }
 \description{
-CITEseq function assembles data on-the-fly from `ExperimentHub`
-    to provide a \linkS4class{MultiAssayExperiment} container. 
-    The `DataType` argument provides access to the available datasets
+function assembles data on-the-fly from `ExperimentHub`
+    to provide a \linkS4class{MultiAssayExperiment} container. Actually
+    the `dataType` argument provides access to the available datasets
     associated to the package.
 }
 \details{
@@ -61,19 +60,19 @@ CITEseq data are a combination of single cell transcriptomics and
             }
      }
      \itemize{
-        \item{peripheral_blood: } a dataset of single cells of peripheral
+        \item{peripheral_blood: } a dataset of single cells of peripheral 
         blood as provided in Mimitou et al. (2019).
-        We provide two different conditions controls (CTRL) and
+        We provide two different conditions controls (CTRL) and 
         Cutaneous T-cell Limphoma (CTCL).
-        Just build appropriate \code{modes} regex for subselecting the
-        dataset modes.
+        Just build appropriate \code{modes} regex for subselecting the 
+        dataset modes. 
          \itemize{
             \item{scRNA} - Mimitou scRNA-seq gene count matrix
             \item{scADT} - Mimitou antibody-derived tags (ADT) data
             \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
-            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta
+            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
             available through the object metadata.
-            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta
+            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
             available through the object metadata.
             }
      }
@@ -82,7 +81,6 @@ CITEseq data are a combination of single cell transcriptomics and
 
 mae <- CITEseq(DataType="cord_blood", dry.run=FALSE)
 experiments(mae)
-
 }
 \references{
 Stoeckius et al. (2017), Mimitou et al. (2019)
