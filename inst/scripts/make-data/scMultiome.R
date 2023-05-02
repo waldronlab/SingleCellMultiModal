@@ -32,7 +32,7 @@ HDF5Array::saveHDF5SummarizedExperiment(pbmc[[1]], dir = "pbmc_rna",
 ## load SCE shell
 rna_sce <- readRDS("./pbmc_rna/pbmc_rna_se.rds")
 ## replace assay with MTX assay
-pbmc_rna_mtx_obj <- BiocGenerics::replaceSlots(
+pbmc_rna_mtx_obj <- BiocBaseUtils::setSlots(
     rna_sce, assays = Assays(SimpleList(counts = rna_mtx))
 )
 
@@ -51,7 +51,7 @@ HDF5Array::saveHDF5SummarizedExperiment(pbmc[[2]], dir = "pbmc_atac",
 ## load SCE shell
 atac_sce <- readRDS("./pbmc_atac/pbmc_atac_se.rds")
 ## replace assay with MTX assay
-pbmc_atac_mtx_obj <- BiocGenerics::replaceSlots(
+pbmc_atac_mtx_obj <- BiocBaseUtils::setSlots(
     atac_sce, assays = Assays(SimpleList(counts = atac_mtx))
 )
 

@@ -30,8 +30,8 @@ Depends:
     MultiAssayExperiment
 Imports:
     AnnotationHub,
+    BiocBaseUtils,
     BiocFileCache,
-    BiocGenerics,
     ExperimentHub,
     HDF5Array,
     S4Vectors,
