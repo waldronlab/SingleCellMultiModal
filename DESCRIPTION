@@ -56,4 +56,4 @@ VignetteBuilder:
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
     ExperimentHub, GEO
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
