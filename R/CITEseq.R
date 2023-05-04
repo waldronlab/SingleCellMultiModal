@@ -175,7 +175,7 @@
 #' experiments(mae)
 CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
                 version="1.0.0", dry.run=TRUE, verbose=TRUE, 
-                DataClass=c("MultiAssaiExperiment", "SingleCellExperiment"), 
+                DataClass=c("MultiAssayExperiment", "SingleCellExperiment"),
                 ...)
 {
     dataType <- match.arg(DataType)
@@ -235,9 +235,9 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         scrna <- scrna[,(colnames(scrna) %in% commonsamp)]
         scadt <- scadt[,(colnames(scadt) %in% commonsamp)]
         
-        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                          altExps=list(scADT=scadt, 
-                                                                       scHTO=schto))
+        sce <- SingleCellExperiment::SingleCellExperiment(
+            list(counts=scrna), altExps=list(scADT=scadt, scHTO=schto)
+        )
     } else if(length(mae)==2) {
         scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
         if(length(grep("scADT", names(mae)))!=0)
