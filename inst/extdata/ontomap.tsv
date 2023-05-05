@@ -1,33 +1,33 @@
 DataType	function_name	original_column_name	original_cell_name	ontology_ID	ontology_cell_name
-macrophage_differentiation_protein	SCoPE2	celltype	Macrophage	CL:0000235	macrophage
-macrophage_differentiation_protein	SCoPE2	celltype	Monocyte	CLO:0009465	U-937 cell
-mouse_gastrulation	scNMT	lineage	Epiblast	NA	NA
-mouse_gastrulation	scNMT	lineage	Mesoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Primitive_Streak	NA	NA
-mouse_gastrulation	scNMT	lineage	Ectoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Endoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	ExE_ectoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Visceral_endoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Primitive_endoderm	NA	NA
-mouse_visual_cortex	seqFISH	class	Glutamatergic Neuron	NA	NA
-mouse_visual_cortex	seqFISH	class	GABA-ergic Neuron	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.3	NA	NA
-mouse_visual_cortex	seqFISH	class	Endothelial Cell	NA	NA
-mouse_visual_cortex	seqFISH	class	Astrocyte	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.2	NA	NA
-mouse_visual_cortex	seqFISH	class	Microglia	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.1	NA	NA
-pbmc_10x	scMultiome	celltype	naive CD4 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	memory CD4 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	non-classical monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	naive CD8 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	CD56 (bright) NK cells	NA	NA
-pbmc_10x	scMultiome	celltype	classical monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	effector CD8 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	myeloid DC	NA	NA
-pbmc_10x	scMultiome	celltype	intermediate monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	memory B cells	NA	NA
-pbmc_10x	scMultiome	celltype	MAIT T cells	NA	NA
-pbmc_10x	scMultiome	celltype	CD56 (dim) NK cells	NA	NA
-pbmc_10x	scMultiome	celltype	naive B cells	NA	NA
-pbmc_10x	scMultiome	celltype	plasmacytoid DC	NA	NA
+1	macrophage_differentiation	SCoPE2	celltype	Macrophage	CL:0000235	macrophage
+2	macrophage_differentiation	SCoPE2	celltype	Monocyte	CLO:0009465	U-937 cell
+3	mouse_gastrulation	scNMT	lineage	Epiblast	NA	NA
+4	mouse_gastrulation	scNMT	lineage	Mesoderm	NA	NA
+5	mouse_gastrulation	scNMT	lineage	Primitive_Streak	NA	NA
+6	mouse_gastrulation	scNMT	lineage	Ectoderm	NA	NA
+7	mouse_gastrulation	scNMT	lineage	Endoderm	NA	NA
+8	mouse_gastrulation	scNMT	lineage	ExE_ectoderm	NA	NA
+9	mouse_gastrulation	scNMT	lineage	Visceral_endoderm	NA	NA
+10	mouse_gastrulation	scNMT	lineage	Primitive_endoderm	NA	NA
+11	mouse_visual_cortex	seqFISH	class	Glutamatergic Neuron	NA	NA
+12	mouse_visual_cortex	seqFISH	class	GABA-ergic Neuron	NA	NA
+13	mouse_visual_cortex	seqFISH	class	Oligodendrocyte.3	NA	NA
+14	mouse_visual_cortex	seqFISH	class	Endothelial Cell	NA	NA
+15	mouse_visual_cortex	seqFISH	class	Astrocyte	NA	NA
+16	mouse_visual_cortex	seqFISH	class	Oligodendrocyte.2	NA	NA
+17	mouse_visual_cortex	seqFISH	class	Microglia	NA	NA
+18	mouse_visual_cortex	seqFISH	class	Oligodendrocyte.1	NA	NA
+19	pbmc_10x	scMultiome	celltype	naive CD4 T cells	NA	NA
+20	pbmc_10x	scMultiome	celltype	memory CD4 T cells	NA	NA
+21	pbmc_10x	scMultiome	celltype	non-classical monocytes	NA	NA
+22	pbmc_10x	scMultiome	celltype	naive CD8 T cells	NA	NA
+23	pbmc_10x	scMultiome	celltype	CD56 (bright) NK cells	NA	NA
+24	pbmc_10x	scMultiome	celltype	classical monocytes	NA	NA
+25	pbmc_10x	scMultiome	celltype	effector CD8 T cells	NA	NA
+26	pbmc_10x	scMultiome	celltype	myeloid DC	NA	NA
+27	pbmc_10x	scMultiome	celltype	intermediate monocytes	NA	NA
+28	pbmc_10x	scMultiome	celltype	memory B cells	NA	NA
+29	pbmc_10x	scMultiome	celltype	MAIT T cells	NA	NA
+30	pbmc_10x	scMultiome	celltype	CD56 (dim) NK cells	NA	NA
+31	pbmc_10x	scMultiome	celltype	naive B cells	NA	NA
+32	pbmc_10x	scMultiome	celltype	plasmacytoid DC	NA	NA
