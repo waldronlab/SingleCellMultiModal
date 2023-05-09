@@ -156,6 +156,9 @@
 #'     data version required.
 #' @param dry.run logical(1) Whether to return the dataset names before actual
 #'     download (default TRUE)
+#' @param filtered logical(1) indicating if the returned dataset needs to 
+#'     have filtered cells.
+#'     See Details for additional information about the filtering process.
 #'
 #' @param verbose logical(1) Whether to show the dataset currently being
 #'     (down)loaded (default TRUE)
@@ -166,8 +169,26 @@
 #' @param DataClass either MultiAssayExperiment or SingleCellExperiment
 #' data classes can be returned (default MultiAssayExperiment)
 #'
+#' @details 
+#' If `filtered` parameter is `FALSE` (default), the colData of the returned
+#' object contains three columns of TRUE/FALSE indicating the cells to be 
+#' discarded.
+#' Column `adt.discard` indicates the cells to be discarded computed on the ADT
+#' assay.
+#' Column `mito.discard` indicates the cells to be discarded computed on the 
+#' RNA assay and mitocondrial genes. 
+#' Column `discard` combines the previous columns with an `OR` operator.
+#' Cell filtering has been computed for `cord_blood` and `peripheral_blood`
+#' datasets following section 12.3 of the Advanced Single-Cell Analysis with 
+#' Bioconductor book.
+#' Executed code can be retrieved in the CITEseq_filtering.R script of this 
+#' package.
+#' 
 #' @return A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-#'     informative `data.frame` when `dry.run` is `TRUE`
+#'     informative `data.frame` when `dry.run` is `TRUE`.
+#'     When `DataClass` is `SingleCellExperiment` an object of this class
+#'     is returned with an RNA assay as main experiment and other assay(s) 
+#'     as `AltExp(s)`.
 #' @references Stoeckius et al. (2017), Mimitou et al. (2019)
 #' @export
 #'
@@ -176,7 +197,7 @@
 #' mae <- CITEseq(DataType="cord_blood", dry.run=FALSE)
 #' experiments(mae)
 CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
-                version="1.0.0", dry.run=TRUE, verbose=TRUE, 
+                version="1.0.0", dry.run=TRUE, filtered=FALSE, verbose=TRUE, 
                 DataClass=c("MultiAssayExperiment", "SingleCellExperiment"),
                 ...)
 {
@@ -194,7 +215,9 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
             ## Add here other CITE-seq datasets based on DataType identifier
             { stop("Unrecognized CITE-seq dataset name: ", DataType) }
         )
-        
+        if (filtered==TRUE) {
+            sampleMap(mae) <- sampleMap(mae)[!colData(mae)$discard, ]
+        }
         if(dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
         return(mae)
     } else {
@@ -257,7 +280,8 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         l <- list(scalt)
         names(l) <- name
         sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                          altExps=l)
+                                                          altExps=l,
+                                                          colData=colData(mae)[!duplicated(colData(mae)),])
     } else { ## case length 1
         if(length(grep("scADT", names(mae)))!=0)
         {
