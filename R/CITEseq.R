@@ -1,11 +1,13 @@
 .cord_blood <- function(ess_list)
 {
+    idx <- grep(pattern="_Counts", names(ess_list$experiments))
     names(ess_list$experiments) <- gsub("_Counts", "", names(ess_list$experiments))
-    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments))
+    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments[idx]))
     coldat <- sampleMap(mae)[,-c(1:2), drop=FALSE]
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
-    colData(mae) <- coldat
+    cd <- ess_list$experiments[-idx]
+    colData(mae) <- cbind.DataFrame(coldat, cd)
     return(mae)
 }
 
