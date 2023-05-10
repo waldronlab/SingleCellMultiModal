@@ -49,11 +49,13 @@
                                           names(explist)[assIdx[2]]),
                                      dimslist[assIdx][[2]][2]), 
                                  colnames(explist[[assIdx[2]]])))
+        rownames(m1) <- rownames(explist[[assIdx[[1]]]])
     } else {
         colnames(m1) <- paste0(rep(gsub("scADT|scHTO|scRNA","", 
                                         names(explist)[assIdx[1]]),
                                    dimslist[assIdx][[1]][2]), 
                                colnames(explist[[assIdx[1]]]))
+        rownames(m1) <- rownames(explist[[assIdx[[1]]]])
     }
     return(m1)
 }
