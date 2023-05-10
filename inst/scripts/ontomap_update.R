@@ -36,7 +36,7 @@ onto$ontology_cell_name <- cellontokelly$ontology_cell_name
 
 # cbind.data.frame(onto[,c("DataType", "ontology_ID", "ontology_cell_name")], 
 #                  cellontokelly[,c("dataset_name","ontology_ID", "ontology_cell_name")])
-# write.table(cbind.data.frame(onto, cellontokelly), file="check.tsv",sep="\t", row.names=FALSE)
+# write.table(cbind.data.frame(onto, cellontokelly), file="~/Downloads/check.tsv",sep="\t", row.names=FALSE)
 # 
 
 ## writing
