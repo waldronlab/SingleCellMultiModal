@@ -215,7 +215,7 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
             ## Add here other CITE-seq datasets based on DataType identifier
             { stop("Unrecognized CITE-seq dataset name: ", DataType) }
         )
-        if (filtered==TRUE) {
+        if (filtered) {
             sampleMap(mae) <- sampleMap(mae)[!colData(mae)$discard, ]
         }
         if(dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
