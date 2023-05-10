@@ -79,13 +79,11 @@
         x <- x[order(rownames(x)),]
     })
     
-    
     dims <- lapply(ll, dim)
     # expslist <- vector("list", length(ll))
     # sampmap <- DataFrame()
     exps <- lapply(c("scADT", "scHTO", "scRNA"), function(assayn)
     {
-        print(assayn)
         if ( !isEmpty(grep(assayn, names(ll))) )
         {
             assmat <- .combMatrixForAssay(explist=ll, dimslist=dims, assayId=assayn)
