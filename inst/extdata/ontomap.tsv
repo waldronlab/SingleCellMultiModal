@@ -1,33 +1,33 @@
 DataType	function_name	original_column_name	original_cell_name	ontology_ID	ontology_cell_name
-macrophage_differentiation	SCoPE2	celltype	Macrophage	CL:0000235	macrophage
-macrophage_differentiation	SCoPE2	celltype	Monocyte	CLO:0009465	U-937 cell
-mouse_gastrulation	scNMT	lineage	Epiblast	NA	NA
-mouse_gastrulation	scNMT	lineage	Mesoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Primitive_Streak	NA	NA
-mouse_gastrulation	scNMT	lineage	Ectoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Endoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	ExE_ectoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Visceral_endoderm	NA	NA
-mouse_gastrulation	scNMT	lineage	Primitive_endoderm	NA	NA
-mouse_visual_cortex	seqFISH	class	Glutamatergic Neuron	NA	NA
-mouse_visual_cortex	seqFISH	class	GABA-ergic Neuron	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.3	NA	NA
-mouse_visual_cortex	seqFISH	class	Endothelial Cell	NA	NA
-mouse_visual_cortex	seqFISH	class	Astrocyte	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.2	NA	NA
-mouse_visual_cortex	seqFISH	class	Microglia	NA	NA
-mouse_visual_cortex	seqFISH	class	Oligodendrocyte.1	NA	NA
-pbmc_10x	scMultiome	celltype	naive CD4 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	memory CD4 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	non-classical monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	naive CD8 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	CD56 (bright) NK cells	NA	NA
-pbmc_10x	scMultiome	celltype	classical monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	effector CD8 T cells	NA	NA
-pbmc_10x	scMultiome	celltype	myeloid DC	NA	NA
-pbmc_10x	scMultiome	celltype	intermediate monocytes	NA	NA
-pbmc_10x	scMultiome	celltype	memory B cells	NA	NA
-pbmc_10x	scMultiome	celltype	MAIT T cells	NA	NA
-pbmc_10x	scMultiome	celltype	CD56 (dim) NK cells	NA	NA
-pbmc_10x	scMultiome	celltype	naive B cells	NA	NA
-pbmc_10x	scMultiome	celltype	plasmacytoid DC	NA	NA
+macrophage_differentiation	SCoPE2	celltype	Macrophage	NCIT:C12558	Macrophage
+macrophage_differentiation	SCoPE2	celltype	Monocyte	NCIT:C12547	Monocyte
+mouse_gastrulation	scNMT	lineage	Epiblast	NCIT:C34164	Epiblast
+mouse_gastrulation	scNMT	lineage	Mesoderm	NCIT:C12750	Mesoderm
+mouse_gastrulation	scNMT	lineage	Primitive_Streak	NCIT:C28402	Primitive_Streak
+mouse_gastrulation	scNMT	lineage	Ectoderm	NCIT:C12703	Ectoderm
+mouse_gastrulation	scNMT	lineage	Endoderm	NCIT:C12706	Endoderm
+mouse_gastrulation	scNMT	lineage	ExE_ectoderm	NCIT:C12703	Ectoderm
+mouse_gastrulation	scNMT	lineage	Visceral_endoderm	UBERON:0004877	visceral endoderm
+mouse_gastrulation	scNMT	lineage	Primitive_endoderm	BTO:0002123	primitive endoderm
+mouse_visual_cortex	seqFISH	class	Glutamatergic Neuron	CL:0000679	glutamatergic neuron
+mouse_visual_cortex	seqFISH	class	GABA-ergic Neuron	CL:0000617	GABAergic neuron
+mouse_visual_cortex	seqFISH	class	Oligodendrocyte.3	CL:0000128	oligodendrocyte
+mouse_visual_cortex	seqFISH	class	Endothelial Cell	NCIT:C12865	Endothelial Cell
+mouse_visual_cortex	seqFISH	class	Astrocyte	NCIT:C12477	Astrocyte
+mouse_visual_cortex	seqFISH	class	Oligodendrocyte.2	CL:0000128	oligodendrocyte
+mouse_visual_cortex	seqFISH	class	Microglia	NCIT:C12616	Microglia
+mouse_visual_cortex	seqFISH	class	Oligodendrocyte.1	CL:0000128	oligodendrocyte
+pbmc_10x	scMultiome	celltype	naive CD4 T cells	NCIT:C12537	CD4-Positive T-Lymphocyte
+pbmc_10x	scMultiome	celltype	memory CD4 T cells	NCIT:C97349	CD4 Positive Memory T-Lymphocyte
+pbmc_10x	scMultiome	celltype	non-classical monocytes	CL:0000875	non-classical monocyte
+pbmc_10x	scMultiome	celltype	naive CD8 T cells	ASCTB-TEMP_cd8-t-cells	cd8+ t-cells
+pbmc_10x	scMultiome	celltype	CD56 (bright) NK cells	CL:0000938	CD16-negative, CD56-bright natural killer cell
+pbmc_10x	scMultiome	celltype	classical monocytes	CL:0000860	classic monocytes
+pbmc_10x	scMultiome	celltype	effector CD8 T cells	NCIT:C126419	Effector Memory T-Lymphocyte
+pbmc_10x	scMultiome	celltype	myeloid DC	CL:0000782	myeloid dendritic cell
+pbmc_10x	scMultiome	celltype	intermediate monocytes	CL:0002393	intermediate monocyte
+pbmc_10x	scMultiome	celltype	memory B cells	CL:0000787	memory B cell
+pbmc_10x	scMultiome	celltype	MAIT T cells	NCIT:C115217	Mucosal-Associated Invariant T-Cell
+pbmc_10x	scMultiome	celltype	CD56 (dim) NK cells	CL:0000939	CD16-positive, CD56-dim natural killer cell
+pbmc_10x	scMultiome	celltype	naive B cells	CL:0000788	naive B cell
+pbmc_10x	scMultiome	celltype	plasmacytoid DC	CL:0000784	plasmacytoid dendritic cell
