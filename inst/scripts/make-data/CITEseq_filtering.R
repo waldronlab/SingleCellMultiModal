@@ -22,7 +22,7 @@ discard <- qc.stats$discard | mito.discard
 
 colData(cb) <- cbind.DataFrame(colData(cb), adt.discard=qc.stats$discard, mito.discard=mito.discard, discard=discard)
 
-scRNAseq_coldata <- colData(cb)
+scRNAseq_coldata <- as.data.frame(colData(cb))
 dir.create("cord_blood/v1.0.0/", recursive=TRUE)
 save(scRNAseq_coldata, file="cord_blood/v1.0.0/scRNAseq_coldata.rda")
 
@@ -107,9 +107,9 @@ cd$discard_CTCL <- cd$adt.discard_CTCL | cd$mito.discard_CTCL
 cd$discard <- cd$discard_CTRL | cd$discard_CTCL
 
 
-scRNAseq_coldata <- cd
+scRNAseq_coldata <- as.data.frame(cd)
 dir.create("peripheral_blood/v1.0.0/", recursive=TRUE)
-save(scRNAseq_coldata, file="peripheral_blood/v1.0.0/scRNAseq_coldata.rda")
+save(scRNAseq_coldata, file="peripheral_blood/v1.0.0/scRNAseq_coldata.Rda")
 
 
 
