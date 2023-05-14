@@ -60,6 +60,15 @@
     return(m1)
 }
 
+.buildColData <- function(mat1, assayId)
+{
+    cd <- DataFrame(
+        colname=colnames(mat1),
+        condition=gsub("_\\w+", "", colnames(mat1))
+    )
+    return(cd)
+}
+
 .buildMap <- function(mat1, assayId)
 {
     map <- DataFrame(assay=assayId,
@@ -74,6 +83,13 @@
 .peripheral_blood <- function(ess_list)
 {
     ll <- ess_list$experiments
+    cdidx <- grep("coldata", names(ll))
+    cd <- NULL
+    if (length(cdidx)!=0) 
+    {
+        cd <- ll[[cdidx]]
+        ll <- ess_list$experiments[-cdidx]
+    }
     ll <- lapply(ll, function(x)
     {
         x <- x[order(rownames(x)),]
@@ -94,12 +110,15 @@
     names(exps) <- unlist(lapply(exps, function(e){e$NAME}))
     expslist <- lapply(exps, function(e){e$EXP})
     sampmap <- do.call("rbind", lapply(exps, function(e){e$SAMP}))
-    
-    #coldat <- .buildColDat(ll)
-    coldat <- sampmap[,-c(1:2)]
-    colnames(coldat) <- c("sampleID", "condition")
-    rownames(coldat) <- coldat$sampleID
-    coldat <- unique(coldat)
+    if (is.null(cd)) {
+        coldat <- .buildColData(ll)
+        coldat <- sampmap[,-c(1:2)]
+        colnames(coldat) <- c("sampleID", "condition")
+        rownames(coldat) <- coldat$sampleID
+        coldat <- unique(coldat)
+    } else {
+        coldat <- cd
+    }
     mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist, 
                                                       sampleMap=sampmap, 
                                                       colData=coldat)
@@ -170,14 +189,20 @@
 #' data classes can be returned (default MultiAssayExperiment)
 #'
 #' @details 
-#' If `filtered` parameter is `FALSE` (default), the colData of the returned
-#' object contains three columns of TRUE/FALSE indicating the cells to be 
+#' If `filtered` parameter is `FALSE` (default), the `colData` of the returned
+#' object contains multiple columns of `logicals` indicating the cells to be 
 #' discarded.
+#' In case `filtered` is `TRUE`, the `discard` column is used to filer the 
+#' cells.
 #' Column `adt.discard` indicates the cells to be discarded computed on the ADT
 #' assay.
 #' Column `mito.discard` indicates the cells to be discarded computed on the 
 #' RNA assay and mitocondrial genes. 
 #' Column `discard` combines the previous columns with an `OR` operator.
+#' Note that for the `peripheral_blood` dataset these three columns are 
+#' computed and returned separately for the `CTCL` and `CTRL` conditions.
+#' In this case the additional `discard` column combines the `discard.CTCL` and 
+#' `discard.CTRL` columns with an `OR` operator.
 #' Cell filtering has been computed for `cord_blood` and `peripheral_blood`
 #' datasets following section 12.3 of the Advanced Single-Cell Analysis with 
 #' Bioconductor book.
@@ -227,9 +252,14 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 
 
 #' CITEseqMaeToSce
-#' @description converts a MultiAssayExperiment object with CITEseq data into
-#' a SingleCellExperiment object to be used with already known methods and
+#' @description converts a `MultiAssayExperiment` object with CITEseq data into
+#' a `SingleCellExperiment` object to be used with already known methods and
 #' packages in literature.
+#' 
+#' Note that for creating a `SingleCellExperiment` object the following function
+#' subsets all the assays present in the `MultiAssayExperiment` with only the 
+#' common cells across all the modalities.
+#' This could result in a not complete object.
 #'
 #'
 #' @param mae a MultiAssayExperiment object with scRNA and/or scADT and/or 
@@ -251,8 +281,8 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
     if(length(mae)==3)
     {
         scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-        scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
-        schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
+        scadt <- SingleCellExperiment(experiments(mae)[[grep("scADT", names(mae))]])
+        schto <- SingleCellExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
         
         commonsamp <- intersect(intersect(colnames(scrna), colnames(scadt)), colnames(schto))
         
@@ -261,16 +291,22 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         scadt <- scadt[,(colnames(scadt) %in% commonsamp)]
         
         sce <- SingleCellExperiment::SingleCellExperiment(
-            list(counts=scrna), altExps=list(scADT=scadt, scHTO=schto)
+            list(counts=scrna), 
+            altExps=list(scADT=scadt, scHTO=schto)
         )
+        cd <- colData(mae)
+        idxcd <- which(commonsamp %in% rownames(cd))
+        cdcs <- cd[idxcd,]
+        
+        colData(sce) <- cdcs
     } else if(length(mae)==2) {
         scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
         if(length(grep("scADT", names(mae)))!=0)
         {
-            scalt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
+            scalt <- SingleCellExperiment(experiments(mae)[[grep("scADT", names(mae))]])
             name <- "scADT"
         } else {
-            scalt <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
+            scalt <- SingleCellExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
             name <- "scHTO"
         }
         commonsamp <- intersect(colnames(scrna), colnames(scalt))
@@ -293,10 +329,10 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         } else if(length(grep("scRNA", names(mae)))!=0) {
             scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
             sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna))
-        } else if(length(grep("scHTO", names(mae)))!=0) {
-            schto <- experiments(mae)[[grep("scHTO", names(mae))]]
-            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=schto))
         }
+        cd <- colData(mae)
+        idxcd <- unlist(which(colnames(sce) %in% rownames(cd)))
+        colData(sce) <- cd[idxcd,]
     }
     
     return(sce)

@@ -22,6 +22,9 @@ discard <- qc.stats$discard | mito.discard
 
 colData(cb) <- cbind.DataFrame(colData(cb), adt.discard=qc.stats$discard, mito.discard=mito.discard, discard=discard)
 
+scRNAseq_coldata <- colData(cb)
+dir.create("cord_blood/v1.0.0/", recursive=TRUE)
+save(scRNAseq_coldata, file="cord_blood/v1.0.0/scRNAseq_coldata.rda")
 
 ## Alternatively it is possible to indicate two or more ADTs that should 
 ## be expressed alternatively in a cell.
@@ -34,10 +37,14 @@ colData(cb) <- cbind.DataFrame(colData(cb), adt.discard=qc.stats$discard, mito.d
 
 library(SingleCellExperiment)
 library(DropletUtils)
-pb <- CITEseq("peripheral_blood", dry.run=FALSE, DataClass="SingleCellExperiment")
-adt <- SingleCellExperiment(assays=list(counts=assays(altExp(pb))[[1]]))
+mae <- CITEseq("peripheral_blood", dry.run=FALSE)#, DataClass="SingleCellExperiment")
+adt <- SingleCellExperiment(assays=list(counts=mae[["scADT"]]))
+pb <-  SingleCellExperiment(assays=list(counts=mae[["scRNA"]]))
+cn <- colnames(adt)
 condition <- unlist(lapply(strsplit(colnames(adt), "_"), function(x) x[1]))
-colData(adt) <- DataFrame("barcodes"=colnames(adt), "condition"=condition)
+bc <- unlist(lapply(strsplit(colnames(adt), "_"), function(x) x[2]))
+colData(adt) <- DataFrame("barcodes"=bc, "condition"=condition)
+colnames(adt) <- cn
 
 adt.rm <- adt[-c(3,52),]
 
@@ -66,37 +73,46 @@ qc.statscl <- cleanTagCounts(adtcl)#, exclusive=c("CD3", "CD19"))
 summary(qc.statscl$high.ambient) # libraries removed with high am
 
 library(scater)
+cn <- colnames(pb)
 condition <- unlist(lapply(strsplit(colnames(pb), "_"), function(x) x[1]))
-colData(pb) <- DataFrame("barcodes"=colnames(pb), "condition"=condition)
+bc <- unlist(lapply(strsplit(colnames(pb), "_"), function(x) x[2]))
+colData(pb) <- DataFrame("barcodes"=bc, "condition"=condition)
+colnames(pb) <- cn
 pbcr <- pb[,pb$condition=="CTRL"]
 pbcl <- pb[,pb$condition=="CTCL"]
 mito <- grep("mt-", tolower(rownames(pb)))
 dfcr <- perCellQCMetrics(pbcr, subsets=list(Mito=mito))
 dfcl <- perCellQCMetrics(pbcl, subsets=list(Mito=mito))
 mito.discardcr <- isOutlier(dfcr$subsets_Mito_percent, type="higher")
+names(mito.discardcr) <- rownames(dfcr)
 summary(mito.discardcr)
 
 mito.discardcl <- isOutlier(dfcl$subsets_Mito_percent, type="higher")
+names(mito.discardcl) <- rownames(dfcl)
 summary(mito.discardcl)
 
+cd <- colData(mae)
+cd
+cd$adt.discard_CTRL <- FALSE
+cd$adt.discard_CTRL[which(rownames(cd) %in% rownames(qc.statscr)[qc.statscr$discard])] <- TRUE
+cd$adt.discard_CTCL <- FALSE
+cd$adt.discard_CTCL[which(rownames(cd) %in% rownames(qc.statscl)[qc.statscl$discard])] <- TRUE
 
-discardcr <- qc.statscr$discard | mito.discardcr
-discardcl <- qc.statscl$discard | mito.discardcl
+cd$mito.discard_CTRL <- FALSE
+cd$mito.discard_CTRL[which(rownames(cd) %in% names(mito.discardcr)[mito.discardcr])] <- TRUE
+cd$mito.discard_CTCL <- FALSE
+cd$mito.discard_CTCL[which(rownames(cd) %in% names(mito.discardcl)[mito.discardcl])] <- TRUE
+cd$discard_CTRL <- cd$adt.discard_CTRL | cd$mito.discard_CTRL
+cd$discard_CTCL <- cd$adt.discard_CTCL | cd$mito.discard_CTCL
+cd$discard <- cd$discard_CTRL | cd$discard_CTCL
 
-tctrl <- rep(FALSE, dim(pbcl)[2])
-length(tctrl)
-tctcl <- rep(FALSE, dim(pbcr)[2])
-length(tctcl)
 
-discard <- c(discardcr, discardcl)
+scRNAseq_coldata <- cd
+dir.create("peripheral_blood/v1.0.0/", recursive=TRUE)
+save(scRNAseq_coldata, file="peripheral_blood/v1.0.0/scRNAseq_coldata.rda")
 
-colData(pb) <- cbind.DataFrame(colData(pb), 
-    adt.discard.CTCL=c(qc.statscl$discard, tctcl), 
-    mito.discard.CTCL=c(mito.discardcl, tctcl),
-    adt.discard.CTRL=c(tctrl, qc.statscr$discard), 
-    mito.discard.CTRL=c(tctrl, mito.discardcr),
-    discard=discard)
 
-sum(c(qc.statscl$discard, tctcl))
-sum(c(mito.discardcl, tctcl))
+
+
+
 
