@@ -82,12 +82,9 @@
 
 #' Single-cell Multiome ATAC + Gene Expression
 #'
-#' @description scMultiome currently allows users to download 10K Peripheral
-#' Blood Mononuclear Cells provided by
-#' [10x Genomics website](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets)
-#' (`DataType = "pbmc_10x"`).
-#' This technology enables simultaneous profiling of the transcriptome (using
-#' 3’ gene expression) and epigenome (using ATAC-seq) from single cells to
+#' @description 10x Genomics Multiome technology enables simultaneous profiling 
+#' of the transcriptome (using 3’ gene expression) and epigenome 
+#' (using ATAC-seq) from single cells to
 #' deepen our understanding of how genes are expressed and regulated across
 #' different cell types. Data prepared by Ricard Argelaguet.
 #'
@@ -95,6 +92,11 @@
 #'     as the internal data representation. The `MTX` (Matrix Market)
 #'     format allows users to load a sparse `dgCMatrix` representation.
 #'     Choosing `HDF5` gives users a sparse `HDF5Array` class object.
+#'     \itemize{pbmc_10x:} 10K Peripheral Blood Mononuclear Cells provided by
+#' [10x Genomics website](https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets)
+#'      Cell quality control filters are available in the object `colData`
+#'      together with the `celltype` annotation labels.
+#'     
 #'
 #' @inheritParams scNMT
 #'

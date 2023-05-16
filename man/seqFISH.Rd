@@ -59,6 +59,8 @@ seq FISH data are a combination of single cell spatial coordinates
         of Emerging Biological Data Types 2020 Workshop)
         The returned seqFISH data are always the processed ones for the same
         workshop.
+        Additionally, cell types annotations are available in the `colData`
+        through the `class` column in the seqFISH `assay`.
         \itemize{
             \item{scRNA_Counts} - Tasic scRNA-seq gene count matrix
             \item{scRNA_Labels} - Tasic scRNA-seq cell labels

@@ -51,16 +51,17 @@ The article provides more information about the data
 acquisition and pre-processing.
 }
 \details{
-The SCoPE2 study combined scRNA-seq (transcriptome) and
-single-cell proteomics. The cells are monocytes that undergo
-macrophage differentiation. No annotation is available for the
-transcriptome data, but batch and cell type annotations are
-available for the proteomics data. The transcriptomics and
-proteomics data were not measured from the same cells but from
-a distinct set of cell cultures.
+The SCoPE2 study combines scRNA-seq (transcriptome) and
+single-cell proteomics.
 
 \itemize{
-\item{SCoPE2:}
+\item{macrophage_differentiation:} the cells are monocytes that undergo
+macrophage differentiation. No annotation is available for the
+transcriptome data, but batch and cell type annotations are
+available for the proteomics data in the \code{celltype} \code{colData} column.
+The transcriptomics and proteomics data were not measured from the same
+cells but from a distinct set of cell cultures.
+This dataset provides already filtered bad quality cells.
 \itemize{
 \item{scRNAseq1} - single-cell transcriptome (batch 1)
 \item{scRNAseq2} - single-cell transcriptome (batch 2)

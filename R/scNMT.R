@@ -15,7 +15,11 @@
 #'   information, see Reik et al. (2018) DOI: 10.1038/s41467-018-03149-4
 #'
 #'   \itemize{
-#'       \item{mouse_gastrulation:}
+#'       \item{mouse_gastrulation: }
+#'       this dataset provides cell quality control filters in the object 
+#'       `colData` starting from version 2.0.0.
+#'       Additionally, cell types annotations are provided through the `lineage`
+#'       `colData` column.
 #'       \itemize{
 #'           \item{rna} - RNA-seq
 #'           \item{acc_*} - chromatin accessibility
