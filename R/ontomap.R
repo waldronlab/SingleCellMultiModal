@@ -7,8 +7,11 @@
 #'   package. If missing, a map of all cell types in each function will
 #'   be provided.
 #'
-#' @return A `data.frame` of metadata regarding the cell types and ontologies,
-#'   if any.
+#' @details
+#' Note that `CITEseq` does not have any cell annotations; therefore, no entries
+#' are present in the `ontomap`.
+#'
+#' @return A `data.frame` of metadata with cell types and ontologies
 #'
 #' @examples
 #'

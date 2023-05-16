@@ -19,6 +19,10 @@ A `data.frame` of metadata regarding the cell types and ontologies,
 The `ontomap` function provides a mapping of all the cell names across the
 all the data sets or for a specified data set.
 }
+\details{
+Note that `CITEseq` does not have any cell annotations; therefore, no entries
+are present in the `ontomap`.
+}
 \examples{
 
 ontomap(dataset = "scNMT")

@@ -20,7 +20,7 @@
 #'   same cell. For more information, see Macaulay et al. (2015).
 #'   \itemize{
 #'       \item{mouse_embryo_8_cell:}
-#'       this dataset have already removed bad cells as specified in Macaulay 
+#'       this dataset was filtered for bad cells as specified in Macaulay
 #'       et al. (2015).
 #'       \itemize{
 #'           \item{genomic} - integer copy numbers as detected from scDNA-seq
