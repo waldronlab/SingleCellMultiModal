@@ -7,7 +7,7 @@
 .CITEseqMaeToSce(mae)
 }
 \arguments{
-\item{mae}{a MultiAssayExperiment object with scRNA and/or scADT and/or
+\item{mae}{a MultiAssayExperiment object with scRNA and/or scADT and/or 
 scHTO named experiments.}
 }
 \value{

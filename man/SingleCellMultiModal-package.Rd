@@ -28,6 +28,7 @@ Authors:
   \item Ricard Argelaguet \email{ricard@ebi.ac.uk}
   \item Dario Righelli \email{dario.righelli@gmail.com}
   \item Kelly Eckenrode \email{kelly.eckenrode@sph.cuny.edu}
+  \item Ludwig Geistlinger \email{ludwig_geistlinger@hms.harvard.edu}
   \item Levi Waldron \email{lwaldron.research@gmail.com}
 }
 

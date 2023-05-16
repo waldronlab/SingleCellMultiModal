@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
-Version: 1.13.0
+Version: 1.13.3
 Authors@R: c(
     person(given = "Marcel", family = "Ramos",
         role = c("aut", "cre"), email = "marcel.ramos@roswellpark.org",
@@ -30,8 +30,8 @@ Depends:
     MultiAssayExperiment
 Imports:
     AnnotationHub,
+    BiocBaseUtils,
     BiocFileCache,
-    BiocGenerics,
     ExperimentHub,
     HDF5Array,
     S4Vectors,

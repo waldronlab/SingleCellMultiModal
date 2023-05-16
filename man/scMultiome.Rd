@@ -41,12 +41,9 @@ download (default TRUE)}
 A 10X PBMC \code{MultiAssayExperiment} object
 }
 \description{
-scMultiome currently allows users to download 10K Peripheral
-Blood Mononuclear Cells provided by
-\href{https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets}{10x Genomics website}
-(\code{DataType = "pbmc_10x"}).
-This technology enables simultaneous profiling of the transcriptome (using
-3’ gene expression) and epigenome (using ATAC-seq) from single cells to
+10x Genomics Multiome technology enables simultaneous profiling
+of the transcriptome (using 3’ gene expression) and epigenome
+(using ATAC-seq) from single cells to
 deepen our understanding of how genes are expressed and regulated across
 different cell types. Data prepared by Ricard Argelaguet.
 }
@@ -55,6 +52,10 @@ Users are able to choose from either an \code{MTX} or \code{HDF5} file format
 as the internal data representation. The \code{MTX} (Matrix Market)
 format allows users to load a sparse \code{dgCMatrix} representation.
 Choosing \code{HDF5} gives users a sparse \code{HDF5Array} class object.
+\itemize{pbmc_10x:} 10K Peripheral Blood Mononuclear Cells provided by
+\href{https://support.10xgenomics.com/single-cell-multiome-atac-gex/datasets}{10x Genomics website}
+Cell quality control filters are available in the object \code{colData}
+together with the \code{celltype} annotation labels.
 }
 \examples{
 

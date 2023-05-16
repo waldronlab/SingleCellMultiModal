@@ -2,13 +2,14 @@
 % Please edit documentation in R/CITEseq.R
 \name{CITEseq}
 \alias{CITEseq}
-\title{Single-Cell Gene Expression + Protein Surface}
+\title{CITEseq}
 \usage{
 CITEseq(
   DataType = c("cord_blood", "peripheral_blood"),
   modes = "*",
   version = "1.0.0",
   dry.run = TRUE,
+  filtered = FALSE,
   verbose = TRUE,
   DataClass = c("MultiAssayExperiment", "SingleCellExperiment"),
   ...
@@ -27,6 +28,10 @@ data version required.}
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
 
+\item{filtered}{logical(1) indicating if the returned dataset needs to 
+have filtered cells.
+See Details for additional information about the filtering process.}
+
 \item{verbose}{logical(1) Whether to show the dataset currently being
 (down)loaded (default TRUE)}
 
@@ -37,14 +42,16 @@ data classes can be returned (default MultiAssayExperiment)}
 \link[ExperimentHub]{ExperimentHub-class} constructor}
 }
 \value{
-A single cell multi-modal \linkS4class{MultiAssayExperiment}/
-\linkS4class{SingleCellExperiment} or informative `data.frame` when `dry.run`
- is `TRUE`
+A single cell multi-modal \linkS4class{MultiAssayExperiment} or
+    informative `data.frame` when `dry.run` is `TRUE`.
+    When `DataClass` is `SingleCellExperiment` an object of this class
+    is returned with an RNA assay as main experiment and other assay(s) 
+    as `AltExp(s)`.
 }
 \description{
-CITEseq function assembles data on-the-fly from `ExperimentHub`
-    to provide a \linkS4class{MultiAssayExperiment} container. 
-    The `DataType` argument provides access to the available datasets
+function assembles data on-the-fly from `ExperimentHub`
+    to provide a \linkS4class{MultiAssayExperiment} container. Actually
+    the `dataType` argument provides access to the available datasets
     associated to the package.
 }
 \details{
@@ -61,28 +68,41 @@ CITEseq data are a combination of single cell transcriptomics and
             }
      }
      \itemize{
-        \item{peripheral_blood: } a dataset of single cells of peripheral
+        \item{peripheral_blood: } a dataset of single cells of peripheral 
         blood as provided in Mimitou et al. (2019).
-        We provide two different conditions controls (CTRL) and
+        We provide two different conditions controls (CTRL) and 
         Cutaneous T-cell Limphoma (CTCL).
-        Just build appropriate \code{modes} regex for subselecting the
-        dataset modes.
+        Just build appropriate \code{modes} regex for subselecting the 
+        dataset modes. 
          \itemize{
             \item{scRNA} - Mimitou scRNA-seq gene count matrix
             \item{scADT} - Mimitou antibody-derived tags (ADT) data
             \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
-            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta
+            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
             available through the object metadata.
-            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta
+            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
             available through the object metadata.
             }
      }
+
+If `filtered` parameter is `FALSE` (default), the colData of the returned
+object contains three columns of TRUE/FALSE indicating the cells to be 
+discarded.
+Column `adt.discard` indicates the cells to be discarded computed on the ADT
+assay.
+Column `mito.discard` indicates the cells to be discarded computed on the 
+RNA assay and mitocondrial genes. 
+Column `discard` combines the previous columns with an `OR` operator.
+Cell filtering has been computed for `cord_blood` and `peripheral_blood`
+datasets following section 12.3 of the Advanced Single-Cell Analysis with 
+Bioconductor book.
+Executed code can be retrieved in the CITEseq_filtering.R script of this 
+package.
 }
 \examples{
 
 mae <- CITEseq(DataType="cord_blood", dry.run=FALSE)
 experiments(mae)
-
 }
 \references{
 Stoeckius et al. (2017), Mimitou et al. (2019)
