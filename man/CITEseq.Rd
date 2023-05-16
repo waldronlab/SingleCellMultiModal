@@ -9,6 +9,7 @@ CITEseq(
   modes = "*",
   version = "1.0.0",
   dry.run = TRUE,
+  filtered = FALSE,
   verbose = TRUE,
   DataClass = c("MultiAssayExperiment", "SingleCellExperiment"),
   ...
@@ -27,6 +28,10 @@ data version required.}
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
 
+\item{filtered}{logical(1) indicating if the returned dataset needs to 
+have filtered cells.
+See Details for additional information about the filtering process.}
+
 \item{verbose}{logical(1) Whether to show the dataset currently being
 (down)loaded (default TRUE)}
 
@@ -38,7 +43,10 @@ data classes can be returned (default MultiAssayExperiment)}
 }
 \value{
 A single cell multi-modal \linkS4class{MultiAssayExperiment} or
-    informative `data.frame` when `dry.run` is `TRUE`
+    informative `data.frame` when `dry.run` is `TRUE`.
+    When `DataClass` is `SingleCellExperiment` an object of this class
+    is returned with an RNA assay as main experiment and other assay(s) 
+    as `AltExp(s)`.
 }
 \description{
 function assembles data on-the-fly from `ExperimentHub`
@@ -76,6 +84,20 @@ CITEseq data are a combination of single cell transcriptomics and
             available through the object metadata.
             }
      }
+
+If `filtered` parameter is `FALSE` (default), the colData of the returned
+object contains three columns of TRUE/FALSE indicating the cells to be 
+discarded.
+Column `adt.discard` indicates the cells to be discarded computed on the ADT
+assay.
+Column `mito.discard` indicates the cells to be discarded computed on the 
+RNA assay and mitocondrial genes. 
+Column `discard` combines the previous columns with an `OR` operator.
+Cell filtering has been computed for `cord_blood` and `peripheral_blood`
+datasets following section 12.3 of the Advanced Single-Cell Analysis with 
+Bioconductor book.
+Executed code can be retrieved in the CITEseq_filtering.R script of this 
+package.
 }
 \examples{
 
