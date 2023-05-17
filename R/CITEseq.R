@@ -7,7 +7,7 @@
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
     cd <- ess_list$experiments[-idx]
-    colData(mae) <- cbind.DataFrame(coldat, cd)
+    colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
     return(mae)
 }
 
