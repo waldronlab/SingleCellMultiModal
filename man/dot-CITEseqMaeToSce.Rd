@@ -7,7 +7,7 @@
 .CITEseqMaeToSce(mae)
 }
 \arguments{
-\item{mae}{a MultiAssayExperiment object with scRNA and/or scADT and/or 
+\item{mae}{a MultiAssayExperiment object with scRNA and/or scADT and/or
 scHTO named experiments.}
 }
 \value{
@@ -16,8 +16,13 @@ and scADT, scHTO data as altExps.
 If only one modality is present, it has returned as main assay of the SCE.
 }
 \description{
-converts a MultiAssayExperiment object with CITEseq data into
-a SingleCellExperiment object to be used with already known methods and
+converts a `MultiAssayExperiment` object with CITEseq data into
+a `SingleCellExperiment` object to be used with already known methods and
 packages in literature.
+
+Note that for creating a `SingleCellExperiment` object the following function
+subsets all the assays present in the `MultiAssayExperiment` with only the
+common cells across all the modalities.
+This could result in a not complete object.
 }
 \keyword{internal}
