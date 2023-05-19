@@ -12,8 +12,7 @@ package. If missing, a map of all cell types in each function will
 be provided.}
 }
 \value{
-A `data.frame` of metadata regarding the cell types and ontologies,
-  if any.
+A `data.frame` of metadata with cell types and ontologies
 }
 \description{
 The `ontomap` function provides a mapping of all the cell names across the
