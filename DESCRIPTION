@@ -3,19 +3,18 @@ Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
 Version: 1.13.5
 Authors@R: c(
-    person(given = "Marcel", family = "Ramos",
-        role = c("aut", "cre"), email = "marcel.ramos@roswellpark.org",
-        comment = c(ORCID = "0000-0002-3242-0582")),
-    person(given = "Ricard", family = "Argelaguet",
-        role = "aut", email = "ricard@ebi.ac.uk"),
-    person(given = "Dario", family = "Righelli",
-        role = "aut", email = "dario.righelli@gmail.com"),
-    person(given = "Kelly", family = "Eckenrode",
-        role = "aut", email = "kelly.eckenrode@sph.cuny.edu"),
-    person(given = "Ludwig", family = "Geistlinger",
-        role = "aut", email = "ludwig_geistlinger@hms.harvard.edu"),
-    person(given = "Levi", family = "Waldron",
-        role = "aut", email = "lwaldron.research@gmail.com")
+    person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
+        c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
+    ),
+    person("Ricard", "Argelaguet", , "ricard@ebi.ac.uk", "aut"),
+    person("Al", "Abadi", , , "ctb"),
+    person("Dario", "Righelli", , "dario.righelli@gmail.com", "aut"),
+    person("Christophe", "Vanderaa", ,
+        "christophe.vanderaa@uclouvain.be", "ctb"),
+    person("Kelly", "Eckenrode", , "kelly.eckenrode@sph.cuny.edu", "aut"),
+    person("Ludwig", "Geistlinger", ,
+        "ludwig_geistlinger@hms.harvard.edu", "aut"),
+    person("Levi", "Waldron", , "lwaldron.research@gmail.com", "aut")
     )
 Description: SingleCellMultiModal is an ExperimentHub package
     that serves multiple datasets obtained from GEO and other sources and
