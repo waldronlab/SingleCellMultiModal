@@ -71,7 +71,7 @@
         mtxfile <- query(ehub, mtxdata)[[1L]]
         mtxf <- .read_mtx(mtxfile)
 
-        BiocGenerics:::replaceSlots(
+        BiocBaseUtils::setSlots(
             object = se,
             assays = SummarizedExperiment::Assays(
                 S4Vectors::SimpleList(counts = mtxf)

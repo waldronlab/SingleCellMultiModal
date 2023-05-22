@@ -30,8 +30,8 @@ Depends:
     MultiAssayExperiment
 Imports:
     AnnotationHub,
+    BiocBaseUtils,
     BiocFileCache,
-    BiocGenerics,
     ExperimentHub,
     HDF5Array,
     S4Vectors,
@@ -56,4 +56,4 @@ VignetteBuilder:
 biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
     ExperimentHub, GEO
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
