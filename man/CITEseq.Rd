@@ -28,7 +28,7 @@ data version required.}
 \item{dry.run}{logical(1) Whether to return the dataset names before actual
 download (default TRUE)}
 
-\item{filtered}{logical(1) indicating if the returned dataset needs to 
+\item{filtered}{logical(1) indicating if the returned dataset needs to
 have filtered cells.
 See Details for additional information about the filtering process.}
 
@@ -45,7 +45,7 @@ data classes can be returned (default MultiAssayExperiment)}
 A single cell multi-modal \linkS4class{MultiAssayExperiment} or
     informative `data.frame` when `dry.run` is `TRUE`.
     When `DataClass` is `SingleCellExperiment` an object of this class
-    is returned with an RNA assay as main experiment and other assay(s) 
+    is returned with an RNA assay as main experiment and other assay(s)
     as `AltExp(s)`.
 }
 \description{
@@ -60,7 +60,7 @@ CITEseq data are a combination of single cell transcriptomics and
 
     Available datasets are:
     \itemize{
-        \item{cord_blood: } a dataset of single cells of cord blood as
+        \item{cord_blood:} a dataset of single cells of cord blood as
         provided in Stoeckius et al. (2017).
          \itemize{
             \item{scRNA_Counts} - Stoeckius scRNA-seq gene count matrix
@@ -68,35 +68,41 @@ CITEseq data are a combination of single cell transcriptomics and
             }
      }
      \itemize{
-        \item{peripheral_blood: } a dataset of single cells of peripheral 
+        \item{peripheral_blood: } a dataset of single cells of peripheral
         blood as provided in Mimitou et al. (2019).
-        We provide two different conditions controls (CTRL) and 
+        We provide two different conditions controls (CTRL) and
         Cutaneous T-cell Limphoma (CTCL).
-        Just build appropriate \code{modes} regex for subselecting the 
-        dataset modes. 
+        Just build appropriate \code{modes} regex for subselecting the
+        dataset modes.
          \itemize{
             \item{scRNA} - Mimitou scRNA-seq gene count matrix
             \item{scADT} - Mimitou antibody-derived tags (ADT) data
             \item{scHTO} - Mimitou Hashtag Oligo (HTO) data
-            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta  
+            \item{TCRab} - Mimitou T-cell Receptors (TCR) alpha and beta
             available through the object metadata.
-            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta  
+            \item{TCRgd} - Mimitou T-cell Receptors (TCR) gamma and delta
             available through the object metadata.
             }
      }
 
-If `filtered` parameter is `FALSE` (default), the colData of the returned
-object contains three columns of TRUE/FALSE indicating the cells to be 
+If `filtered` parameter is `FALSE` (default), the `colData` of the returned
+object contains multiple columns of `logicals` indicating the cells to be
 discarded.
+In case `filtered` is `TRUE`, the `discard` column is used to filer the
+cells.
 Column `adt.discard` indicates the cells to be discarded computed on the ADT
 assay.
-Column `mito.discard` indicates the cells to be discarded computed on the 
-RNA assay and mitocondrial genes. 
+Column `mito.discard` indicates the cells to be discarded computed on the
+RNA assay and mitocondrial genes.
 Column `discard` combines the previous columns with an `OR` operator.
+Note that for the `peripheral_blood` dataset these three columns are
+computed and returned separately for the `CTCL` and `CTRL` conditions.
+In this case the additional `discard` column combines the `discard.CTCL` and
+`discard.CTRL` columns with an `OR` operator.
 Cell filtering has been computed for `cord_blood` and `peripheral_blood`
-datasets following section 12.3 of the Advanced Single-Cell Analysis with 
+datasets following section 12.3 of the Advanced Single-Cell Analysis with
 Bioconductor book.
-Executed code can be retrieved in the CITEseq_filtering.R script of this 
+Executed code can be retrieved in the CITEseq_filtering.R script of this
 package.
 }
 \examples{

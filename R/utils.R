@@ -139,7 +139,8 @@
     fileIdx <- .conditionToIndex(
         resultModes, eh_assays, function(x) grepl(x, eh_assays)
     )
-    fileMatches <- modes_metadat[fileIdx, c("Title", "DispatchClass", "SourceVersion")]
+    fileMatches <-
+        modes_metadat[fileIdx, c("Title", "DispatchClass", "SourceVersion")]
     eh <- .test_eh(...)
 
     if (dry.run) {
