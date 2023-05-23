@@ -51,8 +51,6 @@ because it provides a familiar user experience by extending
 standard data classes present in Bioconductor such as the
 `SingleCellExperiment`.
 
-For more information on `MultiAssayExperiment`, please refer to @Ramos2017-tk.
-
 ```{r,echo=FALSE}
 imgurl <- paste0(
     "https://github.com/waldronlab/MultiAssayExperiment/blob/",
@@ -63,5 +61,10 @@ knitr::include_graphics(
     path = imgurl
 )
 ```
+
+## Further resources
+
+For more information on the `MultiAssayExperiment` data structure, please refer
+to @Ramos2017-tk as well as the [MultiAssayExperiment vignette](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
 
 # References
