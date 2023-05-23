@@ -7,7 +7,12 @@
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
     cd <- ess_list$experiments[-idx]
-    colData(mae) <- cbind.DataFrame(coldat, cd)
+    if ( !is.null(dim(cd)) ) 
+    {
+        colData(mae) <- cbind.DataFrame(coldat, cd)
+    } else {
+        colData(mae) <- coldat
+    }
     return(mae)
 }
 
