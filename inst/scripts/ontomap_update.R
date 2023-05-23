@@ -46,3 +46,29 @@ write.table(
     x = onto, file = "inst/extdata/ontomap.tsv",
     quote = FALSE, sep = "\t", row.names = FALSE
 )
+
+
+## adding celltypes for cord_blood citeseq
+## 
+load("cord_blood/v1.0.0/coldata_scRNAseq.rda")
+cd <- coldata_scRNAseq
+ct <- unique(cd$celltype)
+ct <- ct[-which(is.na(ct))]
+
+onto <- as.data.frame(
+    readr::read_tsv("inst/extdata/ontomap.tsv")
+)
+
+cn <- colnames(onto)
+ctcb <- data.frame("cord_blood", "CITEseq", "celltype", ct, NA, NA)
+colnames(ctcb) <- cn
+onton <- rbind.data.frame(onto, ctcb) 
+write.table(
+    x = onton, file = "inst/extdata/ontomap.tsv",
+    quote = FALSE, sep = "\t", row.names = FALSE
+)
+
+
+
+
+
