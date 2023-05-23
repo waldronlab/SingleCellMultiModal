@@ -7,7 +7,12 @@
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
     cd <- ess_list$experiments[-idx]
-    colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
+    if ( !is.null(dim(cd)) ) 
+    {
+        colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
+    } else {
+        colData(mae) <- coldat
+    }
     return(mae)
 }
 
@@ -148,7 +153,7 @@
 #'             }
 #'      }
 #'      \itemize{
-#'         \item{peripheral_blood: } a dataset of single cells of peripheral
+#'         \item{peripheral_blood:} a dataset of single cells of peripheral
 #'         blood as provided in Mimitou et al. (2019).
 #'         We provide two different conditions controls (CTRL) and
 #'         Cutaneous T-cell Limphoma (CTCL).
