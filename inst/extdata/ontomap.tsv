@@ -31,11 +31,11 @@ pbmc_10x	scMultiome	celltype	MAIT T cells	NCIT:C115217	Mucosal-Associated Invari
 pbmc_10x	scMultiome	celltype	CD56 (dim) NK cells	CL:0000939	CD16-positive, CD56-dim natural killer cell
 pbmc_10x	scMultiome	celltype	naive B cells	CL:0000788	naive B cell
 pbmc_10x	scMultiome	celltype	plasmacytoid DC	CL:0000784	plasmacytoid dendritic cell
-cord_blood	CITEseq	celltype	Natural Killers	NA	NA
-cord_blood	CITEseq	celltype	Precursors	NA	NA
-cord_blood	CITEseq	celltype	CD4 T-cells	NA	NA
-cord_blood	CITEseq	celltype	CD8 T-cells	NA	NA
-cord_blood	CITEseq	celltype	B-cells	NA	NA
-cord_blood	CITEseq	celltype	Monocytes CD14+	NA	NA
-cord_blood	CITEseq	celltype	T-cells	NA	NA
-cord_blood	CITEseq	celltype	Monocytes CD16+	NA	NA
+cord_blood	CITEseq	celltype	Natural Killers	OMIT:0026379	Natural Killer T-Cells
+cord_blood	CITEseq	celltype	Precursors	OMIT:0012443	Protein Precursors
+cord_blood	CITEseq	celltype	CD4 T-cells	ASCTB-TEMP_cd4-t	cd4+ t
+cord_blood	CITEseq	celltype	CD8 T-cells	ASCTB-TEMP_cd8-t-cells	cd8+ t-cells
+cord_blood	CITEseq	celltype	B-cells	NCIT:C12474	B-Lymphocyte
+cord_blood	CITEseq	celltype	Monocytes CD14+	CL:0001054	CD14-positive monocyte
+cord_blood	CITEseq	celltype	T-cells	OMIT:0026379	Natural Killer T-Cells
+cord_blood	CITEseq	celltype	Monocytes CD16+	NCIT:C12547	Monocyte
