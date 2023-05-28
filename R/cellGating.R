@@ -14,10 +14,8 @@
 #' @param verbose logical for having informative messages during the execution
 #'
 #' @return an updated version of the cd DataFrame 
-#' @export
 #'
-#' @examples
-#' TBD
+#' @export
 addCTLabels <- function(cd, out, outname, ct, mkrcol="markers", ctcol="celltype",
                         overwrite=FALSE, verbose=TRUE)
 {
@@ -66,19 +64,6 @@ addCTLabels <- function(cd, out, outname, ct, mkrcol="markers", ctcol="celltype"
     return(cd)
 }
 
-
-#' .plotGatingAdt
-#' @description
-#' 
-#' 
-#' @param mat 
-#' @param adt1 
-#' @param adt2 
-#' @param th1 
-#' @param th2 
-#'
-#' @return
-#' @keywords internal
 #' @importFrom graphics abline smoothScatter
 .plotGatingAdt <- function(mat, adt1="CD19", adt2="CD3", th1=0.2, th2=0)
 {
@@ -128,11 +113,9 @@ addCTLabels <- function(cd, out, outname, ct, mkrcol="markers", ctcol="celltype"
 #' play with the thresholds to identify the cell populations specified by an 
 #' uptake (+) o downtake (-) of the couple of markers (ADTs) previously selected.
 #' 
-#' @export
-#'
-#' @examples
-#' TBD
 #' @importFrom graphics text
+#'
+#' @export
 getCellGroups <- function(mat, adt1="CD19", adt2="CD3", th1=0.2, th2=0)
 {
     stopifnot(any(adt1,adt2) %in% rownames(mat))
