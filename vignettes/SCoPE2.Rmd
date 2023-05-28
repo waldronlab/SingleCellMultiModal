@@ -73,7 +73,7 @@ scope2
 
 # The macrophage differentiation project
 
-This data set has been acquired by the Slavov Lab (@Specht2021-jm).
+This data set has been acquired by the Slavov Lab (@Specht2021-pm).
 It contains single-cell proteomics and single-cell
 RNA sequencing data for macrophages and monocytes. The objective of the
 research that led to generate the data is to understand whether
@@ -86,7 +86,7 @@ the authors' [website](https://scope2.slavovlab.net/docs/data) and the
 transcriptomic data was retrieved from the GEO database (accession id:
 [GSE142392](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE142392)).
 
-For more information on the protocol, see @Specht2021-jm.
+For more information on the protocol, see @Specht2021-pm.
 
 ## Data versions
 
