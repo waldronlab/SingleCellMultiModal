@@ -79,6 +79,7 @@ addCTLabels <- function(cd, out, outname, ct, mkrcol="markers", ctcol="celltype"
 #'
 #' @return
 #' @keywords internal
+#' @importFrom graphics abline smoothScatter
 .plotGatingAdt <- function(mat, adt1="CD19", adt2="CD3", th1=0.2, th2=0)
 {
     plot(x=mat[adt1,], y=mat[adt2,], xlab=adt1, ylab=adt2, 
@@ -131,6 +132,7 @@ addCTLabels <- function(cd, out, outname, ct, mkrcol="markers", ctcol="celltype"
 #'
 #' @examples
 #' TBD
+#' @importFrom graphics text
 getCellGroups <- function(mat, adt1="CD19", adt2="CD3", th1=0.2, th2=0)
 {
     stopifnot(any(adt1,adt2) %in% rownames(mat))

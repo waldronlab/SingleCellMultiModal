@@ -32,6 +32,7 @@ Imports:
     BiocBaseUtils,
     BiocFileCache,
     ExperimentHub,
+    graphics,
     HDF5Array,
     S4Vectors,
     SingleCellExperiment,
