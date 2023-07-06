@@ -7,7 +7,7 @@
     rownames(coldat) <- coldat[,1]
     colnames(coldat) <- c("sampleID")
     cd <- ess_list$experiments[-idx]
-    if ( !is.null(dim(cd)) ) 
+    if ( !is.null(dim(cd)) )
     {
         colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
     } else {
@@ -338,6 +338,10 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
         cd <- colData(mae)
         idxcd <- unlist(which(colnames(sce) %in% rownames(cd)))
         colData(sce) <- cd[idxcd,]
+    }
+    
+    if ( !isEmpty(metadata(mae))) {
+        metadata(sce) <- metadata(mae)
     }
 
     return(sce)
