@@ -68,7 +68,7 @@ CITEseq data are a combination of single cell transcriptomics and
             }
      }
      \itemize{
-        \item{peripheral_blood: } a dataset of single cells of peripheral
+        \item{peripheral_blood:} a dataset of single cells of peripheral
         blood as provided in Mimitou et al. (2019).
         We provide two different conditions controls (CTRL) and
         Cutaneous T-cell Limphoma (CTCL).

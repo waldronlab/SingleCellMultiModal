@@ -32,4 +32,10 @@ Authors:
   \item Levi Waldron \email{lwaldron.research@gmail.com}
 }
 
+Other contributors:
+\itemize{
+  \item Al Abadi [contributor]
+  \item Christophe Vanderaa \email{christophe.vanderaa@uclouvain.be} [contributor]
+}
+
 }

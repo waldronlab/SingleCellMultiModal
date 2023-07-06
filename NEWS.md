@@ -1,3 +1,16 @@
+## Changes in version 1.14.0
+
+### New features
+
+* The `ontomap` function provides a reference table of ontology IDs and cell
+names by data type available in the package.
+* `scRNAseq` `colData` added to `cord_blood` and `peripheral_blood` datasets
+provided by the `CITEseq` function. (@drighelli)
+
+### Bug fixes and minor improvements
+
+* Using `BiocBaseUtils` internally to handle assertions and checks.
+
 ## Changes in version 1.12.0
 
 ### Bug fixes and minor improvements

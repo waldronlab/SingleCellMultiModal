@@ -2,36 +2,39 @@ name: Bioc build and check
 
 on:
   push:
+    paths:
+      - 'DESCRIPTION'
+      - '**.yml'
     branches:
-      - master
+      - devel
   pull_request:
     branches:
-      - master
+      - devel
 
 jobs:
   build-check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container: bioconductor/bioconductor_docker:devel
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CRAN: https://packagemanager.posit.co/cran/__linux__/jammy/latest
       NOT_CRAN: true
       TZ: UTC
-      
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
-          devtools::install_github("Bioconductor/AnVIL")
+          BiocManager::install(update = TRUE, ask = FALSE)
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Cache R packages
         if: runner.os != 'Windows'
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: /usr/local/lib/R/site-library
           key: ${{ runner.os }}-r-1-${{ hashFiles('.github/depends.Rds') }}
@@ -39,12 +42,12 @@ jobs:
 
       - name: Install Package Dependencies
         run: |
-          options(repos = c(CRAN = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"), Ncpus = 2L)
-          remotes::install_deps(dependencies = TRUE, repos = AnVIL::repositories())
-          BiocManager::install("rcmdcheck", ask = FALSE, update = TRUE)
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())
+          BiocManager::install(ask = FALSE, update = TRUE)
         shell: Rscript {0}
 
       - name: Check Package
+        id: rcmdcheck
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "error", check_dir = "check")
