@@ -278,70 +278,42 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 #'
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#' @importFrom SingleCellExperiment SingleCellExperiment altExps
+#' @importFrom SingleCellExperiment SingleCellExperiment altExps colData counts
 #' @importFrom methods is
 #' @keywords internal
 .CITEseqMaeToSce <- function(mae)
 {
     stopifnot(c(is(mae, "MultiAssayExperiment"), !(length(mae)==0)))
 
-    if(length(mae)==3)
-    {
-        scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-        scadt <- SingleCellExperiment(experiments(mae)[[grep("scADT", names(mae))]])
-        schto <- SingleCellExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
-
-        commonsamp <- intersect(intersect(colnames(scrna), colnames(scadt)), colnames(schto))
-
-        schto <- schto[,(colnames(schto) %in% commonsamp)]
-        scrna <- scrna[,(colnames(scrna) %in% commonsamp)]
-        scadt <- scadt[,(colnames(scadt) %in% commonsamp)]
-
-        sce <- SingleCellExperiment::SingleCellExperiment(
-            list(counts=scrna),
-            altExps=list(scADT=scadt, scHTO=schto)
-        )
-        cd <- colData(mae)
-        idxcd <- which(commonsamp %in% rownames(cd))
-        cdcs <- cd[idxcd,]
-
-        colData(sce) <- cdcs
-    } else if(length(mae)==2) {
-        scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-        if(length(grep("scADT", names(mae)))!=0)
-        {
-            scalt <- SingleCellExperiment(experiments(mae)[[grep("scADT", names(mae))]])
-            name <- "scADT"
-        } else {
-            scalt <- SingleCellExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
-            name <- "scHTO"
-        }
-        commonsamp <- intersect(colnames(scrna), colnames(scalt))
-
-        scalt <- scalt[,(colnames(scalt) %in% commonsamp)]
-        scrna <- scrna[,(colnames(scrna) %in% commonsamp)]
-        l <- list(scalt)
-        names(l) <- name
-        sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna),
-                                                          altExps=l,
-                                                          colData=colData(mae)[!duplicated(colData(mae)),])
-    } else { ## case length 1
-        if(length(grep("scADT", names(mae)))!=0)
-        {
-            scadt <- SummarizedExperiment(experiments(mae)[[grep("scADT", names(mae))]])
-            sce <- SingleCellExperiment::SingleCellExperiment(list(adt=scadt))
-        } else if(length(grep("scHTO", names(mae)))!=0) {
-            schto <- SummarizedExperiment(experiments(mae)[[grep("scHTO", names(mae))]])
-            sce <- SingleCellExperiment::SingleCellExperiment(list(hto=schto))
-        } else if(length(grep("scRNA", names(mae)))!=0) {
-            scrna <- experiments(mae)[[grep("scRNA", names(mae))]]
-            sce <- SingleCellExperiment::SingleCellExperiment(list(counts=scrna))
-        }
-        cd <- colData(mae)
-        idxcd <- unlist(which(colnames(sce) %in% rownames(cd)))
-        colData(sce) <- cd[idxcd,]
-    }
+    cs <- colnames(mae[[1]])
+    for ( i in seq_along(mae)[-1]) { cs <- intersect(cs, colnames(mae[[i]])) }
     
+    scelist <- lapply(seq_along(mae), function(i)
+    {
+        sce <- SingleCellExperiment(list(counts=mae[[i]]))
+        sce <- sce[, (colnames(sce) %in% cs)]
+        cd <- colData(mae)[(rownames(colData(mae)) %in% colnames(sce)), ]
+        colData(sce) <- cd
+        return(sce)
+    })
+    names(scelist) <- names(mae)
+    
+    idx <- grep("scRNA", names(scelist))
+    if (length(idx) != 0 )
+    {
+        altExps(scelist[[idx]]) <- scelist[-idx]
+        sce <- scelist[[idx]]
+    } else {
+        stop("Couldn't find RNA assay in MultiAssayExperiment")
+    }
+    idx <- grep("scADT_clr", names(altExps(sce)))
+    if( length(idx) != 0 )
+    {
+        clr <- counts(altExps(sce)[[idx]])
+        altExps(sce)[idx] <- NULL
+        assays(altExp(sce)) <- SimpleList(counts=counts(altExp(sce)), clr=clr)
+    }
+
     if ( !isEmpty(metadata(mae))) {
         metadata(sce) <- metadata(mae)
     }
