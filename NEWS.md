@@ -9,6 +9,8 @@ provided by the `CITEseq` function. (@drighelli)
 
 ### Bug fixes and minor improvements
 
+* When using `HDF5` as `format` input in `scMultiome`, the filtering of file
+paths obtained from `ExperimentHub` has been fixed.
 * Using `BiocBaseUtils` internally to handle assertions and checks.
 
 ## Changes in version 1.12.0
