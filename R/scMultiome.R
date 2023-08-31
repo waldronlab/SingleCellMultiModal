@@ -27,7 +27,7 @@
     fpaths <- filepaths[matchres]
     fact <- .removeExt(fpaths)
     fact <- gsub("_se|_assays|_tenx", "", fact)
-    h5list <- split(filepaths, fact)
+    h5list <- split(fpaths, fact)
     lapply(h5list,
         .getH5_TENx,
         ehub = ehub, fn = names(h5list), verbose = verbose
