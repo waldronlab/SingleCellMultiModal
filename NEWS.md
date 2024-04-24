@@ -1,3 +1,7 @@
+## Changes in version 1.16.0
+
+* No significant changes.
+
 ## Changes in version 1.14.0
 
 ### New features
