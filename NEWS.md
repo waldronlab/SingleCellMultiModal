@@ -1,6 +1,9 @@
 ## Changes in version 1.16.0
 
-* No significant changes.
+### New features
+
+* Added citation information to the package; see
+`citation("SingleCellMultiModal")` and the vignette.
 
 ## Changes in version 1.14.0
 
