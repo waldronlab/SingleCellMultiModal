@@ -1,0 +1,461 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+
+cff-version: 1.2.0
+message: 'To cite package "SingleCellMultiModal" in publications use:'
+type: software
+license: Artistic-2.0
+title: 'SingleCellMultiModal: Integrating Multi-modal Single Cell Experiment datasets'
+version: 1.17.1
+doi: 10.1371/journal.pcbi.1011324
+abstract: SingleCellMultiModal is an ExperimentHub package that serves multiple datasets
+  obtained from GEO and other sources and represents them as MultiAssayExperiment
+  objects. We provide several multi-modal datasets including scNMT, 10X Multiome,
+  seqFISH, CITEseq, SCoPE2, and others. The scope of the package is is to provide
+  data for benchmarking and analysis.
+authors:
+- family-names: Ramos
+  given-names: Marcel
+  email: marcel.ramos@roswellpark.org
+  orcid: https://orcid.org/0000-0002-3242-0582
+- family-names: Argelaguet
+  given-names: Ricard
+  email: ricard@ebi.ac.uk
+- family-names: Righelli
+  given-names: Dario
+  email: dario.righelli@gmail.com
+- family-names: Eckenrode
+  given-names: Kelly
+  email: kelly.eckenrode@sph.cuny.edu
+- family-names: Geistlinger
+  given-names: Ludwig
+  email: ludwig_geistlinger@hms.harvard.edu
+- family-names: Waldron
+  given-names: Levi
+  email: lwaldron.research@gmail.com
+preferred-citation:
+  type: article
+  title: Curated single cell multimodal landmark datasets for R/Bioconductor
+  authors:
+  - family-names: Eckenrode
+    given-names: Kelly B
+  - family-names: Righelli
+    given-names: Dario
+    email: dario.righelli@gmail.com
+  - family-names: Ramos
+    given-names: Marcel
+    orcid: https://orcid.org/0000-0002-3242-0582
+    email: marcel.ramos@roswellpark.org
+  - family-names: Argelaguet
+    given-names: Ricard
+    email: ricard@ebi.ac.uk
+  - family-names: Vanderaa
+    given-names: Christophe
+  - family-names: Geistlinger
+    given-names: Ludwig
+    orcid: https://orcid.org/0000-0002-2495-5464
+    email: ludwig_geistlinger@hms.harvard.edu
+  - family-names: Culhane
+    given-names: Aedin C
+  - family-names: Gatto
+    given-names: Laurent
+  - family-names: Carey
+    given-names: Vincent J
+    orcid: https://orcid.org/0000-0003-4046-0063
+  - family-names: Morgan
+    given-names: Martin
+    orcid: https://orcid.org/0000-0002-5874-8148
+  - family-names: Risso
+    given-names: Davide
+  - family-names: Waldron
+    given-names: Levi
+    orcid: https://orcid.org/0000-0003-2725-0694
+    email: lwaldron.research@gmail.com
+  journal: PLoS Comput. Biol.
+  year: '2023'
+  volume: '19'
+  issue: '8'
+  doi: 10.1371/journal.pcbi.1011324
+repository: https://bioconductor.org/
+repository-code: https://github.com/waldronlab/SingleCellMultiModal
+url: https://github.com/waldronlab/SingleCellMultiModal
+date-released: '2024-06-18'
+contact:
+- family-names: Ramos
+  given-names: Marcel
+  email: marcel.ramos@roswellpark.org
+  orcid: https://orcid.org/0000-0002-3242-0582
+references:
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  url: https://www.R-project.org/
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
+  version: '>= 4.2.0'
+- type: software
+  title: MultiAssayExperiment
+  abstract: 'MultiAssayExperiment: Software for the integration of multi-omics experiments
+    in Bioconductor'
+  notes: Depends
+  url: http://waldronlab.io/MultiAssayExperiment/
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Ramos
+    given-names: Marcel
+    email: marcel.ramos@roswellpark.org
+    orcid: https://orcid.org/0000-0002-3242-0582
+  - family-names: Morgan
+    given-names: Martin
+  - family-names: Carey
+    given-names: Vincent J
+  - family-names: Waldron
+    given-names: Levi
+    email: lwaldron.research@gmail.com
+  year: '2024'
+- type: software
+  title: AnnotationHub
+  abstract: 'AnnotationHub: Client to access AnnotationHub resources'
+  notes: Imports
+  url: https://github.com/Bioconductor/AnnotationHub
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Morgan
+    given-names: Martin
+  - family-names: Shepherd
+    given-names: Lori
+  year: '2024'
+- type: software
+  title: BiocBaseUtils
+  abstract: 'BiocBaseUtils: General utility functions for developing Bioconductor
+    packages'
+  notes: Imports
+  url: https://www.github.com/Bioconductor/BiocBaseUtils
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Ramos
+    given-names: Marcel
+    email: marcel.ramos@roswellpark.org
+    orcid: https://orcid.org/0000-0002-3242-0582
+  year: '2024'
+- type: software
+  title: BiocFileCache
+  abstract: 'BiocFileCache: Manage Files Across Sessions'
+  notes: Imports
+  url: https://github.com/Bioconductor/BiocFileCache
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Shepherd
+    given-names: Lori
+    email: lori.shepherd@roswellpark.org
+  - family-names: Morgan
+    given-names: Martin
+    email: martin.morgan@roswellpark.org
+  year: '2024'
+- type: software
+  title: ExperimentHub
+  abstract: 'ExperimentHub: Client to access ExperimentHub resources'
+  notes: Imports
+  url: https://github.com/Bioconductor/ExperimentHub
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Morgan
+    given-names: Martin
+  - family-names: Shepherd
+    given-names: Lori
+  year: '2024'
+- type: software
+  title: graphics
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
+- type: software
+  title: HDF5Array
+  abstract: 'HDF5Array: HDF5 backend for DelayedArray objects'
+  notes: Imports
+  url: https://bioconductor.org/packages/HDF5Array
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Pagès
+    given-names: Hervé
+  year: '2024'
+- type: software
+  title: S4Vectors
+  abstract: 'S4Vectors: Foundation of vector-like and list-like containers in Bioconductor'
+  notes: Imports
+  url: https://bioconductor.org/packages/S4Vectors
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Pagès
+    given-names: Hervé
+    email: hpages.on.github@gmail.com
+  - family-names: Lawrence
+    given-names: Michael
+  - family-names: Aboyoun
+    given-names: Patrick
+  year: '2024'
+- type: software
+  title: SingleCellExperiment
+  abstract: 'SingleCellExperiment: S4 Classes for Single Cell Data'
+  notes: Imports
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Lun
+    given-names: Aaron
+    email: infinite.monkeys.with.keyboards@gmail.com
+  - family-names: Risso
+    given-names: Davide
+    email: risso.davide@gmail.com
+  year: '2024'
+- type: software
+  title: SpatialExperiment
+  abstract: 'SpatialExperiment: S4 Class for Spatially Resolved -omics Data'
+  notes: Imports
+  url: https://github.com/drighelli/SpatialExperiment
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Righelli
+    given-names: Dario
+    email: dario.righelli@gmail.com
+  - family-names: Risso
+    given-names: Davide
+    email: risso.davide@gmail.com
+  - family-names: Crowell
+    given-names: Helena L.
+    email: helena.crowell@uzh.ch
+  - family-names: Weber
+    given-names: Lukas M.
+    email: lukas.weber.edu@gmail.com
+  year: '2024'
+- type: software
+  title: SummarizedExperiment
+  abstract: 'SummarizedExperiment: SummarizedExperiment container'
+  notes: Imports
+  url: https://bioconductor.org/packages/SummarizedExperiment
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Morgan
+    given-names: Martin
+  - family-names: Obenchain
+    given-names: Valerie
+  - family-names: Hester
+    given-names: Jim
+  - family-names: Pagès
+    given-names: Hervé
+    email: hpages.on.github@gmail.com
+  year: '2024'
+- type: software
+  title: Matrix
+  abstract: 'Matrix: Sparse and Dense Matrix Classes and Methods'
+  notes: Imports
+  url: https://R-forge.R-project.org/tracker/?atid=294&group_id=61
+  repository: https://CRAN.R-project.org/package=Matrix
+  authors:
+  - family-names: Bates
+    given-names: Douglas
+    orcid: https://orcid.org/0000-0001-8316-9503
+  - family-names: Maechler
+    given-names: Martin
+    email: mmaechler+Matrix@gmail.com
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Jagan
+    given-names: Mikael
+    orcid: https://orcid.org/0000-0002-3542-2938
+  year: '2024'
+- type: software
+  title: methods
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
+- type: software
+  title: utils
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2024'
+- type: software
+  title: BiocStyle
+  abstract: 'BiocStyle: Standard styles for vignettes and other Bioconductor documents'
+  notes: Suggests
+  url: https://github.com/Bioconductor/BiocStyle
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Oleś
+    given-names: Andrzej
+    orcid: https://orcid.org/0000-0003-0285-2787
+  year: '2024'
+- type: software
+  title: ggplot2
+  abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
+  notes: Suggests
+  url: https://ggplot2.tidyverse.org
+  repository: https://CRAN.R-project.org/package=ggplot2
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Chang
+    given-names: Winston
+    orcid: https://orcid.org/0000-0002-1576-2126
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomas.pedersen@posit.co
+    orcid: https://orcid.org/0000-0002-5147-4711
+  - family-names: Takahashi
+    given-names: Kohske
+  - family-names: Wilke
+    given-names: Claus
+    orcid: https://orcid.org/0000-0002-7470-9261
+  - family-names: Woo
+    given-names: Kara
+    orcid: https://orcid.org/0000-0002-5125-4188
+  - family-names: Yutani
+    given-names: Hiroaki
+    orcid: https://orcid.org/0000-0002-3385-7233
+  - family-names: Dunnington
+    given-names: Dewey
+    orcid: https://orcid.org/0000-0002-9415-4582
+  - family-names: Brand
+    given-names: Teun
+    name-particle: van den
+    orcid: https://orcid.org/0000-0002-9335-7468
+  year: '2024'
+- type: software
+  title: knitr
+  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  notes: Suggests
+  url: https://yihui.org/knitr/
+  repository: https://CRAN.R-project.org/package=knitr
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2024'
+- type: software
+  title: RaggedExperiment
+  abstract: 'RaggedExperiment: Representation of Sparse Experiments and Assays Across
+    Samples'
+  notes: Suggests
+  url: https://github.com/Bioconductor/RaggedExperiment
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: Morgan
+    given-names: Martin
+    email: martin.morgan@roswellpark.org
+  - family-names: Ramos
+    given-names: Marcel
+    email: marcel.ramos@roswellpark.org
+    orcid: https://orcid.org/0000-0002-3242-0582
+  year: '2024'
+- type: software
+  title: rmarkdown
+  abstract: 'rmarkdown: Dynamic Documents for R'
+  notes: Suggests
+  url: https://pkgs.rstudio.com/rmarkdown/
+  repository: https://CRAN.R-project.org/package=rmarkdown
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@posit.co
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
+  - family-names: McPherson
+    given-names: Jonathan
+    email: jonathan@posit.co
+  - family-names: Luraschi
+    given-names: Javier
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevin@posit.co
+  - family-names: Atkins
+    given-names: Aron
+    email: aron@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Cheng
+    given-names: Joe
+    email: joe@posit.co
+  - family-names: Chang
+    given-names: Winston
+    email: winston@posit.co
+  - family-names: Iannone
+    given-names: Richard
+    email: rich@posit.co
+    orcid: https://orcid.org/0000-0003-3925-190X
+  year: '2024'
+- type: software
+  title: scater
+  abstract: 'scater: Single-Cell Analysis Toolkit for Gene Expression Data in R'
+  notes: Suggests
+  url: https://support.bioconductor.org/
+  repository: https://bioconductor.org/
+  authors:
+  - family-names: McCarthy
+    given-names: Davis
+    email: davis@ebi.ac.uk
+  - family-names: Campbell
+    given-names: Kieran
+    email: kieran.campbell@sjc.ox.ac.uk
+  - family-names: Lun
+    given-names: Aaron
+    email: infinite.monkeys.with.keyboards@gmail.com
+  - family-names: Wills
+    given-names: Quin
+    email: qilin@quinwills.net
+  year: '2024'
+- type: software
+  title: UpSetR
+  abstract: 'UpSetR: A More Scalable Alternative to Venn and Euler Diagrams for Visualizing
+    Intersecting Sets'
+  notes: Suggests
+  url: http://github.com/hms-dbmi/UpSetR
+  repository: https://CRAN.R-project.org/package=UpSetR
+  authors:
+  - family-names: Gehlenborg
+    given-names: Nils
+    email: nils@hms.harvard.edu
+  year: '2024'
+- type: software
+  title: uwot
+  abstract: 'uwot: The Uniform Manifold Approximation and Projection (UMAP) Method
+    for Dimensionality Reduction'
+  notes: Suggests
+  url: https://jlmelville.github.io/uwot/
+  repository: https://CRAN.R-project.org/package=uwot
+  authors:
+  - family-names: Melville
+    given-names: James
+    email: jlmelville@gmail.com
+  year: '2024'
+
