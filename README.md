@@ -31,7 +31,7 @@ library(MultiAssayExperiment)
 # Citing SingleCellMultiModal
 
 Your citations are crucial in keeping our software free and open source.
-To cite our package see the citation (@Eckenrode2023-yq) in the
+To cite our package see the citation (Eckenrode et al. (2023)) in the
 Reference section. You may also browse to the publication at [PLoS
 Computational Biology](https://doi.org/10.1371/journal.pcbi.1011324).
 
@@ -63,7 +63,30 @@ for more details.
 ## Further resources
 
 For more information on the `MultiAssayExperiment` data structure,
-please refer to @Ramos2017-tk as well as the [MultiAssayExperiment
+please refer to Ramos et al. (2017) as well as the [MultiAssayExperiment
 vignette](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
 
 # References
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
+
+<div id="ref-Eckenrode2023-yq" class="csl-entry">
+
+Eckenrode, Kelly B, Dario Righelli, Marcel Ramos, Ricard Argelaguet,
+Christophe Vanderaa, Ludwig Geistlinger, Aedin C Culhane, et al. 2023.
+“Curated Single Cell Multimodal Landmark Datasets for R/Bioconductor.”
+*PLoS Comput. Biol.* 19 (8): e1011324.
+
+</div>
+
+<div id="ref-Ramos2017-tk" class="csl-entry">
+
+Ramos, Marcel, Lucas Schiffer, Angela Re, Rimsha Azhar, Azfar Basunia,
+Carmen Rodriguez, Tiffany Chan, et al. 2017. “Software for the
+Integration of Multiomics Experiments in Bioconductor.” *Cancer Res.* 77
+(21): e39–42.
+
+</div>
+
+</div>
