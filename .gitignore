@@ -5,6 +5,7 @@
 /vignettes/cache/
 *.[Rr][Dd][SsAa]
 *.txt
+*.html
 .Ruserdata
 .Rhistory
 *GSE*
