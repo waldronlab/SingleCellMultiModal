@@ -32,8 +32,8 @@ library(MultiAssayExperiment)
 
 Your citations are crucial in keeping our software free and open source.
 To cite our package see the citation (@Eckenrode2023-yq) in the
-Reference section. You may also browse to the publication at the link
-[here](https://doi.org/10.1371/journal.pcbi.1011324).
+Reference section. You may also browse to the publication at [PLoS
+Computational Biology](https://doi.org/10.1371/journal.pcbi.1011324).
 
 ## Representation
 
