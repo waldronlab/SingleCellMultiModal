@@ -12,7 +12,19 @@ Package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
 ---
 
-# Installation
+# SingleCellMultiModal
+
+## Overview 
+
+`SingleCellMultiModal` is an R package that provides a convenient and
+user-friendly representation of multi-modal data using `MultiAssayExperiment`.
+This package introduces a suite of single-cell multimodal landmark datasets for
+benchmarking and testing multimodal analysis methods via the `ExperimentHub`
+Bioconductor package. The scope of this package is to provide efficient access
+to a selection of curated, pre-integrated, publicly available landmark datasets
+for methods development and benchmarking.
+
+## Installation
 
 ```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -21,26 +33,19 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("SingleCellMultiModal")
 ```
 
-## Load packages
+## Loading packages
 
 ```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(SingleCellMultiModal)
 library(MultiAssayExperiment)
 ```
 
-# Introduction
-
-This package introduces a suite of single-cell multimodal landmark datasets for
-benchmarking and testing multimodal analysis methods via the `ExperimentHub`
-Bioconductor package. The scope of this package is to provide efficient access
-to a selection of curated, pre-integrated, publicly available landmark datasets
-for methods development and benchmarking.
-
 # Citing SingleCellMultiModal
 
 Your citations are crucial in keeping our software free and open source. To
 cite our package see the citation (@Eckenrode2023-yq) in the Reference
-section. You may also browse to the publication at the link [here][1].
+section. You may also browse to the publication at
+[PLoS Computational Biology][1].
 
 [1]: https://doi.org/10.1371/journal.pcbi.1011324
 
@@ -70,9 +75,20 @@ knitr::include_graphics(
 )
 ```
 
+# Contributions
+
+Want to contribute to the `SingleCellMultiModal` package? We welcome
+contributions from the community. Please refer to our
+[Contributing Guidelines][2] for more details.
+
+[2]: https://github.com/waldronlab/SingleCellMultiModal/wiki/Contributing-Guidelines
+
+
 ## Further resources
 
 For more information on the `MultiAssayExperiment` data structure, please refer
-to @Ramos2017-tk as well as the [MultiAssayExperiment vignette](https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html).
+to @Ramos2017-tk as well as the [MultiAssayExperiment vignette][3].
+
+[3]: https://bioconductor.org/packages/release/bioc/vignettes/MultiAssayExperiment/inst/doc/MultiAssayExperiment.html
 
 # References
