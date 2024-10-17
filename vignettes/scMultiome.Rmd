@@ -46,7 +46,7 @@ promoter level, etc.), you have download the `fragments.tsv.gz` file from the
 The user can see the available dataset by using the default options
 
 ```{r}
-mae <- scMultiome("pbmc_10x", mode = "*", dry.run = FALSE, format = "MTX")
+mae <- scMultiome("pbmc_10x", modes = "*", dry.run = FALSE, format = "MTX")
 ```
 
 ```{r, echo=FALSE}
