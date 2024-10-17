@@ -9,7 +9,7 @@ vignette: >
     %\VignetteIndexEntry{ECCITEseq Peripheral Blood}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
-Package: SingleCellMultiModal
+package: SingleCellMultiModal
 bibliography: ../inst/REFERENCES.bib
 editor_options:
   chunk_output_type: console
