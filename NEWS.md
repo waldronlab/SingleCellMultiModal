@@ -5,6 +5,13 @@
 * Added citation information to the package; see
 `citation("SingleCellMultiModal")` and the vignette.
 
+### Bug fixes and minor improvements
+
+* Update imports from `SingleCellExperiment`, `S4Vectors`, and
+`SummarizedExperiment`
+* Add package anchors to links in documentation
+* Use markdown in documentation
+
 ## Changes in version 1.14.0
 
 ### New features
