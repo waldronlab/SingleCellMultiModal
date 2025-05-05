@@ -1,0 +1,7 @@
+title: SingleCellMultiModal
+url: https://waldronlab.github.io/SingleCellMultiModal
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: flatly
