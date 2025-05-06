@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 rmarkdown::render(input = "inst/scripts/README.Rmd", output_dir = ".")
 ```
 
+# <a href='https://waldronlab.github.io/SingleCellMultiModal'><img src='https://raw.githubusercontent.com/Bioconductor/BiocStickers/devel/SingleCellMultiModal/SingleCellMultiModal.png' align="right" height="139" /></a>
+
 ```{r, child="../../vignettes/SingleCellMultiModal.Rmd"}
 
 ```
