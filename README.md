@@ -1,4 +1,6 @@
 
+# <a href='https://waldronlab.github.io/SingleCellMultiModal'><img src='https://raw.githubusercontent.com/Bioconductor/BiocStickers/devel/SingleCellMultiModal/SingleCellMultiModal.png' align="right" height="139" /></a>
+
 # SingleCellMultiModal
 
 ## Overview
