@@ -1,7 +1,7 @@
 Type: Package
 Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
-Version: 1.21.2
+Version: 1.21.3
 Authors@R: c(
     person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
         c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
@@ -59,4 +59,4 @@ biocViews: ExperimentData, SingleCellData, ReproducibleResearch,
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
-Date: 2025-05-06
+Date: 2025-06-12
