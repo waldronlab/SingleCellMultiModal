@@ -1,5 +1,6 @@
 ---
 title: "SCoPE2: macrophage vs monocytes"
+author: "Christophe Vanderaa"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
     %\VignetteIndexEntry{SCoPE2: macrophage vs monocytes}

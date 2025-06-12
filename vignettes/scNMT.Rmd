@@ -1,5 +1,7 @@
 ---
 title: "scNMT Mouse Gastrulation"
+author: 
+  - name: "Marcel Ramos Pérez"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{scNMT Mouse Gastrulation}

@@ -1,5 +1,10 @@
 ---
 title: "PBMCs profiled with the Chromium Single Cell Multiome ATAC + Gene Expression from 10x"
+author:
+  - name: "Marcel Ramos Pérez"
+  - name: "Al J Abadi"
+  - name: "Ricard Argelaguet"
+  - name: "Levi Waldron"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{scMultiome 10x PBMC}

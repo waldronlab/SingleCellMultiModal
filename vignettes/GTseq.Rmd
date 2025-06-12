@@ -1,5 +1,6 @@
 ---
 title: "G&T-seq Mouse Embryo (8-cell stage)"
+author: "Ludwig Geistlinger"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
   %\VignetteIndexEntry{GT-seq Mouse Embryo}
