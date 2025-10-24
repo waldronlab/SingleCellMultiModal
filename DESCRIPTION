@@ -3,7 +3,7 @@ Package: SingleCellMultiModal
 Title: Integrating Multi-modal Single Cell Experiment datasets
 Version: 1.21.3
 Authors@R: c(
-    person("Marcel", "Ramos", , "marcel.ramos@roswellpark.org",
+    person("Marcel", "Ramos", , "marcel.ramos@sph.cuny.edu",
         c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
     ),
     person("Ricard", "Argelaguet", , "ricard@ebi.ac.uk", "aut"),
