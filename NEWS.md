@@ -1,3 +1,24 @@
+## Changes in version 1.22.0
+
+### Bug fixes and minor improvements
+
+* Updated vignette authorship information
+* Added sticker to `README.md`
+* Enhancements to GitHub Actions workflows
+
+## Changes in version 1.20.0
+
+### Bug fixes and minor improvements
+
+* Minor fixes to documentation and imports in `NAMESPACE`.
+* Use Markdown in documentation.
+
+## Changes in version 1.18.0
+
+### Bug fixes and minor improvements
+
+* Added `CITATION.cff` file to the package and note in the `DESCRIPTION` file.
+
 ## Changes in version 1.16.0
 
 ### New features
