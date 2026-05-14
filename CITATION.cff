@@ -8,7 +8,7 @@ message: 'To cite package "SingleCellMultiModal" in publications use:'
 type: software
 license: Artistic-2.0
 title: 'SingleCellMultiModal: Integrating Multi-modal Single Cell Experiment datasets'
-version: 1.23.0
+version: 1.25.1
 doi: 10.1371/journal.pcbi.1011324
 abstract: SingleCellMultiModal is an ExperimentHub package that serves multiple datasets
   obtained from GEO and other sources and represents them as MultiAssayExperiment
@@ -115,5 +115,5 @@ references:
     given-names: Levi
     email: lwaldron.research@gmail.com
   year: '2025'
-  notes: R package version 1.23.0
+  notes: R package version 1.25.1
 
