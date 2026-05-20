@@ -1,15 +1,20 @@
-.cord_blood <- function(ess_list)
-{
-    idx <- grep(pattern="Counts", names(ess_list$experiments))
-    names(ess_list$experiments) <- gsub("Counts|_Counts", "", names(ess_list$experiments))
-    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=(ess_list$experiments[idx]))
-    coldat <- sampleMap(mae)[,-c(1:2), drop=FALSE]
-    rownames(coldat) <- coldat[,1]
+.cord_blood <- function(ess_list) {
+    idx <- grep(pattern = "Counts", names(ess_list$experiments))
+    names(ess_list$experiments) <- gsub(
+        "Counts|_Counts",
+        "",
+        names(ess_list$experiments)
+    )
+    mae <- MultiAssayExperiment::MultiAssayExperiment(
+        experiments = (ess_list$experiments[idx])
+    )
+    coldat <- sampleMap(mae)[, -c(1:2), drop = FALSE]
+    rownames(coldat) <- coldat[, 1]
     colnames(coldat) <- c("sampleID")
-    cd <- ess_list$experiments[grep("coldata", names(ess_list$experiments))][[1]]
+    cd <-
+        ess_list$experiments[grep("coldata", names(ess_list$experiments))][[1L]]
     ### check add clr counts
-    if ( !is.null(dim(cd)) )
-    {
+    if (!is.null(dim(cd))) {
         # colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
         colData(mae) <- DataFrame(cd)
     } else {
@@ -18,119 +23,145 @@
     return(mae)
 }
 
-.combMatrixForAssay <- function(explist, dimslist,
-                                assayId=c("scADT", "scHTO", "scRNA"))
-{
+.combMatrixForAssay <- function(
+    explist,
+    dimslist,
+    assayId = c("scADT", "scHTO", "scRNA")
+) {
     match.arg(assayId)
     assIdx <- grep(assayId, names(explist))
-    switch(assayId,
-           "scADT"=, "scHTO"={
-               if(length(explist[assIdx]) == 2)
-               {
-                   m1 <- Matrix::Matrix(unlist(explist[assIdx]),
-                        nrow=dimslist[assIdx][[1]][1],
-                        ncol=(dimslist[assIdx][[1]][2]+dimslist[assIdx][[2]][2]),
-                        sparse=TRUE)
-               } else {
-                   m1 <- Matrix::Matrix(explist[[assIdx]])
-               }
-           },
-           "scRNA"={
-               if(length(explist[assIdx]) == 2)
-               {
-                   ## we can have at last 2 matrices
-                   m1 <- cbind(explist[[assIdx[1]]], explist[[assIdx[2]]])
-               } else {
-                   m1 <- explist[[assIdx]]
-               }
-           },
-           { stop("Unrecognized assayId: ", assayId) }
+    switch(
+        assayId,
+        "scADT" = ,
+        "scHTO" = {
+            if (length(explist[assIdx]) == 2) {
+                m1 <- Matrix::Matrix(
+                    unlist(explist[assIdx]),
+                    nrow = dimslist[assIdx][[1]][1],
+                    ncol = (dimslist[assIdx][[1]][2] +
+                        dimslist[assIdx][[2]][2]),
+                    sparse = TRUE
+                )
+            } else {
+                m1 <- Matrix::Matrix(explist[[assIdx]])
+            }
+        },
+        "scRNA" = {
+            if (length(explist[assIdx]) == 2) {
+                ## we can have at last 2 matrices
+                m1 <- cbind(explist[[assIdx[1]]], explist[[assIdx[2]]])
+            } else {
+                m1 <- explist[[assIdx]]
+            }
+        },
+        {
+            stop("Unrecognized assayId: ", assayId)
+        }
     )
-    if(length(explist[assIdx]) == 2)
-    {
-        colnames(m1) <- c(paste0(rep(gsub("scADT|scHTO|scRNA","",
-                                          names(explist)[assIdx[1]]),
-                                     dimslist[assIdx][[1]][2]),
-                                 colnames(explist[[assIdx[1]]])),
-                          paste0(rep(gsub("scADT|scHTO|scRNA","",
-                                          names(explist)[assIdx[2]]),
-                                     dimslist[assIdx][[2]][2]),
-                                 colnames(explist[[assIdx[2]]])))
+    if (length(explist[assIdx]) == 2) {
+        colnames(m1) <- c(
+            paste0(
+                rep(
+                    gsub("scADT|scHTO|scRNA", "", names(explist)[assIdx[1]]),
+                    dimslist[assIdx][[1]][2]
+                ),
+                colnames(explist[[assIdx[1]]])
+            ),
+            paste0(
+                rep(
+                    gsub("scADT|scHTO|scRNA", "", names(explist)[assIdx[2]]),
+                    dimslist[assIdx][[2]][2]
+                ),
+                colnames(explist[[assIdx[2]]])
+            )
+        )
         rownames(m1) <- rownames(explist[[assIdx[[1]]]])
     } else {
-        colnames(m1) <- paste0(rep(gsub("scADT|scHTO|scRNA","",
-                                        names(explist)[assIdx[1]]),
-                                   dimslist[assIdx][[1]][2]),
-                               colnames(explist[[assIdx[1]]]))
+        colnames(m1) <- paste0(
+            rep(
+                gsub("scADT|scHTO|scRNA", "", names(explist)[assIdx[1]]),
+                dimslist[assIdx][[1]][2]
+            ),
+            colnames(explist[[assIdx[1]]])
+        )
         rownames(m1) <- rownames(explist[[assIdx[[1]]]])
     }
     return(m1)
 }
 
-.buildColData <- function(mat1, assayId)
-{
+.buildColData <- function(mat1, assayId) {
     cd <- DataFrame(
-        colname=colnames(mat1),
-        condition=gsub("_\\w+", "", colnames(mat1))
+        colname = colnames(mat1),
+        condition = gsub("_\\w+", "", colnames(mat1))
     )
     return(cd)
 }
 
-.buildMap <- function(mat1, assayId)
-{
-    map <- DataFrame(assay=assayId,
-                     #primary=gsub("_\\w+", "", colnames(mat1)),
-                     primary=colnames(mat1),
-                     colname=colnames(mat1),
-                     condition=gsub("_\\w+", "", colnames(mat1)))
+.buildMap <- function(mat1, assayId) {
+    map <- DataFrame(
+        assay = assayId,
+        #primary=gsub("_\\w+", "", colnames(mat1)),
+        primary = colnames(mat1),
+        colname = colnames(mat1),
+        condition = gsub("_\\w+", "", colnames(mat1))
+    )
     return(map)
 }
 
 #' @importFrom Matrix Matrix
-.peripheral_blood <- function(ess_list)
-{
+.peripheral_blood <- function(ess_list) {
     ll <- ess_list$experiments
     cdidx <- grep("coldata", names(ll))
     cd <- NULL
-    if (length(cdidx)!=0)
-    {
+    if (length(cdidx) != 0) {
         cd <- ll[[cdidx]]
         ll <- ess_list$experiments[-cdidx]
     }
-    ll <- lapply(ll, function(x)
-    {
-        x <- x[order(rownames(x)),]
+    ll <- lapply(ll, function(x) {
+        x <- x[order(rownames(x)), ]
     })
 
     dims <- lapply(ll, dim)
     # expslist <- vector("list", length(ll))
     # sampmap <- DataFrame()
-    exps <- lapply(c("scADT", "scHTO", "scRNA"), function(assayn)
-    {
-        if ( !isEmpty(grep(assayn, names(ll))) )
-        {
-            assmat <- .combMatrixForAssay(explist=ll, dimslist=dims, assayId=assayn)
-            assmap <- .buildMap(assmat, assayId=assayn)
-            return(list("EXP"=assmat, "SAMP"=assmap, "NAME"=assayn))
+    exps <- lapply(c("scADT", "scHTO", "scRNA"), function(assayn) {
+        if (!isEmpty(grep(assayn, names(ll)))) {
+            assmat <- .combMatrixForAssay(
+                explist = ll,
+                dimslist = dims,
+                assayId = assayn
+            )
+            assmap <- .buildMap(assmat, assayId = assayn)
+            return(list("EXP" = assmat, "SAMP" = assmap, "NAME" = assayn))
         }
     })
-    names(exps) <- unlist(lapply(exps, function(e){e$NAME}))
-    expslist <- lapply(exps, function(e){e$EXP})
-    sampmap <- do.call("rbind", lapply(exps, function(e){e$SAMP}))
+    names(exps) <- unlist(lapply(exps, function(e) {
+        e$NAME
+    }))
+    expslist <- lapply(exps, function(e) {
+        e$EXP
+    })
+    sampmap <- do.call(
+        "rbind",
+        lapply(exps, function(e) {
+            e$SAMP
+        })
+    )
     if (is.null(cd)) {
         coldat <- .buildColData(ll)
-        coldat <- sampmap[,-c(1:2)]
+        coldat <- sampmap[, -c(1:2)]
         colnames(coldat) <- c("sampleID", "condition")
         rownames(coldat) <- coldat$sampleID
         coldat <- unique(coldat)
     } else {
         coldat <- cd
     }
-    mae <- MultiAssayExperiment::MultiAssayExperiment(experiments=expslist,
-                                                      sampleMap=sampmap,
-                                                      colData=coldat)
-    if(!isEmpty(grep("TCR", names(ll))))
-    {
+    mae <- MultiAssayExperiment::MultiAssayExperiment(
+        experiments = expslist,
+        sampleMap = sampmap,
+        colData = coldat
+    )
+    if (!isEmpty(grep("TCR", names(ll)))) {
         metadata(mae) <- ll[grep("TCR", names(ll))]
     }
     return(mae)
@@ -218,29 +249,46 @@
 #'
 #' mae <- CITEseq(DataType="cord_blood", dry.run=FALSE)
 #' experiments(mae)
-CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
-                version="1.0.0", dry.run=TRUE, filtered=FALSE, verbose=TRUE,
-                DataClass=c("MultiAssayExperiment", "SingleCellExperiment"),
-                ...)
-{
+CITEseq <- function(
+    DataType = c("cord_blood", "peripheral_blood"),
+    modes = "*",
+    version = "1.0.0",
+    dry.run = TRUE,
+    filtered = FALSE,
+    verbose = TRUE,
+    DataClass = c("MultiAssayExperiment", "SingleCellExperiment"),
+    ...
+) {
     dataType <- match.arg(DataType)
     message("Dataset: ", dataType)
     dataClass <- match.arg(DataClass)
-    ess_list <- .getResourcesList(prefix = "citeseq_", datatype = dataType,
-                    modes=modes, version=version,
-                    dry.run=dry.run, verbose=verbose, ...)
+    ess_list <- .getResourcesList(
+        prefix = "citeseq_",
+        datatype = dataType,
+        modes = modes,
+        version = version,
+        dry.run = dry.run,
+        verbose = verbose,
+        ...
+    )
     if (!dry.run) {
         mae <- switch(
             dataType,
-            "cord_blood" = { .cord_blood(ess_list=ess_list) },
-            "peripheral_blood" = { .peripheral_blood(ess_list=ess_list) },
+            "cord_blood" = {
+                .cord_blood(ess_list = ess_list)
+            },
+            "peripheral_blood" = {
+                .peripheral_blood(ess_list = ess_list)
+            },
             ## Add here other CITE-seq datasets based on DataType identifier
-            { stop("Unrecognized CITE-seq dataset name: ", DataType) }
+            {
+                stop("Unrecognized CITE-seq dataset name: ", DataType)
+            }
         )
         if (filtered) {
             sampleMap(mae) <- sampleMap(mae)[!colData(mae)$discard, ]
         }
-        if(dataClass=="SingleCellExperiment") return(.CITEseqMaeToSce(mae))
+        if (dataClass == "SingleCellExperiment") return(.CITEseqMaeToSce(mae))
         return(mae)
     } else {
         return(ess_list)
@@ -273,16 +321,16 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 #' @importFrom methods is
 #' @importFrom S4Vectors SimpleList
 #' @keywords internal
-.CITEseqMaeToSce <- function(mae)
-{
-    stopifnot(c(is(mae, "MultiAssayExperiment"), !(length(mae)==0)))
+.CITEseqMaeToSce <- function(mae) {
+    stopifnot(c(is(mae, "MultiAssayExperiment"), !(length(mae) == 0)))
 
     cs <- colnames(mae[[1]])
-    for ( i in seq_along(mae)[-1]) { cs <- intersect(cs, colnames(mae[[i]])) }
+    for (i in seq_along(mae)[-1]) {
+        cs <- intersect(cs, colnames(mae[[i]]))
+    }
 
-    scelist <- lapply(seq_along(mae), function(i)
-    {
-        sce <- SingleCellExperiment(list(counts=mae[[i]]))
+    scelist <- lapply(seq_along(mae), function(i) {
+        sce <- SingleCellExperiment(list(counts = mae[[i]]))
         sce <- sce[, (colnames(sce) %in% cs)]
         cd <- colData(mae)[(rownames(colData(mae)) %in% colnames(sce)), ]
         colData(sce) <- cd
@@ -291,26 +339,25 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
     names(scelist) <- names(mae)
 
     idx <- grep("scRNA", names(scelist))
-    if (length(idx) != 0 )
-    {
+    if (length(idx) != 0) {
         altExps(scelist[[idx]]) <- scelist[-idx]
         sce <- scelist[[idx]]
     } else {
         stop("Couldn't find RNA assay in MultiAssayExperiment")
     }
     idx <- grep("scADT_clr", names(altExps(sce)))
-    if( length(idx) != 0 )
-    {
+    if (length(idx) != 0) {
         clr <- counts(altExps(sce)[[idx]])
         altExps(sce)[idx] <- NULL
-        assays(altExp(sce)) <- SimpleList(counts=counts(altExp(sce)), clr=clr)
+        assays(altExp(sce)) <- SimpleList(
+            counts = counts(altExp(sce)),
+            clr = clr
+        )
     }
 
-    if ( !isEmpty(metadata(mae))) {
+    if (!isEmpty(metadata(mae))) {
         metadata(sce) <- metadata(mae)
     }
 
     return(sce)
 }
-
-
