@@ -1,3 +1,12 @@
+## Changes in version 1.26.0
+
+### Bug fixes and minor improvements
+
+* Replaced local pull request workflow with reusable GitHub Actions wrapper
+* Updated author, contributor, and funding metadata in `DESCRIPTION` and
+  `CITATION.cff`
+* Trimmed unnecessary software references from `CITATION.cff`
+
 ## Changes in version 1.22.0
 
 ### Bug fixes and minor improvements
