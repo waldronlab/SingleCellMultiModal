@@ -21,10 +21,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Marcel Ramos \email{marcel.ramos@roswellpark.org} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
+\strong{Maintainer}: Marcel Ramos \email{marcel.ramos@sph.cuny.edu} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
 
 Authors:
 \itemize{
+  \item Marcel Ramos \email{marcel.ramos@sph.cuny.edu} (\href{https://orcid.org/0000-0002-3242-0582}{ORCID})
   \item Ricard Argelaguet \email{ricard@ebi.ac.uk}
   \item Dario Righelli \email{dario.righelli@gmail.com}
   \item Kelly Eckenrode \email{kelly.eckenrode@sph.cuny.edu}
@@ -36,6 +37,7 @@ Other contributors:
 \itemize{
   \item Al Abadi [contributor]
   \item Christophe Vanderaa \email{christophe.vanderaa@uclouvain.be} [contributor]
+  \item NCI (GrantNo.: U24CA289073) [funder]
 }
 
 }
