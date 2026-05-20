@@ -1,18 +1,16 @@
 .cord_blood <- function(ess_list) {
-    idx <- grep(pattern = "Counts", names(ess_list$experiments))
-    names(ess_list$experiments) <- gsub(
-        "Counts|_Counts",
-        "",
-        names(ess_list$experiments)
-    )
+    experiments <- ess_list[["experiments"]]
+    enames <- names(experiments)
+    idx <- grep("Counts", enames)
+    names(experiments) <- gsub("Counts|_Counts", "", enames)
     mae <- MultiAssayExperiment::MultiAssayExperiment(
-        experiments = (ess_list$experiments[idx])
+        experiments = experiments[idx]
     )
     coldat <- sampleMap(mae)[, -c(1:2), drop = FALSE]
     rownames(coldat) <- coldat[, 1]
-    colnames(coldat) <- c("sampleID")
-    cd <-
-        ess_list$experiments[grep("coldata", names(ess_list$experiments))][[1L]]
+    colnames(coldat) <- "sampleID"
+    cdataidx <- grep("coldata", enames)
+    cd <- experiments[cdataidx][[1L]]
     ### check add clr counts
     if (!is.null(dim(cd))) {
         # colData(mae) <- S4Vectors::cbind.DataFrame(coldat, cd)
