@@ -110,12 +110,12 @@
 
 #' @importFrom Matrix Matrix
 .peripheral_blood <- function(ess_list) {
-    ll <- ess_list$experiments
+    ll <- ess_list[["experiments"]]
     cdidx <- grep("coldata", names(ll))
     cd <- NULL
     if (length(cdidx) != 0) {
         cd <- ll[[cdidx]]
-        ll <- ess_list$experiments[-cdidx]
+        ll <- ess_list[["experiments"]][-cdidx]
     }
     ll <- lapply(ll, function(x) {
         x <- x[order(rownames(x)), ]
@@ -135,23 +135,14 @@
             return(list("EXP" = assmat, "SAMP" = assmap, "NAME" = assayn))
         }
     })
-    names(exps) <- unlist(lapply(exps, function(e) {
-        e$NAME
-    }))
-    expslist <- lapply(exps, function(e) {
-        e$EXP
-    })
-    sampmap <- do.call(
-        "rbind",
-        lapply(exps, function(e) {
-            e$SAMP
-        })
-    )
+    names(exps) <- vapply(exps, `[[`, character(1L), "NAME")
+    expslist <- lapply(exps, `[[`, "EXP")
+    sampmap <- do.call("rbind", lapply(exps, `[[`, "SAMP"))
     if (is.null(cd)) {
         coldat <- .buildColData(ll)
         coldat <- sampmap[, -c(1:2)]
         colnames(coldat) <- c("sampleID", "condition")
-        rownames(coldat) <- coldat$sampleID
+        rownames(coldat) <- coldat[["sampleID"]]
         coldat <- unique(coldat)
     } else {
         coldat <- cd
