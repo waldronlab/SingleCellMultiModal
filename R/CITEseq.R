@@ -269,7 +269,7 @@ CITEseq <- function(DataType=c("cord_blood", "peripheral_blood"), modes="*",
 #' @importFrom MultiAssayExperiment experiments
 #' @importFrom SummarizedExperiment SummarizedExperiment assays<-
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExp<- altExps
-#'   altExps<- colData counts
+#' @importFrom SingleCellExperiment altExps<- colData counts
 #' @importFrom methods is
 #' @importFrom S4Vectors SimpleList
 #' @keywords internal
